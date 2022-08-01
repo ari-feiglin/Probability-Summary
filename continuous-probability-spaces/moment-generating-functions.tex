@@ -1,0 +1,202 @@
+\begin{defn*}
+
+	A real function $f$ is \ppemph{convex} in a set $I$ if for every $a\in I$ there exists an $m$ such that for
+	every $x\in I$:
+	\[ f(x)\geq f(a) + m(x-a) \]
+
+\end{defn*}
+
+\begin{thrm*}
+
+	If $f$ is convex and $X$ has an expected value, then:
+	\[ f\big(\expecof X\big)\leq\expecof{f(X)} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We know that there exists an $m$ such that:
+	\[ f(X) \geq f\big(\expecof X\big) + m\big(X-\expecof X\big) \]
+	Since $\expecof X$ is constant (it is our $a$).
+	So if we take the expected value of both sides we get that
+	\[ \expecof{f(X)} \geq \expecof{f\big(\expecof X\big)} + m \expecof{X-\expecof X} = f\big(\expecof X\big) \]
+	Since $f\big(\expecof X\big)$ is constant.
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{coro*}
+
+	If $\expecof{X^k}$ exists, then $\expecof{X^{k-1}}$ exists.
+
+\end{coro*}
+
+This means that if $X$ has variance, it has expectation.
+
+\begin{proof}
+
+	Recall that $\expecof Y$ exists if and only if $\expecof{\abs Y}$ exists.
+	And it turns out that $x^{\slfrac k{k-1}}$ is convex (this is something you'd prove in calculus/analysis), so:
+	\[ \expecof{\abs X^{k-1}}^{\frac k{k-1}}\leq \expecof{\abs X^k} \]
+	So if $\expecof{X^k}$ exists, then $\expecof{\abs X^k}$ converges, and therefore so does $\expecof{\abs X^{k-1}}$, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	The $k$th \ppemph{moment} of a random variable $X$ is $\expecof{X^k}$, if it exists. And the \ppemph{moment generating function}
+	of $X$, denoted $M_X(t)$ is a function defined by:
+	\[ M_X(t) = \expecof{e^{t\cdot X}} \]
+	For every $t$ where this is defined.
+
+\end{defn*}
+
+Now it can be shown that expectation is linear even under infinite sums, but this requires a result from measure theory which we will
+not prove here.
+Therefore, we get that if every one of $X$'s moments exists, then:
+\[ M_X(t) = \expecof{e^{t\cdot X}} = \expecof{\sum_{k=0}^\infty \frac{t^k}{k!}\cdot X^k} =
+\sum_{k=0}^\infty \frac{t^k}{k!}\cdot \expecof{X^k} \]
+And therefore the $n$th derivative of $X$'s moment generating function is:
+\[ M_X^{(n)}(t) = \sum_{k=n}^\infty \frac{k!\cdot t^{k-n}}{k!\cdot(k-n)!}\cdot\expecof{X^k} =
+\sum_{k=n}^\infty \frac{t^{k-n}}{(k-n)!}\cdot\expecof{X^k} \]
+So if we let $t=0$, the summands are all $0$ except for when $k=n$, sp this becomes:
+\[ M_X^{(n)}(0) = \expecof{X^n} \]
+So the moment generating function provides a powerful way of computing moments.
+
+\begin{prop*}
+
+	If $X$ and $Y$ are independent random variables, then $M_{X+Y}=M_X\cdot M_Y$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that:
+	\[ M_{X+Y}(t) = \expecof{e^{tX+tY}} = \expecof{e^{tX}\cdot e^{tY}} \]
+	And as we showed, if $X$ and $Y$ are inependent then so is $f(X)$ and $f(Y)$.
+	So this is equal to:
+	\[ = \expecof{e^{tX}}\cdot\expecof{e^{tY}} = M_X(t)\cdot M_Y(t) \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+Let's compute the moment generating functions of a few distributions.
+\begin{msecitemize}
+	\mitem If $X\sim\berof p$ then notice that $e^{tX}=e^t$ with probability $p$ and is $1$ with probability $1-p$.
+	So the moment generating function of $X$ is
+		\[ M_X(t) = p\cdot e^t + 1 - p \]
+	\mitem If $X\sim\binof{n,p}$ then $X$ is distributively equivalent to the sum of $n$ independent bernoulli-distributing
+		random variables with parameter $p$, and the moment generating function of a sum is the product of the moment generating
+		functions, so:
+		\[ M_X(t) = (p\cdot e^t + 1 - p)^n \]
+	\mitem If $X\sim\expof\lambda$, then:
+		\[ M_X(t) = \expecof{e^{tX}} = \int_0^\infty e^{tx}\cdot\lambda\cdot e^{-\lambda x}\,dx =
+		\lambda\cdot\int_0^\infty e^{x(t-\lambda)}\,dx = \frac{\lambda}{t-\lambda}\cdot e^{x(t-\lambda)}\big|_0^\infty \]
+		This only converges if $t<\lambda$ (if they're equal this just becomes the integral of $\lambda$ which diverges).
+		And if this is the case we get that:
+		\[ M_X(t) = \frac\lambda{\lambda - t} \]
+	\mitem If $X\sim\geoof p$ then:
+		\[ M_X(t) = \expecof{e^{tX}} = \sum_{k=1}^\infty e^{tk}\cdot p(1-p)^{k-1} =
+		p\cdot e^t\cdot\sum_{k=1}^\infty \big(e^t(1-p)\big)^{k-1} \]
+		This converges if and only if $e^t(1-p)<1$, that is $t<-\logof{1-p}$.
+		If this is the case then:
+		\[ M_X(t) = \frac{pe^t}{1-e^t(1-p)} = \frac{p}{e^{-t}+p-1} \]
+\end{msecitemize}
+
+\begin{thrm*}[chernoffBoundTheorem,Chernoff\ Bound]
+
+	If $X$ is a random variable, then for every positive real $t$ where $M_X(t)$ defined, for every real $a$:
+	\[ \probof{X\geq a}\leq M_X(t)\cdot e^{-ta} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	By \ppref{markovsIneqTheorem}:
+	\[ \probof{X\geq a} = \probof{e^{tX}\geq e^{ta}} \leq \frac{\expecof{e^{tX}}}{e^{ta}} = M_X(t)\cdot e^{-ta} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{lemm*}
+
+	If $X$ is a random variable such that $\abs X\asleq1$ and $\expecof X=0$ then for every real $t$:
+	\[ M_X(t)\leq e^{\frac{t^2}2} \]
+
+\end{lemm*}
+
+\begin{proof}
+
+	The function $x\mapsto e^{tx}$ is convex (think second derivative), which means geometrically that the line between
+	two points on the graph is above the function, so if we take the points $(1,e^t)$ and $(-1,e^{-t})$, we get that that for every
+	$x\in[-1,1]$:
+	\[ e^{tx}\leq \frac{e^t-e^{-t}}2\cdot x + \frac{e^t+e^{-t}}2 \]
+	So then since $X\in[-1,1]$ almost surely:
+	\[ M_X(t) = \expecof{e^{tx}} \leq \frac{e^t+e^{-t}}2\cdot\expecof{X} + \frac{e^t+e^{-t}}2 \]
+	Since $\expecof X=0$, this is equal to:
+	\[ = \frac{e^t+e^{-t}}2 \leq e^{\frac{t^2}2} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}[hoeffIneqTheorem,Hoeffding's\ Inequality]
+
+	If $\set{X_k}_{k=1}^n$ is a sequence of independent random variables such that for every $k$ $\expecof{X_k}=0$ and
+	$\abs{X_k}\asleq1$, then:
+	\[ \probof{\sum_{k=1}^n X_k\geq a}\leq e^{-\frac{a^2}{2n}} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let $X$ be the sum of the $X_k$s.
+	Then $M_X$ is equal to the product of $M_{X_k}$s, so by the lemma above:
+	\[ M_X(t) = \prod_{k=1}^n M_{X_k}(t) \leq \parens{e^{\frac{t^2}2}}^n = e^{\frac{nt^2}2} \]
+	And by \ppref{chernoffBoundTheorem}:
+	\[ \probof{X\geq a}\leq M_X(t)\cdot e^{-ta} \leq e^{\frac{nt^2}2-ta} \]
+	We define $f(t)=e^{\frac{nt^2}2-ta}$ and we will find its minimum, so we will find its derivative:
+	\[ f'(t) = (nt-a)e^{\frac{nt^2}2-ta} \]
+	So $f'(t)=0$ at $t=\frac an$.
+	So if we input that into the inequality above, we get:
+	\[ \probof{X\geq a}\leq e^{\frac{a^2}{2n}-\frac{a^2}n} = e^{-\frac{a^2}{2n}} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+We can generalize this fact with the below corollary:
+
+\begin{coro*}
+
+	Suppose $\set{X_k}_{k=1}^n$ is a sequence of independent random variables such that there exists some $M$ where for every $k$:
+	$\abs{X_k-\expecof{X_k}}\asleq M$.
+	Let $X$ be the sum of the $X_k$s, then
+	\[ \probof{X-\expecof X\geq a}\leq e^{-\frac{a^2}{2nM^2}} \]
+
+\end{coro*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \abs{\frac{X_k-\expecof{X_k}}M}\leq 1 \]
+	And
+	\[ \expecof{\frac{X_k-\expecof{X_k}}M} = 0 \]
+	So by the theorem above we get that:
+	\[ \probof{X-\expecof X\geq a} = \probof{\frac{X-\expecof X}M\geq\frac aM} \leq e^{-\frac{a^2}{2nM^2}} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
