@@ -1,0 +1,407 @@
+\begin{defn*}
+
+	If $\jpv=\tuple{X_1,\dots,X_n}$ is a vector of absolutely continuous random variables then the \ppemph{joint probability function} $f_{\jpv}$
+	is a function:
+	\[ f_{\jpv}\colon\bR^n\longrightarrow[0,1] \]
+	Where:
+	\[ \probof{\jpv\in(a_1,b_1)\times\cdots(a_n,b_n)} = \int_{a_1}^{b_1}\cdots\int_{a_n}^{b_n} f_{\jpv}(x_1,\dots,x_n)\,dx_1\cdots dx_n \]
+
+\end{defn*}
+
+It can be shown with relative ease using \ppref[theorem]{contProbTheorem} that if $X_1,\dots,X_n$ have a joint probability function then:
+\[ \probof{X_1\leq a_1,\dots,X_n\leq a_n} = \int_{-\infty}^{a_1}\cdots\int_{-\infty}^{a_n} f_{X_1,\dots,X_n}(x_1,\dots,x_n)\,dx_n\cdots dx_1 \]
+
+\begin{prop*}
+
+	If $X$ and $Y$ are two absolutely continuous random variables with a joint density function, $X$ and $Y$ are independent if and only if
+	$f_{X,Y}(x,y)=f_X(x)\cdot f_Y(y)$ for every real $x$ and $y$.
+
+\end{prop*}
+
+\begin{proof}
+
+	If $X$ and $Y$ are independent then for every real $a$, $b$, $c$, and $d$:
+	\[ \probof{X\in(a,b), Y\in(c,d)} = \probof{X\in(a,b)}\cdot\probof{Y\in(c,d)} = \int_a^b f_X(x)\,dx \cdot \int_c^d f_Y(x)\,dx = 
+	\int_a^b\int_c^d f_X(x)\cdot f_Y(y)\,dy dx \]
+	So $f_X(x)\cdot f_Y(y)$ satisfies the property of the joint density function, so $f_{X,Y}=f_X\cdot f_Y$.
+
+	For the converse, we know that for every $I,J\in\borelof\bR$:
+	\[ \probof{X\in I, Y\in J} = \int_I\int_J f_{X,Y}(x,y)\,dy dx = \int_I\int_J f_X(x)\cdot f_Y(y)\,dy dx =
+	\int_I f_X(x)\,dx \cdot \int_J f_Y(y)\,dy = \probof{X\in I}\cdot\probof{Y\in J} \]
+	So $X$ and $Y$ are independent, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	If $X$ and $Y$ are absoutely continuous random variables with a joint probability density function, for every real $x$:
+	\[ f_X(x) = \int_{-\infty}^\infty f_{X,Y}(x,y)\,dy \]
+
+\end{prop*}
+
+\begin{proof}
+
+	Remember that:
+	\[ \probof{X\in(a,b)} = \probof{X\in(a,b), Y\in\bR} = \int_a^b\int_{-\infty}^\infty f_{X,Y}(x,y)\,dy dx \]
+	And since this is true for every real $a$ and $b$, if we define:
+	\[ f_X(x)\coloneqq\int_{-\infty}^\infty f_{X,Y}(x,y)\,dy \]
+	We get that for every real $a<b$:
+	\[ \probof{X\in(a,b)} = \int_a^b f_X(x)\,dx \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}
+
+	If $X$ and $Y$ are absolutely continuous random variables with a joint probability density function, and we define $Z=X+Y$,
+	we have that
+	\[ f_Z(z) = \int_{-\infty}^\infty f_{X,Y}(t, z-t)\,dt \]
+	is a probability density function of $Z$'s.
+
+\end{thrm*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \probof{X\leq a, Z\leq b} = \probof{X\leq a, X+Y\leq b} \]
+	So we're integrating over when $X\leq a$ and $Y\leq b-X$:
+	\[ = \int_{-\infty}^a\int_{-\infty}^{b-x} f_{X,Y}(x,y)\,dy dx \]
+	If we define $s=x+y$ then $dy=ds$ and $s(x,b-x)=b$ so:
+	\[ = \int_{-\infty}^a\int_{-\infty}^b f_{X,Y}(x,s-x)\,ds dx \]
+	If we then differentiate relative to $a$ and then $b$ we get that:
+	\[ \frac{d}{db}\frac{d}{da}\probof{X\leq a, Z\leq b} = \frac{d}{db}\int_{-\infty}^b f_{X,Y}(a,s-a)\,ds = f_{X,Y}(a,b-a) \]
+	But we know that this derivative is $f_{X,Z}(a,b)$, so:
+	\[ f_{X,Z}(a,b) = f_{X,Y}(a,b-a) \]
+	And we know that:
+	\[ f_Z(z) = \int_{-\infty}^\infty f_{X,Z}(x,z)\,dx = \int_{-\infty}^\infty f_{X,Y}(x,z-x)\,dx \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	If $X$ and $Y$ are two absolutely continuous random variables with a joint probability function, for every real $y$
+	we define $\condevent{X}[Y=y]$ to have a probability density function:
+	\[ f_{\condevent{X}[Y=y]} = \frac{f_{X,Y}(x,y)}{f_Y(y)} \]
+	If $f_Y(y)=0$, we define this to just be $0$.
+
+\end{defn*}
+
+Thus we get that:
+\[ \int_{-\infty}^\infty f_{\condevent X[Y=y]}(x)\cdot f_{Y}(y)\,dy = \int_{-\infty}^\infty f_{X,Y}(x,y)\,dy = f_X(x) \]
+Which is the continuous version of \ppref{totProbTwoTheorem}.
+
+Now we have arrived at the real purpose of this section, expectation.
+Once again we will define expected values, but for absolutely continuous random variables.
+
+\begin{defn*}
+
+	If $X$ is an absolutely continuous random variable with a density function $f_X$, then its expected value is
+	defined to be:
+	\[ \expecof X\coloneqq\int_{-\infty}^\infty x\cdot f_X(x)\,dx \]
+	If this integral converges absolutely.
+
+	And the variance of $X$ is defined the same as before:
+	\[ \varof X\coloneqq\expecof{\big(X-\expecof X\big)^2} = \expecof{X^2}-\expecof{X}^2 \]
+
+\end{defn*}
+
+\begin{prop*}
+
+	If $X$ has expectation then
+	\[ \expecof X = \int_0^\infty \ccumof[X]x\,dx + \int_{-\infty}^0 \cumof[X]x \]
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \int_0^\infty\ccumof[X]x\,dx = \int_0^\infty\int_x^\infty f_X(t)\,dt\,dx \]
+	This is integrating over $(t,x)\in\bR^2$ where $0\leq x\leq t$ so this is equal to the integral:
+	\[ = \int_0^\infty \int_0^t f_X(x)\,dx\,dt = \int_0^\infty \parens{\int_0^t\,dx}\cdot f_X(t)\,dt = \int_0^\infty t\cdot f_X(t)\,dt \]
+	Similarly we see that:
+	\[ \int_{-\infty}^0\cumof[X]x\,dx = \int_{-\infty}^0 t\cdot f_X(t)\,dt \]
+	And so we get that:
+	\[ \int_0^\infty \ccumof[X]x\,dx + \int_{-\infty}^0 \cumof[X]x = \int_{-\infty}^\infty t\cdot f_X(t)\,dt = \expecof X \]
+
+	\hfill$\qed$
+
+\end{proof}
+
+
+\begin{thrm*}[contlotusTheorem,The\ Law\ of\ the\ Unconscious\ Statistician]
+
+	If $\jpv$ is a vector of absolutely continuous random variables, and $g\colon\bR^n\longrightarrow\bR$ is an integrable function such that
+	$g^{-1}\big((a,b)\big)\in\borelof{\bR}^n$, then:
+	\[ \expecof{g(\jpv)} = \int\!\!\cdots\!\!\int_{\bR^n}g(x_1,\dots,x_n)\cdot f_{\jpv}(x_1,\dots,x_n)\,dx_1\cdots dx_n \]
+
+\end{thrm*}
+
+Specificaly we have that:
+\[ \expecof{g(X)} = \int_{-\infty}^\infty g(x)\cdot f_X(x)\,dx \]
+I will provide a proof for this specific case.
+
+\begin{proof}
+
+	Let us prove this for the simple case that $g$ is a constant function over an interval $[a,b)$, that is $g(x)=\bone_{[a,b)}(x)$.
+	Then $g(X)=\bone_{[a,b]}(X)$, so $g(X)$ is $1$ when $X\in[a,b)$ and $0$ otherwise, this means that $g(X)\sim\berof{\probof{X\in[a,b)}}$.
+	So:
+	\[ \expecof{g(X)} = \probof{X\in[a,b)} = \int_a^b f_X(x)\,dx = \int_\bR g(x)\cdot f_X(x)\,dx \]
+	Since $g(x)$ is $0$ for all reals that aren't in $[a,b)$.
+
+	Now suppose we have a countable partition $\set{[x_{j-1},x_j)}_{j\in J}$ (that is $x_{j-1}<x_j$).
+	We define $g_j=\bone_{[x_{j-1},x_j)}$ for every $j\in J$.
+	If then we have real numbers $c_j$ and we define
+	\[ g = \sum_{j\in J} c_j\cdot g_j \]
+	Then 
+	\[ g(X) = \sum_{j\in J} c_j\cdot g_j(X) = \sum_{j\in J} c_j\cdot\bone_{[x_{j-1},x_j)}(X) \]
+	So $g(X)$ takes values $c_j$ and 
+	\[ \probof{g(X)=c_j} = \probof{X\in[x_{j-1},x_j)} = \int_{x_{j-1}}^{x_j}f_X(x)\,dx \]
+	So all in all we have that:
+	\[ \expecof{g(X)} = \sum_{j\in J} c_j\cdot\int_{x_{j-1}}^{x_j}f_X(x)\,dx = \sum_{j\in J}\int_{x_{j-1}}^{x_j} c_jg_j(x)\cdot f_X(x)\,dx =
+	\sum_{j\in J} \int_{x_{j-1}}^{x_j}g(x)\cdot f_X(x)\,dx = \int_\bR g(x)\cdot f_X(x)\,dx \]
+
+	Now suppose that $g$ is the sum of a countably infinite 
+	Now suppose we have a sequence of functions $g^k$ which approach $g$ from below which are constant over certain intervals, like above.
+	So we can define:
+	\[ g^k(x) = \inf_{t\in\bracks{n\cdot 2^{-k}, (n+1)\cdot 2^{-k}}} g(t) \]
+	Where $n=\floor{2^k\cdot x}$, so for every $t$ interval, $g^k(x)$ is constant.
+	And this is a countable partition of $\bR$ so by above:
+	\[ \expecof{g^k(X)} = \int_\bR g^k(x)\cdot f_X(x)\,dx \]
+	Also notice that since these partitions get finer, $g^k$ is an increasing series, and it converges to $g$.
+
+	And since $g^k(X)$ is essentially a discrete random variable, $\expecof{g^k(X)}\leq\expecof{g^{k+1}(X)}$.
+	By the monotone convergence theorem (which is a result of measure theory we will not be showing here), it turns out that:
+	\[ \expecof{g^k(X)} \nearrow \expecof{g(X)} \]
+	And
+	\[ \int_\bR g_k(x)\cdot f_X(x)\,dx \nearrow \int_\bR g(x)\cdot f_X(x)\,dx \]
+	And since we showed that the two series on the left are equal, since limits are unique, we get that:
+	\[ \expecof{g(X)} = \int_\bR g(x)\cdot f_X(x)\,dx \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}
+
+	If $X$ is a random variable with expectation (and variance when relevant) then
+	\begin{msecenumerate}
+		\mitem If $X\asgeq0$ then $\expecof X\geq0$.
+		\mitem $\expecof{\alpha X+\beta Y}=\alpha\expecof X+\beta\expecof Y$.
+		\mitem If $X\asgeq Y$ then $\expecof X\geq\expecof Y$.
+		\mitem If $X$ and $Y$ are independent $\expecof{XY}=\expecof X\cdot\expecof Y$.
+
+		\mitem $\varof X\geq0$.
+		\mitem $\varof{\alpha + X}=\varof X$ and $\varof{\alpha X}=\alpha^2\varof X$.
+		\mitem If $X$ and $Y$ are independent then $\varof{X+Y}=\varof X+\varof Y$.
+	\end{msecenumerate}
+
+\end{thrm*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem So we have that the integral of $f_X(x)$ over $[0,\infty)$ is $1$ and therefore $f_X(x)=0$ almost always over $(-\infty,0)$.
+			Therefore:
+			\[ \expecof{X} = \int_{-\infty}^\infty x\cdot f_X(x)\,dx = \int_0^\infty x\cdot f_X(x)\,dx \]
+			Which is an integral of a nonnegative function and is therefore nonnegative.
+
+		\mitem We know that by \ppref{contlotusTheorem}:
+			\[ \expecof{\alpha X+\beta Y} = \iint_{\bR^2}(\alpha x+\beta y)\cdot f_{X,Y}(x,y)\,dx dy =
+			\alpha\iint_{\bR^2}x\cdot f_{X,Y}(x,y)\,dx dy + \beta\iint_{\bR^2} y\cdot f_{X,Y}(x,y)\,dx dy \]
+			Notice that:
+			\[ \iint_{\bR^2} x\cdot f_{X,Y}(x,y)\,dx dy = \int_\bR x\cdot \int_\bR f_{X,Y}(x,y)\,dy dx = \int_\bR x\cdot f_X(x)\,dx = \expecof X \]
+			And similar for $y$, so we get that this is equal to:
+			\[ = \alpha\expecof X + \beta\expecof Y \]
+			As required.
+
+		\mitem Since $X\asgeq Y$, $X-Y\asgeq0$, so $\expecof{X-Y}=\expecof X-\expecof Y\geq 0$ and therefore $\expecof X\geq \expecof Y$ as required.
+
+		\mitem Again by the law of the unconscious statistician:
+			\[ \expecof{XY} = \iint_{\bR^2}xy\cdot f_{X,Y}(x,y)\,dy dx = \iint_{\bR^2}xy\cdot f_X(x)\cdot f_Y(y)\,dy dx =
+			\int_\bR x\cdot f_X(x)\cdot \int_\bR y\cdot f_Y(y)\,dy dx = \]
+			\[ = \int_\bR x\cdot f_X(x)\,dx \cdot \int_\bR y\cdot f_Y(y)\,dy = \expecof X\cdot\expecof Y \]
+
+		\mitem The proofs supplied in \ppref{varTraitsTheorem} are valid here since it assumes only the traits we proved above about expectation.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+Also note that \ppref{markovsIneqTheorem}, \ppref{chebyIneqTheorem}, \ppref{wllnTheorem}, and \ppref[theorem]{varCovRelationTheorem} also hold here since they only rely on these traits
+proved above.
+
+\begin{exam}
+
+	If $X\sim\uniof{a,b}$ then:
+	\[ \cumof[X]t = \int_a^t \frac{1}{b-a}\,dx = \frac{t-a}{b-a} \]
+	If $t\in[a,b]$ and if $t>b$ then it is $1$ (since the integral is $1$), and if $t<a$ it is $0$.
+	That is:
+	\[ \cumof[X]t = \begin{cases} \frac{t-a}{b-a} & a\leq t\leq b \\ 1 & t>b \\ 0 & t<a \end{cases} \]
+	
+	And its expected value is:
+	\[ \expecof X = \int_a^b x\cdot\frac1{b-a}\,dx = \frac1{b-a}\cdot\frac{x^2}2\bigg|_a^b = \frac{b^2-a^2}{2(b-a)} = \frac{a+b}2 \]
+
+	And notice that:
+	\[ \expecof{X^2} = \int_a^b x^2\cdot\frac1{b-a}\,dx = \frac1{b-a}\cdot\frac{b^3-a^3}{3} \]
+	So:
+	\[ \varof X = \frac{b^3-a^3}{3(b-a)} - \frac{(b-a)^2}2 = \frac{(b-a)^2}{12} \]
+
+\end{exam}
+
+\begin{exam}
+
+	If $X\sim\expof\lambda$ then:
+	\[ \cumof[X]t = \int_0^t \lambda\cdot e^{-\lambda x}\,dx = -e^{-\lambda x}\big|_0^t = 1 - e^{-\lambda t} \]
+	For positive $t$s, and for negative $t$s it is $0$, so:
+	\[ \cumof[X]t = \begin{cases} 1 - e^{-\lambda t} & t\geq0 \\ 0 & t<0 \end{cases} \]
+
+	Its expected value is:
+	\[ \expecof X = \int_0^\infty \lambda x\cdot e^{-\lambda x}\,dx = \frac{-e^{-\lambda x}(\lambda x+1)}{\lambda}\bigg|_0^\infty = \frac1\lambda \]
+
+	And computing its variance gives $\varof X=\frac1{\lambda^2}$ (this is left as an exercise to the reader).
+
+\end{exam}
+
+\begin{thrm*}[expMrylsTheorem,Memorylessness\ of\ Exponential\ Distributions]
+
+	If $X$ is an absolutely continuous random variable, $X$ distributes exponentially over $\lambda$ if and only if $\condevent{X-x_0}[X>x_0]\deq X$
+	for every nonnegative real $x_0$.
+
+\end{thrm*}
+
+\begin{proof}
+
+	In one direction, By definition we know that for every positive $t$:
+	\[ \probof{X-x_0\geq t}[X>x_0] = \frac{\probof{X\geq t+x_0}}{\probof{X>x_0}} = \frac{\ccumof[X]{t+x_0}}{\ccumof[X]{x_0}} \]
+	And we showed above that $\ccumof[X]{x}=e^{-\lambda x}$, so this is equal to:
+	\[ = e^{-\lambda(t+x_0)+\lambda(x_0)} = e^{-\lambda t} \]
+	And so the cummulative probability distributions are equal and therefore $\condevent{X-x_0}[X>x_0]\deq X$ as required.
+
+	In the other direction, notice that for every nonnegative real $t$:
+	\[ \probof{X\geq t} = \probof{X-x_0\geq t}[X>x_0] = \frac{\probof{X\geq t+x_0}}{\probof{X>x_0}} \]
+	And since $X$ is absolutely continuous, this means:
+	\[ \ccumof[X]t\cdot\ccumof[X]{x_0} = \ccumof[X]{t+x_0} \]
+	Since this is true for every $x_0$, we can set $x_0=t$ and we get that $\ccumof[X]{2t}=\ccumof[X]t^2$.
+	Inductively, we can show that for every $n\in\bN_1$, $\ccumof[X]{nt}=\ccumof[X]t^n$.
+	Notice then that:
+	\[ \ccumof[X]{t} = \ccumof[X]{n\cdot\frac1n\cdot t} = \ccumof[X]{\frac1n\cdot t}^n \]
+	So $\ccumof[X]t^{\frac1n}=\ccumof[X]{\frac1n\cdot t}$.
+	Now suppose that $q\in\bQ$ is a nonnegative rational, then there exists some naturals $a$ and $b$ such that $q=\frac ab$.
+	So:
+	\[ \ccumof[X]q = \ccumof[X]{\frac ab}=\ccumof[X]a^{\frac1b} \]
+	And since $\ccumof[X]a=\ccumof[X]1^a$, this is equal to $\ccumof[X]1^{\frac ab}=\ccumof[X]1^q$.
+	So if we let $\ccumof[X]1=e^{-\lambda}$ for some real $\lambda$, we get that for every rational $q$: $\ccumof[X]=e^{-\lambda q}$.
+	And since the rationals are dense in $\bR$, it follows that this is true for every nonnegative real $x$.
+
+	Since this is a complementary cumulative probability distribution, this $\lambda$ must be positive since its limit to infinity must be $0$.
+	And so this is the complementary cumulative distribution of an exponential distribution at least for nonnegative $x$s.
+	But it must be equal to $1$ for negative $x$s since it is decreasing and $\ccumof[X]0=1$.
+	So this is exactly the complementary cumulative probability distribution of an exponential distribution over $\lambda$, so
+	$\condevent{X-x_0}[X>x_0]\deq X$ as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+This sheds light on an interesting connection between exponential and geometric distributions: they are both memoryless (by \ppref{geoMrylsTheorem}).
+Another interesting connection is that if $X$ has an exponential distribution, then $\ceil X$ has a geometric distribution!
+Let's prove this quickly.
+
+\begin{proof}
+
+	We know that $\probof{\ceil X=x} = \probof{X-1<X\leq x} = \cumof[X]x - \cumof[X]{x-1}$, and we can then apply the formula we found above for
+	the cummulative distribution of exponential distributions above:
+	\[ = 1-e^{-\lambda x} - 1 + e^{-\lambda(x-1)} = e^{-\lambda(x-1)}\big(1-e^{-\lambda}\big) \]
+	So if we define $p=1-e^{-\lambda}$ we get that:
+	\[ \probof{\ceil X=x} = (1-p)^{x-1}\cdot p \]
+	And therefore $\ceil X\sim\geoof p=\geoof{1-e^{-\lambda}}$ as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	An absolutely continuous random variable $X$ has a \ppemph{normal distribution} over $\mu$ and $\sigma^2$ if it has a probability density function:
+	\[ f_X(t) = \frac1{\sqrt{2\pi}}\frac1\sigma\cdot e^{-\frac{(t-\mu)^2}{2\sigma^2}} \]
+	This is denoted $X\sim\normof{\mu,\sigma^2}$.
+
+\end{defn*}
+
+The normal distribution is one of the single most important distributions in all of probability.
+The reason why will become clear later on.
+But first lets investigate the distribution a bit.
+
+\begin{prop*}
+
+	If $X\sim\normof{\mu,\sigma^2}$ then $\alpha X+\beta\sim\normof{\alpha\mu+\beta, \alpha^2\cdot\sigma^2}$
+
+\end{prop*}
+
+\begin{proof}
+
+	We know that:
+	\[ \probof{\alpha X+\beta\in(a,b)} = \probof{X\in\parens{\frac{a-\beta}{\alpha},\frac{b-\beta}\alpha}} =
+	\int_{\frac{a-\beta}\alpha}^{\frac{b-\beta}\alpha} \frac1{\sqrt{2\pi}}\cdot\frac1\sigma\cdot e^{-\frac{(t-\mu)^2}{2\sigma^2}}\,dt \]
+	(Suppose the intervals here are bidirectional, ie $(a,b)=(b,a)$ so we don't have to worry about negative $\alpha$s.)
+	Let's substitute $u=\alpha t+\beta$.
+	This means that $dt=\frac{du}\alpha$ so this is equal to:
+	\[ = \int_a^b \frac1{\sqrt{2\pi}}\cdot\frac1{\sigma\cdot\alpha}\cdot e^{-\frac{\parens{u-(\alpha\mu+\beta)}^2}{2\sigma^2\alpha^2}}\,du \]
+	So the probability density function of $\alpha X+\beta$ is exactly that of $\normof{\alpha\mu+\beta,\alpha^2\cdot\sigma^2}$, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+So then if $Z\sim\normof{0,1}$ (this is considered the ``standard'' normal distribution, or the normal normal distribution), and
+$X\sim\normof{\mu,\sigma^2}$ then $X=\sigma\cdot Z+\mu$.
+
+\begin{prop*}
+
+	If $X\sim\normof{\mu,\sigma^2}$ then $\expecof X=\mu$ and $\varof X=\sigma^2$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Let's focus on the specific case of $Z\sim\normof{0,1}$.
+	We know that:
+	\[ \int_{-\infty}^\infty\abs t\cdot e^{-\frac{t^2}2}\,dt \leq \int_{-\infty}^\infty\abs t\cdot e^{-\abs t}\,dt \]
+	Which converges, as we know.
+	So $Z$ has an expected value.
+
+	Furthermore, we know that $f_Z$ is symmetric about $0$ ($f_Z(z)=f_Z(-z)$), so $t\cdot f_Z$ is odd, and therefore its integral over $\bR$ is $0$,
+	so $\expecof Z=0$.
+	And as we remarked above, $X\deq\sigma Z+\mu$, so $\expecof X=\sigma\expecof Z+\mu = \mu$, as required.
+
+	And $Z^2$ has expectation for the same reason as above, and by integration by parts:
+	\[ \expecof{Z^2} = \frac1{\sqrt{2\pi}}\cdot\int_\bR t^2 e^{-\frac{t^2}2}\,dt =
+	\frac1{\sqrt{2\pi}}\cdot\parens{-t e^{-\frac{t^2}2}\bigg|_{-\infty}^\infty + \int_\bR e^{-t^2}\,dt} \]
+	The rightmost integral is a famous integral called the Gaussian and has a known value of $\sqrt{2\pi}$, and the left term is equal to $0$, so this is
+	equal to:
+	\[ = \frac1{\sqrt{2\pi}}\cdot\sqrt{2\pi} = 1 \]
+	And again $X\deq\sigma Z+\mu$ so $\varof X=\sigma^2\varof Z=\sigma^2$ as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	Due to its importance, the cumulative probability distribution of $Z\sim\normof{0,1}$ gets a special symbol:
+	\[ \cumnormof{t}\coloneqq\cumof[Z]t \]
+
+\end{defn*}
+
+Notice that if $X\sim\normof{\mu,\sigma^2}$ then:
+\[ \cumof[X]t = \probof{X\leq t} = \probof{\sigma Z+\mu\leq t} = \probof{Z\leq \frac{t-\mu}\sigma} = \cumnormof{\frac{t-\mu}\sigma} \]
+

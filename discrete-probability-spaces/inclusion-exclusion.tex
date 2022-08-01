@@ -1,0 +1,364 @@
+\begin{thrm*}[inclusionExclusionTheorem,The\ Inclusion-Exclusion\ Principle]
+
+	If $\set{A_i}_{i=1}^n$ are events, for every $I\leq[n]$, let:
+	\[ A_I\coloneqq\bigcap_{i\in I}A_i \]
+	Then:
+	\[ \probof{\bigcup_{i=1}^n A_i} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs{I}+1}\cdot\probof{A_I} \] 
+
+\end{thrm*}
+
+\begin{proof}
+
+	We will prove this through induction on $n$.
+
+	\ppemph{First base case:} If $n=1$, this is trivial.
+
+	\ppemph{Second base case:} If $n=2$, then notice that:
+	\[ A\cup B = (A\setminus B)\sqcup B \]
+	And we know that $A\setminus B=A\setminus(A\cap B)$, and since $A\cap B$ is a subset of $A$:
+	\[ \probof{A\setminus B} = \probof{A} - \probof{A\cap B} \]
+	So all in all we get:
+	\[ \probof{A\cup B} = \probof{A\setminus B} + \probof{B} = \probof{A} + \probof{B} - \probof{A\cap B} \]
+	As required.
+
+	\ppemph{Inductive step:} Suppose this is true for $n$, then let $\set{A_i}_{i=1}^{n+1}$ be events.
+	We know:
+	\[ \probof{\bigcup_{i=1}^{n+1}A_i} = \probof{\parens{\bigcup_{i=1}^n A_i}\cup A_{n+1}} \]
+	Which is equal to, by our second base case:
+	\[ = \probof{\bigcup_{i=1}^n A_i} + \probof{A_{n+1}} - \probof{\bigcup_{i=1}^n A_i\cap A_{n+1}} \]
+	If we let $B_i\coloneqq A_i\cap A_{n+1}$, notice that for every $\varnothing\neq I\subseteq[n]$:
+	\[ B_I = \bigcap_{i\in I} A_i\cap A_{n+1} = A_{n+1}\cap\bigcap_{i\in I}A_i = A_{n+1}\cap A_I \]
+	So by our inductive hypothesis, this is equal to:
+	\[ = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\probof{A_I} + \probof{A_{n+1}} -
+		 \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\probof{A_{n+1}\cap A_I} \]
+
+	Notice that:
+	\[ \probof{A_{n+1}} - \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\probof{A_{n+1}\cap A_I} =
+	   \sum_{I\subseteq[n]} (-1)^{\abs{I\cup\set{n+1}}+1}\probof{A_{I\cup\set{n+1}}} \]
+	Since $(-1)^{\abs{I\cup\set{n+1}}+1}=-1^{\abs{I}+1}$ (so we're rewritting the minus before the sum),
+	and when $I=\varnothing$, the element in the sum is just:
+	\[ (-1)^{\abs{\set{n+1}}+1}\cdot\probof{A_{\set{n+1}}} = \probof{A_{n+1}} \]
+	So we entered $A_{n+1}$ into the sum.
+
+	And this, in turn, is just equal to:
+	\[ \sum_{\substack{I\subseteq[n+1]\\n+1\in I}}(-1)^{\abs{I}+1}\cdot\probof{A_I} \]
+
+	So, we get:
+	\[ \probof{\bigcup_{i=1}^n A_i} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\probof{A_I} +
+	   \sum_{\substack{I\subseteq[n+1]\\n+1\in I}}(-1)^{\abs I+1}\cdot\probof{A_I} \]
+	The first sum is summing over $\varnothing\neq I\subseteq[n+1]$ where $n+1\notin I$, and the second is
+	summing over $\varnothing\neq I\subseteq[n+1]$, where $n+1\in I$.
+	So they form a reordering of the sum of $\varnothing\neq I\subseteq[n+1]$, so their sum is equal to:
+	\[ = \sum_{\varnothing\neq I\subseteq[n+1]}(-1)^{\abs I+1}\cdot\probof{A_I} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{note}
+
+	This is called the \ppemph{Inclusion-Exclusion Principle} since we first add the probabilities of the events,
+	then subtract the probabilities we double-counted (the intersections), then add back the probabilities which
+	we double-counted in the previous step, and so on.
+
+	So this is a process of including, and then excluding.
+
+\end{note}
+
+\begin{coro*}
+
+	If $\set{A_i}_{i=1}^n$ are finite sets, then:
+	\[ \abs{\bigcup_{i=1}^n A_i} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\abs{A_I} \]
+
+\end{coro*}
+
+\begin{proof}
+
+	Let $\Omega\coloneqq\bigcup\limits_{i=1}^n A_i$, and we define:
+	\[ \mprobof\omega = \frac{1}{\abs\Omega} \]
+	Thus if we define for every $A\subseteq\Omega$:
+	\[ \probof{A} = \sum_{\omega\in A}\mprobof\omega \]
+	$\tuple{\Omega, \powset\Omega, \prob}$ forms a uniform probability space, so:
+	\[ \probof{A} = \frac{\abs{A}}{\abs\Omega} \]
+
+	This means that:
+	\[ \probof{\bigcup_{i=1}^n A_i} = \frac{\displaystyle\abs{\bigcup_{i=1}^n A_i}}{\abs\Omega} \]
+
+	But we know by the \ppref{inclusionExclusionTheorem} that:
+	\[ \probof{\bigcup_{i=1}^n A_i} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\probof{A_I} 
+	=  \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\frac{\abs{A_I}}{\abs\Omega} \]
+	Which means that:
+	\[ \frac{\displaystyle\abs{\bigcup_{i=1}^n A_i}}{\abs\Omega} =
+	   \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\frac{\abs{A_I}}{\abs\Omega} \]
+	And multiplying both sides by $\abs\Omega$ gives:
+	\[ \abs{\bigcup_{i=1}^n A_i} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\abs{A_I} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+Using the inclusion-exclusion principle, we can prove some pretty nifty stuff.
+
+\begin{exam}
+
+	How many permutations of $[n]$ are there which have no stable points?
+	(A point $i$ is a stable point if $\sigma(i)=i$.)
+
+\end{exam}
+
+\begin{blankpp}
+
+	We can start by asking the inverse of this question:
+
+	\hfill``\textsl{How many permutations of $S_n$ are there with at least $1$ stable point?}''
+
+	Which we can answer using inclusion-exclusion.
+
+	Let $A$ be the set of all permutations in $S_n$ with no stable points. That is:
+	\[ A\coloneqq\set{\sigma\in S_n}[\forall i\in[n]: \sigma(i)\neq i] \]
+	So we're going to try and find the cardinality of $A^c$ instead:
+	\[ A^c=\set{\sigma\in S_n}[\exists i\in[n]: \sigma(i)=i] \]
+
+	We can then define the set $B_i$ to be the set of all permutations where $i$ is a stable point:
+	\[ \forall i\in[n]: B_i\coloneqq\set{\sigma\in S_n}[\sigma(i)=i] \]
+	This means that:
+	\[ A^c = \bigcup_{i=1}^n B_i \]
+
+	Notice that for an indexing set $I\subseteq[n]$ the cardinality of $B_I$, where $B_I$ is defined as:
+	\[ B_I\coloneqq\bigcap_{i\in I} B_i \]
+	Is equal to $(n-\abs{I})!$.
+	This is because we can create a simple bijection from $S_{[n]\setminus I}$ to $B_I$.
+	Finding this bijection is simple and left as an exercise to the reader.
+	
+	So, by inclusion-exclusion:
+	\[ \abs{A^c} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\abs{B_I} \]
+	We can partition this into sums summing over cardinalities of $I$:
+	\[ = \sum_{k=1}^n\sum_{\substack{I\subseteq[n]\\\abs{I}=k}}(-1)^{k+1}\cdot\abs{B_I}
+	   = \sum_{k=1}^n\sum_{\substack{I\subseteq[n]\\\abs{I}=k}}(-1)^{k+1}\cdot(n-k)! \]
+	And since there are $\binom nk$ subsets of $[n]$ of cardinality $k$, this is equal to:
+	\[ = \sum_{k=1}^n(-1)^{k+1}\binom nk\cdot(n-k)! \]
+	And notice that $\binom nk\cdot(n-k)! = \frac{n!}{k!}$, so this is equal to:
+	\[ = n!\cdot\sum_{k=1}^n\frac{(-1)^{k+1}}{k!} \]
+
+	Since $\abs A=\abs{S_n}-\abs{A^c}=n!-\abs{A^c}$, this means that:
+	\[ \abs{A} = n! - n!\cdot\sum_{k=1}^n\frac{(-1)^{k+1}}{k!} = n!\cdot\parens{1-\sum_{k=1}^n\frac{(-1)^{k+1}}{k!}} \]
+	Notice that:
+	\[ 1-\sum_{k=1}^n\frac{(-1)^{k+1}}{k!} = 1+\sum_{k=1}^n\frac{(-1)^k}{k!} = \sum_{k=0}^n\frac{(-1)^k}{k!} \]
+
+	So we have that:
+	\[ \abs{A} = n!\cdot\sum_{k=0}^n\frac{(-1)^k}{k!} \]
+
+\end{blankpp}
+
+\begin{note}
+
+	Notice that:
+	\[ \frac{\abs A}{n!} = \sum_{k=0}^n\frac{(-1)^k}{k!} \]
+	This is equal to the probability of uniformly choosing a permutation with no stable points from $S_n$.
+
+	This probability has the interesting property that:
+	\[ \lim_{n\to\infty}\frac{\abs A}{n!} = \sum_{k=0}^\infty\frac{(-1)^k}{k!} \]
+	Which is the Taylor Series of $e^x$ at $x=-1$!
+	So:
+	\[ \lim_{n\to\infty}\frac{\abs A}{n!} = e^{-1} = \frac1e \]
+
+	Which means that as you increase $n$, the probability of choosing a permutation with no stable points approaches
+	$\frac1e$.
+
+	This won't be the last time you see $e$ in probability\dots
+
+\end{note}
+
+\begin{exam}
+
+	Let's continue on the same thought as the previous example, but generalizing a bit.
+	How many permutations with exactly $k$ stable points are there?
+
+\end{exam}
+
+\begin{blankpp}
+
+	We could solve this in a similar fashion to the previous example, but what would doing the same thing again really
+	achieve?
+
+	Instead, let's use the previous example to solve this one.
+
+	Let $A$ be the set of all permutations with exactly $k$ stable points, and let for all $I\subseteq[n]$, $B_I$ be the
+	set of all permutations where every $i\in I$ is a stable point and every $i\notin I$ is not:
+	\[ B_I\coloneqq\set{\sigma\in S_n}[\forall i\in I: \sigma(i)=i\;\land\; \forall i\notin I: \sigma(i)\neq i] \]
+	Notice that for every $I\neq J\subseteq[n]$, $B_I$ and $B_J$ are disjoint.
+	Furthemore, notice that:
+	\[ A = \bigsqcup_{\substack{I\subseteq[n]\\\abs{I}=k}} B_I \]
+	So now the question boils down to finding the cardinality of $B_I$.
+
+	Let $C$ be the set of all permutations of $[n-k]$ which have no stable points.
+	By our previous example, we know that 
+	\[ \abs{C}=(n-k)!\cdot\sum_{i=0}^{n-k}\frac{(-1)^i}{i!} \]
+	Furthermore, we can construct a bijection from $B_I$ to $C$:
+	\[ f\colon B_I\longrightarrow C \]
+
+	Since $\abs{I}=k$, there exists a bijection $g_I$ from $[n-k]$ to $I^c$.
+	So we can define:
+	\[ f(\sigma) = \tau \]
+	Where for every $m\in[n-k]$:
+	\[ \tau(m) = g_I^{-1}(\sigma(g_I(m))) \]
+	(This just means $f(\sigma)=g_I^{-1}\circ\sigma\circ g_I$ if we ignore domains and codomains.)
+
+	This is well defined since $g_I(m)\in I^c$, and since $\sigma\in B_I$, every element of $I^c$ is not a stable point, so:
+	\[ \sigma(g_I(m)) \neq g_I(m) \]
+	And since $g_I^{-1}$ is bijective, and therefore injective, this means:
+	\[ \tau(m) = g_I^{-1}(\sigma(g_I(m))) \neq g_I^{-1}(g_I(m)) = m \]
+	So for every $m\in[n-k]$:
+	\[ \tau(m)\neq m \]
+	Which means that $\tau$ has no stable points, so $m\in C$.
+
+	Also note that since $g_I(m)\notin I$, this means that $\sigma(g_I(m))\notin I$ as well (since if it were in $I$, since
+	$\sigma$ is a permutation, it'd have to be a stable point), so we can take the $g_I^{-1}$ of that.
+
+	This is also obviously injective since if:
+	\[ f(\sigma) = f(\pi) \implies g_I^{-1}\circ\sigma\circ g_I = g_I^{-1}\circ\pi\circ g_I \implies \sigma=\pi \]
+
+	And if $\tau\in C$, then for every $i\notin I$, we can define $\sigma(i)=g_I\circ\tau\circ g_I^{-1}(i)$,
+	and if $i\in I$, then $\sigma(i)=i$.
+	This is in $B_I$ since every $i\in I$ is a stable point and:
+	\[ g_I\circ\tau\circ g_I^{-1}(i) = i \iff \tau\circ g_I^{-1}(i) = g_I^{-1}(i) \]
+	Which is false since $\tau\in C$, so it has no stable points.
+
+	Thus
+	\[ \abs{B_I} = \abs{C} \]
+
+	And so:
+	\[ \abs{A} = \sum_{\substack{I\subseteq[n]\\\abs I=k}}\abs{B_I} = \sum_{\substack{I\subseteq[n]\\\abs I=k}}\abs{C}
+	   = \binom nk\cdot\abs{C} = \binom nk\cdot(n-k)!\cdot\sum_{i=0}^{n-k}\frac{(-1)^i}{i!} =
+	   \frac{n!}{k!}\cdot\sum_{i=0}^{n-k}\frac{(-1)^i}{i!} \]
+
+\end{blankpp}
+
+\begin{note}
+
+	Similarly, here if you look at:
+	\[ \frac{\abs{A}}{n!} = \frac1{k!}\cdot\sum_{i=0}^{n-k}\frac{(-1)^i}{i!} \]
+	This is the probability of choosing a permutation with exactly $k$ stable points from $S_n$.
+
+	And its limit as $n$ approaches infinity is:
+	\[ \lim_{n\to\infty}\frac{\abs A}{n!} = \frac1{k!}\cdot\sum_{i=0}^\infty\frac{(-1)^i}{i!} = \frac1{k!}\cdot e^{-1}
+	= \frac{1}{k!\cdot e} \]
+
+\end{note}
+
+Yet another example of the usage of the inclusion-exclusion principle arises in number theory.
+
+\begin{defn}
+
+	The \ppemph{Euler Totient Function} is a function:
+	\[ \phi\colon\bN_1\longrightarrow\bN_1 \]
+	Where $\phi(n)$ is equal to the number of numbers in $[n]$ which are coprime with $n$.
+
+	(Two numbers are coprime if they share no common divisior: in other words, if their greatest common divisor is $1$.)
+
+\end{defn}
+
+The Euler Totient Function has many uses in number theory, and has some very interesting properties which won't 
+be covered here.
+
+\begin{lemm}
+
+	\[ \prod_{k=1}^n(a_k+b_k) = \sum_{I\subseteq[n]}\prod_{i\in I}a_i\cdot\prod_{i\notin I}b_i \]
+
+\end{lemm}
+
+\begin{proof}
+
+	This can be shown simply using some combinatorics.
+	By writing out the product, see that:
+	\[ \prod_{k=1}^n(a_k+b_k) = (a_1+b_1)\cdot(a_2+b_2)\cdots(a_n+b_n) \]
+
+	We can expand this product by choosing from each parentheses $a_k$ or $b_k$ and multiplying all these choices together.
+	Let $I$ be the set of indexes for the parentheses where we chose $a_i$ (so for $a_1\cdot a_2\cdot a_n$, $I=\set{1,2,n}$)
+	so $I^c$ is the set of indexes where we chose $b_i$.
+
+	For every $I$ like this, the coefficient we are adding to the sum is:
+	\[ \prod_{i\in I}a_i\cdot\prod_{i\notin I}b_i \]
+
+	Any subset $I\subseteq[n]$ is a valid choice, so we can sum over $I\subseteq[n]$:
+	\[ \prod_{k=1}^n(a_k+b_k) = \sum_{I\subseteq[n]}\prod_{i\in I}a_i\cdot\prod_{i\notin I}b_i \]
+	As required.
+
+\end{proof}
+
+\begin{note}
+
+	This isn't really a rigorous proof, a rigorous proof can be done simply with induction.
+	But the purpose of this is not to talk about induction, rather combinatorics and probability.
+	Therefore, the ``rigorous'' proof of this lemma is left as an exercise to the reader.
+
+\end{note}
+
+\begin{exam}
+
+	Suppose $n=p_1^{k_1}\cdots p_t^{k_t}$ where $p_i$ is prime.
+	Then:
+	\[ \phi(n) = n\cdot\prod_{i=1}^t\parens{1-\frac1{p_i}} \]
+	In other words:
+	\[ \phi(n) = n\cdot\prod_{p\divides n}\parens{1-\frac1p} \]
+
+\end{exam}
+
+I highly urge you to try and prove this yourself, it provides a good example of how studying probability can be useful
+in other fields, and not just with things related to probability.
+
+\begin{blankpp}
+
+	Let's define:
+	\[ A\coloneqq\set{m\in[n]}[\gcd(n,m)=1] \]
+	So $\phi(n)=\abs A$.
+	($\gcd(n,m)$ is the greatest common divisor of $n$ and $m$, so $\gcd(n,m)=1$ means that $n$ and $m$ are coprime.)
+
+	Now let's look at $A$'s complement: the set of all numbers which share a divisior with $n$.
+	This is true if and only if they are divisible by some $q_i$.
+	So:
+	\[ A^c=\set{m\in[n]}[\exists i: q_i\divides m] \]
+
+	Now, we can define forall $1\leq i\leq t$:
+	\[ B_i\coloneqq\set{m\in [n]}[q_i\divides n] \]
+	So:
+	\[ A^c=\bigcup_{i=1}^t B_{q_i} \]
+
+	Which means that by the inclusion-exclusion principle:
+	\[ \abs{A^c} = \sum_{\varnothing\neq I\subseteq[n]}(-1)^{\abs I+1}\cdot\abs{B_I} \]
+
+	So what is the cardinality of $B_I$?
+	Well, we know that:
+	\[ B_I=\set{m\in [n]}[\forall i\in I:q_i\divides m] \]
+	And since $q_i$ are all prime, every $q_i$ divides $m$ if and only if the product of $q_i$ over $I$ divides $m$, so:
+	\[ B_I=\set{m\in [n]}[\parens{\prod_{i\in I}q_i} \divides m] \]
+
+	So $B_I$ is all the multiples of $\prod\limits_{i\in I}q_i$ in $[n]$:
+	\[ B_I = \set{k\cdot\prod_{i\in I}q_i\in[n]}[k\in\bN_1] \]
+
+	And recall that $\prod\limits_{i\in I}q_i$ divides $n$, since the prime factorization of $n$ includes every $q_i$.
+	This means that:
+	\[ \abs{B_I} = \frac{n}{\prod_{i\in I}q_i} \]
+	(Since there are these many choices for $k$.
+	Alternatively, just build a bijection from $\bracks{\frac{n}{\prod q_i}}$ to $B_I$.
+	This bijection is simple and is again, left as an exercise to the reader.)
+
+	So we have that:
+	\[ \abs{A^c} = n\cdot\sum_{\varnothing\neq I\subseteq[n]}\dfrac{(-1)^{\abs I+1}}{\prod_{i\in I}q_i} \]
+	And so:
+	\[ \abs A = n - n\cdot\sum_{\varnothing\neq I\subseteq[n]}\dfrac{(-1)^{\abs I+1}}{\prod_{i\in I}q_i} 
+	= n\parens{1-\sum_{\varnothing\neq I\subseteq[n]}\dfrac{(-1)^{\abs I+1}}{\prod_{i\in I}q_i}}
+	= n\cdot\sum_{I\subseteq[n]}\dfrac{(-1)^{\abs I}}{\prod_{i\in I}q_i} \]
+	(Since the empty product is equal to $1$.)
+
+	Now, notice that this is equal to:
+	\[ n\cdot\sum_{I\subseteq[n]}\prod_{i\in I}\parens{-\frac1{q_i}} =
+	n\cdot\sum_{I\subseteq[n]}\prod_{i\in I}\parens{-\frac1{q_i}}\cdot\prod_{i\notin I}1 \]
+	Which, by our lemma above, is equal to:
+	\[ n\cdot\prod_{i=1}^t\parens{1-\frac1{q_i}} \]
+	As required.
+
+\end{blankpp}
+

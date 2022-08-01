@@ -1,0 +1,436 @@
+We will now generalize our discussion to not just focus on discrete probability spaces but general ones as well.
+This will be somewhat brief and we will then focus on continuous probability spaces.
+First let's revise our previous definition of a probability space.
+
+\begin{defn*}
+
+	A \ppemph{$\sigma$-algebra} is a set $\cF\subseteq\powsetof\Omega$ for some set $\Omega$ which satisfies the
+	following conditions:
+	\begin{msecenumerate}
+		\mitem $\varnothing\in\cF$
+		\mitem If $\set{U_n}_{n\in\bN}\in\cF$ then their union is in $\cF$ as well:
+		\[ \bigcup_{n\in\bN}U_n\in\cF \]
+		\mitem For every $U\in\cF$, its complement is in $\cF$ as well: $U^c\in\cF$.
+	\end{msecenumerate}
+
+\end{defn*}
+
+It then follows that $\Omega\in\cF$ since it is the empty set's complement.
+$\cF$ is also closed under finite unions since we can define $U_n=\varnothing$ for every $n$ outside of the indexing
+set.
+And if $\set{U_n}_{n\in\bN}\in\cF$, then $U_n^c\in\cF$ and therefore
+\[ \parens{\bigcup_{n\in\bN}U_n^c}^c\in\cF \implies \bigcap_{n\in\bN}U_n\in\cF \]
+So $\cF$ is closed under intersections as well.
+
+\begin{prop*}
+
+	If $I$ is an arbitrary indexing set and $\set{\cF_i}_{i\in I}$ is a series of $\sigma$-algebras, then
+	\[ \bigcap_{i\in I}\cF_i \]
+	is also a $\sigma$-algebra.
+
+\end{prop*}
+
+\begin{proof}
+
+	We will show that the intersection satisfies the conditions for being a $\sigma$-algebra.
+
+	\begin{msecenumerate}[0pt]
+		\mitem Since for every $\cF_i$, $\varnothing\in\cF_i$, $\varnothing$ is in the intersection as well.
+		\mitem If $\set{U_n}_{n\in\bN}$ is in the intersection, $\set{U_n}_{n\in\bN}\in\cF_i$ for every $i\in I$, so:
+		\[ \bigcup_{n\in\bN}U_n\in\cF_i \]
+		Since $\cF_i$ is a $\sigma$-algebra, and since this is true for every $i$, the union of $U_n$ is in the
+		intersection of $\cF_i$.
+		\mitem If $U$ is in the intersection, it is in every $\cF_i$, and therefore $U^c$ is in every $\cF_i$ as well
+		and is therefore in the intersection.
+	\end{msecenumerate} 
+
+	\hfill$\qed$
+
+\end{proof}
+
+So if we have a characteristic which we want a $\sigma$-algebra to have, then we can take the minimum $\sigma$-algebra
+which has this characteristic (minimum under $\subseteq$) by taking the intersection of all the $\sigma$-algebras which
+have this characteristic.
+The most famous and useful example of this are Borel Sets:
+
+\begin{defn*}
+
+	Given a set $S\subseteq\bR$, we define the \ppemph{Borel Set} of $S$, $\borelof S$, to be the minimum $\sigma$-algebra
+	which contains every closed interval in $S$.
+
+	Furthermore, while this is redundant, we will require $\borelof S\subseteq\powsetof S$.
+
+\end{defn*}
+
+$\borelof S$ exists since we can take the intersection of all the $\sigma$-algebras which contain every closed interval of
+$S$ and are subsets of its powerset.
+This intersection is non-empty since $\powsetof S$ is contained in it.
+
+\begin{defn*}
+
+	A \ppemph{Probability Space} is a triplet
+	\[ \tuple{\Omega, \cF, \prob} \]
+	Where $\Omega$ is a set called the \ppemph{sample space}, $\cF$ is a $\sigma$-algebra over $\Omega$, and $\prob$ is a
+	probability function over $\cF$, a function
+	\[ \prob\colon\cF\longrightarrow[0,1] \]
+	Where $\probof\Omega=1$ and if $\set{A_n}_{n\in\bN}$ are disjoint then
+	\[ \probof{\bigsqcup_{n\in\bN}A_n} = \sum_{n\in\bN}\probof{A_n} \]
+
+\end{defn*}
+
+\begin{thrm*}
+
+	There \emph{exists} a probability function:
+	\[ \prob\colon\borelof{[0,1]}\longrightarrow[0,1] \]
+	Where for every $[a,b]\subseteq[0,1]$, $\probof{[a,b]}=b-a$.
+
+\end{thrm*}
+
+Notice that this doesn't tell us much about the actual definition of the Lebesgue measure, just a certain criteria it must
+fulfil.
+We will not be proving this theorem as we don't have the necessary tools to do so.
+To prove this we just need to show that the Lebesgue Measure satisfies the criteria.
+
+\begin{prop*}
+
+	Suppose $\prob$ is the probability function defined over $\borelof{[0,1]}$ discussed above.
+	Then
+
+	\begin{msecenumerate}
+		\mitem $\probof{\set a}=0$
+		\mitem $\probof{(a,b)}=b-a$
+		\mitem If $Q$ is countable, then $\probof{Q}=0$.
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Notice that in \ppref[theorem]{contProbTheorem}, we did not assume that the probability space was discrete, so
+			we will use the result here.
+			Let's define $A_n=\bracks{a,a+\frac1n}$ for every $n\in\bN$.
+			Then $\set{A_n}_{n\in\bN}$ is decreasing, and its intersection is $\set{a}$.
+			Furthermore, notice that $\probof{A_n}=a+\frac1n-a=\frac1n$.
+			So:
+			\[ \probof{\set a} = \probof{\bigcap_{n\in\bN}A_n} = \lim_{n\to\infty}\probof{A_n} = \lim_{n\to\infty}\frac1n = 0 \]
+			As required.
+
+		\mitem Notice that:
+			\[ \probof{[a,b]} = \probof{(a,b)\cup\set a\cup\set b} = \probof{(a,b)} + \probof{\set a}+\probof{\set b} = \probof{(a,b)} \]
+			Since the probability of a singleton is $0$.
+			So:
+			\[ \probof{(a,b)} = \probof{[a,b]} = b - a \]
+
+		\mitem We know that
+			\[ \probof{Q} = \probof{\bigsqcup_{q\in Q}\set q} \]
+			And since this is a disjoint countable union, this is equal to:
+			\[ = \sum_{q\in Q}\probof{\set q} = 0 \]
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	If $\tuple{\Omega,\cF,\prob}$ is a probability space, a \ppemph{random variable} is a function
+	\[ X\colon\Omega\longrightarrow\bR \]
+	Where for every $B\in\borelof\bR$, the preimage of $B$, $X^{-1}(B)$, is an event in $\cF$.
+	The reason for this is so $X\in B$ (which is the set $\set{\omega\in\Omega}[\omega\in X^{-1}(B)]$) is an event in $\cF$.
+
+	The \ppemph{distribution function} of $X$ is a function
+	\[ \prob_X\colon\borelof\bR\longrightarrow[0,1] \]
+	Such that $\probof[X]{B}=\probof{X\in B}=\probof{X^{-1}(B)}$.
+	Note that $\prob_X$ is a probability function over $\tuple{\bR,\borelof\bR}$.
+
+	Two random variables, $X$ and $Y$, are \ppemph{distributively equal} (or equivalent) if $\prob_X=\prob_Y$.
+	This is denoted $X\deq Y$.
+
+\end{defn*}
+
+\begin{defn*}
+
+	If $X$ is a random variable, then the \ppemph{cumulative distribution} of $X$ is the function
+	\[ F_X\colon\bR\longrightarrow[0,1] \]
+	Defined by
+	\[ F_X(s) = \probof{X\leq s} = \probof{X^{-1}\big((-\infty,s]\big)} \]
+
+	The \ppemph{complementary cumulative distribution function} (or \ppemph{tail distribution}) of $X$ is the function
+	\[ \ccum\colon\bR\longrightarrow[0,1] \]
+	Defined by
+	\[ \ccumof s = \probof{X>s} = 1 - \cumof s \]
+
+\end{defn*}
+
+\begin{prop*}
+
+	If $X$ is a random variable, then:
+
+	\begin{msecenumerate}
+		\mitem $F_X$ is increasing.
+		\mitem $\lim\limits_{x\to\infty} F_X(x)=1$ and $\lim\limits_{x\to-\infty} F_X(x)=0$.
+		\mitem $F_X$ is continuous from the right and its limit exists from the left at every real point.
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem If $x<y$, then $\set{X\leq x}\subseteq\set{X\leq y}$, so
+			\[ F_X(x) = \probof{X\leq x} \leq \probof{X\leq y} = F_X(y) \]
+			As required.
+
+		\mitem Let $a_n$ be any monotonic increasing sequence to $\infty$.
+			Then the sets $\set{X\leq a_n}$ are also increasing, and therefore
+			\[ \lim_{n\to\infty} \cumof[X]{a_n} = \lim_{n\to\infty}\probof{X\leq a_n} = \probof{\bigcup_{n\in\bN}\set{X\leq a_n}} \]
+			And the union of all sets $\set{X\leq a_n}$ is $\Omega$, since for every $\omega\in\Omega$, at some point $X(\omega)\leq a_n$.
+			So:
+			\[ = \probof\Omega = 1 \]
+			Since this is true for any monotonic increasing sequence to $\infty$, it must be true for any sequence whose limit is infinity,
+			and therefore
+			\[ \lim_{x\to\infty} \cumof[X]x = 1 \]
+
+			Let $a_n$ be any monotonic decreasing sequence to $-\infty$.
+			Then the sets $\set{X\leq a_n}$ are also decreasing and therefore:
+			\[ \lim_{n\to\infty}\cumof[X]{a_n} = \lim_{n\to\infty}\probof{X\leq a_n} = \probof{\bigcap_{n\in\bN}\set{X\leq a_n}} \]
+			And the intersection of all sets $\set{X\leq a_n}$ is the empty set, as for every $\omega\in\Omega$, at some point $X(\omega)>a_n$.
+			So
+			\[ = \probof\varnothing = 0 \]
+			And for the same reason as above, this means
+			\[ \lim_{x\to-\infty}\cumof[X]x = 0 \]
+
+		\mitem Let $\epsilon_n$ be a positive monotonic decreasing sequence to $0$.
+			Then:
+			\[ \lim_{n\to\infty}\cumof[X]{x+\epsilon_n} = \lim_{n\to\infty}\probof{X\leq x+\epsilon_n} =
+			\probof{\bigcap_{n\in\bN}\set{X\leq x+\epsilon_n}} = \probof{\bigcap_{n\in\bN}X^{-1}\big((-\infty,x+\epsilon_n)\big)} \]
+			And this intersection is equal to $X^{-1}\big((-\infty,x)\big]$, so this is equal to:
+			\[ = \probof{X^{-1}\big((-\infty,x)\big]} = \probof{X\leq x} = \cumof[X]x \]
+			And therfore for every $x_n\searrow x$, the limit of $\cumof[X]{x_n}$ is $\cumof[X]x$, so
+			\[ \lim_{t\to x^+}\cumof[X]t = \cumof[X]x \]
+
+			And if $\epsilon_n$ is a negative increasing sequence to $0$ then
+			\[ \lim_{n\to\infty}\cumof[X]{x+\epsilon_n} = \probof{\bigcup_{n\in\bN}\set{X\leq x+\epsilon_n}} = \probof{X<x} \]
+			(Recall that by the definition of a limit, $\epsilon_n$ will never equal $0$.)
+			So
+			\[ \lim_{t\to x^-}\cumof[X]t = \probof{X<x} \]
+			So the limit exists.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{defn*}
+
+	A random variable $X$ is \ppemph{discrete} if and only if there exists a countable set $B\in\borelof\bR$ such that $\probof{X\in B}=1$.
+
+	\begin{note}
+
+		This is consistent with our previous definition, since singletons are in $\borelof\bR$, and $B$ is countable:
+		\[ \probof{X\in B} = \sum_{x\in B}\probof{X=x} = 1 \]
+		So we can define a mass probability function:
+		\[ \mprob_X\colon\Omega\longrightarrow[0,1] \]
+		By $\mprobof[X]x = \probof{X=x}$.
+		Since for every $x\notin B$, $\probof{X=x}=0$ (otherwise the sum couldn't be $1$), this creates a probability distribution.
+
+	\end{note}
+
+	And a random variable $X$ is \ppemph{continuous} if for every $x\in\bR$, $\probof{X=x}=0$.
+	Note that this means a random variable can't be both discrete and continuous.
+
+\end{defn*}
+
+\begin{prop*}
+
+	A random variable is continuous if and only if its cumulative distribution function is continuous.
+
+\end{prop*}
+
+\begin{proof}
+
+	On one hand, if $X$ is continuous, then we need to show that $F_X$ is left-continuous (since we already know it is right-continuous).
+	We know that
+	\[ \lim_{t\to x^-}\cumof[X]t = \probof{X<x} \]
+	And we also know that $\probof{X\leq x} = \probof{X<x} + \probof{X=x} = \probof{X<x}$.
+	Therefore $F_X$ is also left continuous, as required.
+
+	For the converse, we know that for every $x$:
+	\[ \lim_{t\to x^-}\cumof[X]t = \cumof[X]x = \probof{X\leq x} \]
+	Since $F_X$ is continuous.
+	But we know the limit is $\probof{X<x}$, so $\probof{X\leq x}=\probof{X<x}+\probof{X=x}=\probof{X<x}$, so $\probof{X=x}=0$.
+	Since this is true for every $x\in\bR$, $X$ is continuous.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{exam}
+
+	It is possible for a random variable to be neither continuous nor discrete.
+	Let $X$ be a random variable over the probability space $\tuple{[0,1],\borelof{[0,1]},\prob}$
+	defined by $X(\omega)=\minof{\omega,\frac12}$.
+	So $\probof{X=\frac12}=\probof{\bracks{\frac12,1}}=\frac12$, so $X$ is not continuous.
+	But suppose $X$ is discrete, so there exists a countable $S$ such that $\probof{X\in S}=1$.
+	It is obvious then that $\frac12\in S$.
+	But for every other $x\neq\frac12$, $\probof{X=x}=0$.
+	So we get that:
+	\[ 1 = \sum_{x\in S}\probof{X=x} = \frac12+\sum_{\frac12\neq x\in S}\probof{X=x} = \frac12 \]
+	So we have that $1=\frac12$ in contradiction.
+
+\end{exam}
+
+\begin{lemm*}
+
+	If $X$ is a random variable and if $\set{x_n}_{n=1}^\infty$ is a sequence of distinct real points, then
+	\[ \lim_{n\to\infty}\probof{X=x_n} = 0 \]
+
+\end{lemm*}
+
+\begin{proof}
+
+	We know that:
+	\[ \probof{X\in\bigcup_{n\in\bN}x_n} = \sum_{n=1}^\infty\probof{X=x_n} \leq 1\]
+	And since $\probof{X=x_n}$ is nonnegative, this sum must converge.
+	And since the sum converges, the limit of $\probof{X=x_n}$ must be $0$, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+This means that for every $a\in\bR$, the limit of $\probof{X=x}$ as $x$ approaches $a$ is $0$.
+This is because for every strictly monotonic sequence of points $x_n$ to $a$, $\probof{X=x_n}$ has a limit of $0$.
+So the limit of $\probof{X=x}$ is $0$.
+
+Notice then that $X$ is continuous if and only if $\probof{X=x}$ is continuous.
+This is true because if $X$ is continuous then the limit of $\probof{X=x}$ as $x$ approaches $a$ is $0$, which is the
+same as $\probof{X=a}$.
+And if $\probof{X=x}$ is continuous then for every $a$, the limit of $\probof{X=x}$ as $x$ approaches $a$ is
+$\probof{X=a}$, and that limit is $0$, so $\probof{X=a}=0$.
+
+\begin{prop*}
+
+	\[ \probof{X\in(a,b)} = \lim_{x\to a^+}\probof{X\in(x,b)} = \lim_{x\to b^-}\probof{X\in(a,x)} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	We know that
+	\[ \probof{X\in(x,b)} = \probof{X<b} - \probof{X\leq x} = \probof{X<b} - \cumof[X]x \]
+	And since $\cum_X$ is right-conttinuous, as $x$ approaches $a$ from right, the limit of this is:
+	\[ \lim_{x\to a^+}\probof{X\in(x,b)} = \probof{X<b} - \cumof[X]a = \probof{X<b} - \probof{X\leq a} = \probof{X\in(a,b)} \]
+	As required.
+
+	And for the other equality:
+	\[ \probof{X\in(a,x)} = \probof{X\leq x} - \probof{X\leq a} - \probof{X=x} = \cumof[X]x - \probof{X\leq a} - \probof{X=x} \]
+	As $x$ approaches $b$ from the left, the limit of $\cumof[X]x$ is $\probof{X<b}$, and by the lemma above the limit of
+	$\probof{X=x}$ is $0$.
+	So:
+	\[ \lim_{x\to b^-} = \probof{X<b} - \probof{X\leq a} = \probof{X\in(a,b)} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	\[ \probof{X\in(-\infty,a)} = \lim_{c\to-\infty}\probof{X\in(c,a)} \]
+	And
+	\[ \probof{X\in(a,\infty)} = \lim_{c\to\infty}\probof{X\in(a,c)} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	Recall that
+	\[ \probof{X\in(c,a)} = \probof{X<a} - \cumof[X]c \]
+	And the limit of $\cumof[X]c$ as $c$ goes to $-\infty$ is $0$ as shown above, so the limit of this is $\probof{X<a}$, which is
+	$\probof{X\in(-\infty,a)}$ as required.
+
+	Notice that
+	\[ \probof{X\in(a,c)} = 1 - \probof{X\leq a\text{ or }X\geq c} = 1 - \probof{X\leq a} - \probof{X\geq c} =
+	\probof{X<c} - \probof{X\leq a} = \cumof[X]c - \probof{X\leq a} - \probof{X=c} \]
+	The limit of $\cumof[X]c$ is $1$ as shown above, and the limit of $\probof{X=c}$ is $0$ as shown in the lemma above.
+	So the limit of this is $1-\probof{X\leq a} = \probof{X>a}$ which is $\probof{X\in(a,\infty)}$ as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	A random variable $X$ is \ppemph{absolutely continuous} if there exists a real nonnegative function $f_X$ such that for every real $a<b$:
+	\[ \probof{X\in(a,b)} = \int_a^b f_X(x)\,dx \]
+	$f_X$ is called $X$'s \ppemph{probability density function}.
+
+\end{defn*}
+
+\begin{prop*}
+
+	If $X$ is an absolutely continuous random variable then
+	\begin{msecenumerate}
+		\mitem $X$ is continuous.
+		\mitem \[ \int_{-\infty}^\infty f_X(x)\,dx = 1 \]
+		\mitem \[ \cumof[X]s = \int_{-\infty}^s f_X(x)\,dx \text{ and } \ccumof[X]s = \int_s^\infty f_X(x)\,dx \]
+		\mitem \[ f(x) = F'(x) \]
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Suppose $a\in\bR$.
+			Then:
+			\[ \probof{X=a} = \probof{\bigcap_{n\in\bN}\set{X\in(a,a+\frac1n)}} = \lim_{n\to\infty}\probof{X\in\parens{a,a+\frac1n}} =
+			\lim_{n\to\infty}\int_a^{a+\frac1n}f_X(x)\,dx \]
+			And this limit approaches $0$.
+			So $\probof{X=a}=0$ as required.
+
+		\mitem Let $x_n$ be a sequence of monotonically increasing values to infinity, and $x'_n$ decreasing to negative infinity.
+			Then:
+			\[ \int_{-\infty}^\infty f_X(x)\,dx = \lim \int_{x'_n}^0 f_X(x) + \int_0^{x_n} f_X(x) = \lim \probof{X\in(x'_n,0)} + \probof{X\in(x_n,0)} \]
+			This is equal to
+			\[ \lim\probof{X\in(x'_n,x_n)} \]
+			Since $X$ is continuous, so we can add in $\probof{X=0}$ as it is equal to $0$.
+			And this is an increasing series so this is equal to:
+			\[ \probof{\bigcup_{n\in\bN}\set{X\in(x'_n,x_n)}} = \probof{X\in\bR} = 1 \]
+			As required.
+
+		\mitem We can use a similar proof as above for this.
+		\mitem Suppose $\phi$ is an antiderivative of $f_X$ (which must exist since $f_X$ is integrable over every interval), then:
+			\[ F_X(t) = \int_{-\infty}^t f_X(x)\,dx = \lim_{s\to-\infty}\phi(t)-\phi(s) = \phi(t) - c \]
+			Where $c$ is some constant.
+			And if we differentiate both sides we get $F_X'(t)=f_X(t)$, as required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	If if $I$ is an interval with length $\ell$ (so $I=[a,b]$ or $(a,b)$, etc. and $\ell=b-a$) and $X$ is a random variable with a distribution:
+	\[ f_X(x) = \frac1\ell\cdot\bone_{I}(x) \]
+	Then $X$ has a \ppemph{uniform distribution} over $I$, this is denoted $X\sim\puniof I$.
+
+\end{defn*}
+
+It is simple to verify that this is a valid probability density function, since its integral over $\bR$ is equal to:
+\[ \int_a^b\frac1{b-a}\,dx = \frac{b-a}{b-a} = 1 \]
+
+\begin{defn*}
+
+	If $X$ is a random variable with a probability density function:
+	\[ f_X(t) = \lambda\cdot e^{-\lambda t}\cdot\bone_{[0,\infty)} \]
+	Where $\lambda>0$, then $X$ has a \ppemph{exponential probability distribution}, denoted $X\sim\expof\lambda$.
+
+\end{defn*}
+
+This is a probability density function since its integral over $\bR$ is:
+\[ \int_0^\infty \lambda e^{-\lambda t}\,dt = e^{-\lambda t}\big|_0^\infty = 1 \]
+

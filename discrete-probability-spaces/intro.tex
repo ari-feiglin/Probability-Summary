@@ -1,0 +1,101 @@
+\begin{defn*}
+
+	A \ppemph{probability space} is a triplet:
+	\[ \tuple{\Omega, \cF, \prob} \]
+	Where:
+	\begin{msecitemize}
+		\mitem $\Omega$ is a set called the \ppemph{sample space}.
+		Intuitively it is the set of all outcomes of a trial/experiment.
+
+		\mitem $\cF$ is a subset of $\powsetof{\Omega}$, and its elements are called \ppemph{events}.
+		$\cF$ must satisfy the following:
+		\begin{msecitemize}
+			\mitem $\Omega\in\cF$
+			\mitem If $\set{A_i}_{i=1}^\infty\in\cF$, then $\bigcup\limits_{i=1}^\infty A_i\in\cF$.
+			\mitem If $A\in\cF$, then $\Omega\setminus A\in \cF$.
+		\end{msecitemize}
+
+		\begin{note}
+			Note that these requirements also imply that:
+			\begin{msecitemize}
+				\mitem $\varnothing\in\cF$, since $\varnothing=\Omega\setminus\Omega$.
+				\mitem And if $\set{A_i}_{i=1}^\infty\in\cF$ then:
+					\[ \bigcap_{i=1}^\infty A_i\in\cF \]
+				Since this is the complement of the union of the complements of $A_i$.
+			\end{msecitemize}
+		\end{note}
+
+		\mitem $\prob$ is the \ppemph{probability function}, a function:
+			\[ \prob\colon\cF\longrightarrow[0,\infty) \]
+		Which satisfies the following:
+			\begin{msecitemize}
+				\mitem $\probof{\Omega}=1$
+					\mitem If $\set{A_i}_{i=1}^\infty\in\cF$ are (pairwise) disjoint, then:
+					\[ \probof{\bigsqcup_{i=1}^\infty A_i} = \sum_{i=1}^\infty\probof{A_i} \]
+				Note that this is a \ppemph{countably infinite} sum.
+			\end{msecitemize}
+	\end{msecitemize}
+
+\end{defn*}
+
+\begin{prop*}
+
+	The following are true:
+	\begin{msecenumerate}
+		\mitem $\probof{\varnothing}=0$
+		\mitem If $\set{A_i}_{i=1}^n\in\cF$ are disjoint, then:
+			\[ \probof{\bigsqcup_{i=1}^n A_i} = \sum_{i=1}^n\probof{A_i} \]
+		This is different than the requirement on $\prob$ since the sum is finite here.
+		\mitem If $A$ is a subset of $B$ (and both are events), then $\probof{A}\leq\probof{B}$.
+		\mitem If $A$ is a subsetof $B$, then $\probof{B\setminus A} = \probof{B} - \probof{A}$
+		\mitem If $A$ is an event, then $\probof{A}\in[0,1]$.
+		This means that $\prob$ can be thought of as a function to $[0,1]$ instead of as a function to $[0,\infty)$.
+		\mitem $\probof{A}=\probof{A^c}$ (complements are relative to $\Omega$).
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem We can define a series $\set{A_i}_{i=1}^\infty$ by $A_i=\varnothing$.
+		Then they are all pairwise disjoint and their union is also $\varnothing$.
+		So:
+			\[ \probof{\varnothing} = \probof{\bigsqcup_{i=1}^\infty \varnothing} = \sum_{i=1}^\infty\probof{\varnothing} \]
+		So we get:
+			\[ \sum_{i=1}^\infty\probof{\varnothing} = 0 \]
+		Which means that $\probof\varnothing=0$ (as otherwise the sum doesn't converge).
+
+		\mitem Let's define an infinite series $\set{B_i}_{i=1}^\infty$ like so:
+
+		For $i\leq n$, we define $B_i=A_i$. Otherwise, $B_i=\varnothing$.
+		
+		Then $\set{B_i}_{i=1}^\infty$ is still pairwise disjoint and its union is $\bigsqcup\limits_{i=1}^n A_i$, so:
+			\[ \probof{\bigsqcup_{i=1}^n A_i} = \probof{\bigsqcup_{i=1}^\infty B_i} = \sum_{i=1}^\infty\probof{B_i}
+			= \sum_{i=1}^n\probof{A_i} + \sum_{i=n+1}^\infty\probof\varnothing = \sum_{i=1}^n\probof{A_i} \]
+		As required.
+
+		\mitem We know that $B=A\sqcup(B\setminus A)$, and so:
+			\[ \probof{B} = \probof{A} + \probof{B\setminus A} \]
+		And since $\probof{B\setminus A}\geq0$, we know $\probof A\leq\probof B$, as required.
+
+		\mitem Similar to above, we see:
+			\[ \probof{B} = \probof{A} + \probof{B\setminus A} \]
+		Which means that:
+			\[ \probof{B} - \probof{A} = \probof{B\setminus A} \]
+		As required.
+
+		\mitem Since we know $\varnothing\subseteq A\subseteq\Omega$, this means:
+			\[ \probof\varnothing\leq\probof A\leq\probof\Omega \implies 0\leq\probof A\leq 1 \]
+		As required.
+
+		\mitem We know that $\Omega=A\sqcup A^c$, so:
+			\[ \probof\Omega = \probof A+\probof{A^c} \implies 1=\probof{A}+\probof{A^c} \]
+		Which means that $\probof{A^c}=1-\probof A$, as required.
+	\end{msecenumerate}
+
+\hfill$\qed$
+
+\end{proof}
+
+

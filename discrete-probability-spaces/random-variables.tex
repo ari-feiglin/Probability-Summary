@@ -1,0 +1,688 @@
+Often times it will be tricky, unintuitive, and just downright unhelpful to work with a plain probability space.
+It can be hard to figure out exactly {\sl how} you want to construct your probability space, and you'll probably end up
+using lots of annoying and incomprehensible notation in order to make a point.
+Fortunately, probability theory offers a sort of abstraction from the notion of a probability space.
+This abstraction comes in the form of something called a {\sl random variable}.
+
+\begin{defn*}
+
+	A \ppemph{random variable} over a probability space $(\Omega, \cF, \prob)$ is a function:
+	\[ X\colon\Omega\longrightarrow\bR \]
+
+\end{defn*}
+
+\begin{note}
+
+	There's actually a bit more nuance to this definition, but we'll return to it when we cover general probability spaces.
+
+\end{note}
+
+Of course the introduction of random variables as functions should be of no surprise.
+Mathematicians just {\sl love} functions.
+It makes them wet.
+
+But why is it called a random {\sl variable}?
+After all it's hardly a variable, it's a function for god's sake!
+Well think of it this way: suppose we have a clinical test where we want to know the number of patients who survived.
+We can call this a variable $X$, and we can play around with it like it's a variable, but it's not a constant!
+It is actually a function, where given some result of the test $\omega$, it gives us the number of survivors.
+This is a function.
+So while on the surface a random variable seems like a variable, and in fact it is helpful to think of them as variables in
+many cases, they are far from being constants (though they can be, just like how there are constant functions).
+
+\begin{defn*}
+
+	The \ppemph{probability distribution} of a random variable $X$ is a function:
+	\[ \prob_X\colon\powsetof\bR\longrightarrow[0,1] \]
+	Defined like so:
+	\[ \probof[X]{S} = \probof{\set{\omega\in\Omega}}[X(\omega)\in S] \]
+	This is the probability that $X$ is in the set $S$.
+
+	Many times there are special cases of this, like $\probof{X\leq a}$ is the probability that $X$ is less than $5$, etc.
+	Of course, this is all notational.
+
+\end{defn*}
+
+\begin{prop*}
+
+	For every random variable $X$ over the probability space $(\Omega,\cF,\prob)$, $(\bR,\powsetof\bR,\prob_X)$ is a
+	probability space.
+
+\end{prop*}
+
+\begin{proof}
+
+	We need to show firstly that $\probof[X]\bR=1$.
+	This is trivial since:
+	\[ \probof[X]\bR = \probof{\set{\omega\in\Omega}}[X(\omega)\in\bR] \]
+	But every $\omega$ satisfies that $X(\omega)\in\bR$, so this is equal to $\probof\Omega=1$.
+
+	Now suppose $\set{A_i}_{i=1}^\infty\in\powsetof\bR$ are disjoint.
+	Then:
+	\[ \probof[X]{\bigsqcup_{i=1}^\infty A_i} = \probof{\set{\omega\in\Omega}}[X(\omega)\in\bigsqcup_{i=1}^\infty A_i] \]
+	But notice that:
+	\[ \set{\omega\in\Omega}[X(\omega)\in\bigsqcup_{i=1}^\infty A_i] =
+	   \bigsqcup_{i=1}^\infty\set{\omega\in\Omega}[X(\omega)\in A_i] \]
+	So this is equal to:
+	\[ = \probof{\bigsqcup_{i=1}^\infty\set{\omega\in\Omega}[X(\omega)\in A_i]} =
+		 \sum_{i=1}^\infty\probof{\set{\omega\in\Omega}[X(\omega)\in A_i]} = \sum_{i=1}^\infty\probof[X]{A_i} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	A random variable $X$ is \ppemph{discrete} if its probability distribution is discrete.
+	That means that there exists a function
+	\[ \mprob_X\colon\bR\longrightarrow[0,1] \]
+	such that for every $A\subseteq\bR$:
+	\[ \probof[X]{A} = \sum_{x\in A}\mprobof[X]x \]
+	We also denote:
+	\[ \probof{X=a}=\mprobof[X]a \]
+
+\end{defn*}
+
+\begin{defn*}
+
+	Given an event $A$, we define the \ppemph{indicator function} of $A$ to be a random variable defined like so:
+	\[ \bone_A(\omega) = \begin{cases} 1 & \omega\in A \\ 0 & \omega\notin A \end{cases} \]
+
+\end{defn*}
+
+\begin{defn*}
+
+	A random variable $X$ has a \ppemph{bernoulli distribution} of $p\in[0,1]$ if:
+	\[ \probof[X]{\set1}=p \quad \probof[X]{\set{0}} = 1-p \]
+	This is indicated $X\sim\berof p$.
+
+	Random variables with a bernoulli distribution are also called \ppemph{indicators}, as they {\sl indicate} if an event
+	occurred.
+
+\end{defn*}
+
+\begin{note}
+
+	It should be obvious that indicators are discrete.
+	This is since we can define $\mprobof[X]{x}$ to be equal to $\probof[X]{\set x}$.
+
+	But note that this isn't always true.
+	Say we want to somehow take a random number from $[0,1]$, the probability that we take any arbitrary number is $0$ since
+	there is an uncountable number of numbers to choose from, so there can't be a discrete probability function.
+	We currently don't have the tools to deal with this, so we'll return to it later.
+
+\end{note}
+
+\begin{prop*}
+
+	\[ \bone_A\sim\berof{\probof A} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	We know that $\probof[\bone_A]{\set{1}} = \probof{\set{\bone_A=1}} = \probof{A}$, as required.
+	And $\probof[\bone_A]{\set0} = \probof{\set{\bone=0}} = \probof{\set{\omega\notin A}} = \probof{A^c} = 1-\probof A$,
+	as required.
+
+\hfill$\qed$.
+
+\end{proof}
+
+\begin{defn*}
+
+	A discrete random variable $X$ has a \ppemph{uniform distribution} over a set $S$, denoted $X\sim\uniof{S}$ if the
+	probability of $X$ being equal to any $x\in S$ is equal, and $\probof{X\notin S}=0$.
+	That is, for every $x,y\in S: \probof{X=x}=\probof{X=y}$.
+
+\end{defn*}
+
+Since $\probof{X\in S}=1$, this means that $\sum\limits_{x\in S}\probof{X=x}=\abs{S}\cdot\probof{X=x}=1$, so for every $x\in S$,
+we have that $\probof{X=x}=\frac1{\abs S}$.
+
+Since we have defined a new mathematical object it is handy to define equivalence on it.
+For random variables we define two types of equivalence:
+
+\begin{defn*}
+
+	Two random variables, $X$ and $Y$, \emph{over the same probability space} are \ppemph{almost surely equal} if the probability
+	that they equal one another is $1$.
+	This is denoted by $X\aseq Y$.
+	So:
+	\[ X\aseq Y\iff \probof{X=Y}=1 \iff \probof{\set{\omega\in\Omega}[X(\omega)=Y(\omega)]} = 1 \]
+
+	We say that two discrete random variables $X$ and $Y$ are \ppemph{distributively equal} if they have the same distribution.
+	This is denoted by $X\deq Y$.
+	So $X\deq Y$ if and only if $\prob_X=\prob_Y$.
+	Note that $X$ and $Y$ don't need to necessarily be defined over the same probability space.
+
+\end{defn*}
+
+It is trivial to see that if $X=Y$ (that is they are the same function), then $X\aseq Y$ and $X\deq Y$.
+But is almost surely equivalence more powerful than distributive equivalence?
+The answer is yes.
+
+\begin{prop*}
+
+	If $X$ is almost surely equal to $Y$, than $X$ is distributively equal to $Y$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Let $S\subseteq\bR$, we will show that $\prob_X(S)=\prob_Y(S)$.
+	Notice that $\probof{X\in S}=\probof{X\in S, Y\in S} + \probof{X\in S, Y\notin S}$.
+	But
+	\[ \set{X\in S, Y\notin S}=\set{\omega\in\Omega}[X(\omega)\in S, Y(\omega)\notin S] \]
+	which is a subset of the set
+	$\set{\omega\in\Omega}[X(\omega)\neq Y(\omega)]$ which has a probability of $0$ since $X$ and $Y$ are almost surely equal.
+
+	So we have that $\probof[X]{S} = \probof{X\in S, Y\in S}$, and by symmetry $\probof[Y]{S} = \probof{X\in S, Y\in S}$, so we have
+	that for every $S\subseteq\bR$: $\probof[X]{S}=\probof[Y]{S}$.
+
+\hfill$qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	Suppose $X$ and $Y$ are two random variables and $f\colon\bR\longrightarrow\bR$ is any real function.
+	\begin{msecenumerate}
+		\mitem If $X\aseq Y$ then $f(X)\aseq f(Y)$.
+		\mitem If $X\deq Y$ then $f(X)\deq f(Y)$.
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{note}
+
+	It would be more correct to say that $f\circ X=f\circ Y$ since we're considering the composition of functions, but in probability
+	it is much more common to treat random variables in a way similar to numbers.
+	This is a much more comfortable way to treat them and there's no issue with it.
+
+\end{note}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem We need to show that $\probof{f(X)=f(Y)}=1$.
+			That is, $\probof{\set{\omega\in\Omega}[f(X(\omega))=f(Y(\omega))]}=1$.
+			But this set is a superset of the set $\set{\omega\in\Omega}[X(\omega)=Y(\omega)]$, which has probability $1$, and thus so
+			does this.
+			So $f(X)\aseq f(Y)$.
+
+		\mitem We need to show that $\prob_{f(X)}=\prob_{f(Y)}$.
+			Let $s\subseteq\bR$, then:
+			\[ \probof[f(X)]{S} = \probof{f(X)\in S} = \probof{X\in f^{-1}(S)} = \probof{Y\in f^{-1}(S)} = \probof{f(Y)\in S} \]
+			As required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+Notice that if we have two random variables $X$ and $Y$, even if we know their distribution, we still can't know the distribution of
+random variables in the form of $f(X,Y)$, for example $X+Y$.
+This is demonstrated in the following example:
+
+\begin{exam}
+
+	Suppose $X, Y\sim\berof{\frac12}$.
+	In one case, suppose $X$ and $Y$ are the results of two independent coin flips, then $X+Y$ has a distribution of:
+	\[ \probof{X+Y=x} = \begin{cases} \frac14 & x=0,2 \\ \frac12 & x=1 \end{cases} \]
+	since if $x=0$ or $2$ then both coins must be either heads or tails (one out of four possibilities), and if $x=1$ then one coin must
+	be heads and the other tails (two out of four possibilities).
+
+	But if $X=Y$ then $X+Y=2X$ which has a distribution $\probof{X=0}=\frac12$ and $\probof{X=2}=\frac12$.
+
+\end{exam}
+
+So we need an extra piece of information in order to discern more about how random variables interact with one another.
+
+\begin{defn*}
+
+	A \ppemph{joint probability vector} is a vector of random variables.
+	So for example, we may have
+	\[ \jpv = \tuple{X_1,X_2,\dots,X_n} \]
+
+	And the \ppemph{joint probability distribution} of a joint probability vector $\jpv$ is a function:
+	\[ \prob_{\bs X}\colon \powsetof{\bR^n}\longrightarrow[0,1] \]
+	Where for every $S\in\powsetof{\bR^n}$:
+	\[ \probof[\jpv]{S} = \probof{(X_1,\dots,X_n)\in S} \]
+
+	A random vector is discrete if there exists a function $\mprob_{\bs X}\colon\bR^n\longrightarrow[0,1]$ such that for every
+	$S\subseteq\bR^n$:
+	\[ \probof[\jpv]{S} = \sum_{v\in S}\mprobof[\jpv]{v} \]
+
+\end{defn*}
+
+If we know the joint probability distribution of a vector, we can also determine the probability distribution of each of its terms.
+
+\begin{prop*}
+
+	Given $\jpv=\tuple{X_1,\dots,X_n}$, then for every relevant $i$: $\probof[X_i]{A}=\probof[\jpv]{\bR^{i-1}\times A\times\bR^{n-i}}$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \probof[\jpv]{\bR^{i-1}\times A\times\bR^{n-i}} = \probof{X_1\in\bR,\dots,X_{i-1}\in\bR, X_i\in A, X_{i+1}\in\bR,\dots,X_n\in\bR} \]
+	And we know that $X_j\in\bR$ is true, so this is just equal to:
+	\[ \probof{X_i\in A} \]
+
+\hfill$\qed$
+
+\end{proof}
+
+Notice that this means 
+\[ \probof{X=x}=\probof{X=x, Y\in\bR} = \sum_{y\in\bR}\probof{X=x, Y=y} \]
+
+\begin{defn*}
+
+	If $X$ is a random variable and $A$ is an event with nonzero probability, then we define \ppemph{conditional probability} on $X$ given the
+	event $A$ by:
+	\[ \probof[X\mid A]{S} = \probof{X\in S}[A] = \probof[A]{X\in S} \]
+
+\end{defn*}
+
+\begin{defn*}
+
+	Two random variables, $X$ and $Y$, are \ppemph{independent} if for every $A,B\subseteq\bR$:
+	$\probof{X\in A, Y\in B}=\probof{X\in A}\cdot\probof{Y\in B}$.
+	This is denoted $X\indep Y$ as usual.
+
+\end{defn*}
+
+\begin{prop*}
+
+	$X$ and $Y$ are independent random variables if and only if for every $A\subseteq\bR$ where $\probof[X]{A}>0$:
+	$\prob_{Y\mid\set{X\in A}}=\prob_Y$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \probof[Y\mid\set{X\in A}]{B} = \probof{Y\in B}[X\in A] = \frac{\probof{X\in A,Y\in B}}{\probof{X\in A}} \]
+	And thus if $X$ and $Y$ are independent this equals $\probof{Y\in B}$, so the distributions are the same.
+	And if this is equal to $\probof[Y]{B}$, then we get $\probof{X\in A,Y\in B}=\probof{X\in A}\cdot\probof{Y\in B}$ for every $A$ and $B$,
+	which means $X$ and $Y$ are independent.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	If $X$ and $Y$ are discrete random variables, then they are indpendent if and only if for every real $x$ and $y$:
+	\[ \probof{X=x,Y=y}=\probof{X=x}\cdot\probof{Y=y} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{multiparitemize}[0pt]
+		\paritem{$(\implies)$} Let $A=\set{x}$ and $B=\set{y}$, then:
+			\[ \probof{X=x, Y=y} = \probof{X\in A, Y\in B} = \probof{X\in A}\cdot\probof{Y\in B} = \probof{X=x}\cdot\probof{Y=y} \]
+
+		\paritem{$(\impliedby)$} Let $A, B\subseteq\bR$, then:
+			\[ \probof{X\in A, Y\in B} = \sum_{(a,b)\in A\times B}\probof{X=a, Y=b} = \sum_{a\in A}\sum_{b\in B}\probof{X=a}\cdot\probof{Y=b} = \]
+			\[ \sum_{a\in A}\probof{X=a} \cdot \sum_{b\in B}\probof{Y=b} = \probof{X\in A}\cdot\probof{Y\in B} \]
+			So we have that $X$ and $Y$ are independent.
+	\end{multiparitemize}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	A set of random variables $\set{X_i}_{i=1}^n$ is \ppemph{independent} if for every $E_1,\dots,E_n\subseteq\bR$:
+	\[ \probof{X_1\in E_1,\dots,X_n\in E_n} = \probof{X_1,\in E_1}\cdots\probof{X_n\in E_n} \]
+	And given an infinitely countable set of random variables $\set{X_i}_{i=1}^\infty$, they are independent if for every $n\in\bR$,
+	$\set{X_i}_{i=1}^n$ is independent.
+
+\end{defn*}
+
+\begin{prop*}
+
+	If $\set{X_i}_{i\in I}$ is independent and $I$ is coutable and $E_i\subseteq\bR$ for every $i\in I$, then:
+	\[ \probof{\forall i\in I: X_i\in E_i} = \prod_{i\in I}\probof{X_i\in E_i} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	If $I$ is finite then this is true by definition.
+	Otherwise we know that by \ppref[corollary]{contProbCoro}:
+	\[ \probof{\bigcap_{i=1}^\infty\set{X_i\in E_i}} = \lim_{n\to\infty}\probof{\bigcap_{i=1}^n\set{X_i\in E_i}} =
+	\lim_{n\to\infty}\prod_{i=1}^n\probof{X_i\in E_i} = \prod_{i=1}^\infty\probof{X_i\in E_i} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	A discrete random variable $X$ has a \ppemph{geometric distribution} over $p\neq0$,
+	denoted $X\sim\geoof{p}$ if for every $n\in\bN_1$:
+	\[ \mprobof[X]{n} = (1-p)^{n-1}\cdot p \]
+
+\end{defn*}
+
+\begin{note}
+
+	It is necessary to show that this is in fact a valid distribution.
+	So we must show that $\sum\limits_{n\in\bN_1}\probof{X=n}=1$.
+	If $p=1$ this is true since $\mprobof[X]{1}=p=1$ and for every other $n$ it is $0$, so the sum is $1$.
+	Otherwise:
+	\[ \sum_{n=1}^\infty\probof{X=n} = p\cdot\sum_{n=1}^\infty(1-p)^{n-1} = p\cdot\sum_{n=0}^\infty(1-p)^n \]
+	This is a geometric sum (which converges since $(1-p)<1$), so this is equal to:
+	\[ p\cdot\frac{1}{1-(1-p)} = \frac pp = 1 \]
+	As required.
+
+\end{note}
+
+\begin{thrm*}
+
+	If $\set{X_i}_{i=1}^\infty$ are independent random variables which have a distribution of $\berof p$, then
+	$\min\set{k\in\bN_1}[X_k=1]$ has a distribution of $\geoof{p}$.
+
+\end{thrm*}
+
+The idea behind this theorem is that if you have a series of independent trials which can either succeed or fail with a
+probability of $p$, then the probability that you succeed for the first time on your $n$th try distributes geometrically.
+
+\begin{proof}
+
+	Let $Y=\min\set{k\in\bN_1}[X_k=1]$, we need to show $Y\sim\geoof{p}$.
+	We know that $Y=n$ if and only if $X_1,\dots,X_{n-1}=0$ and $X_n=1$, since $Y$ tracks the \emph{minimum} index where
+	$X_k=1$.
+	So:
+	\[ \probof{Y=n} = \probof{X_1=0,\dots,X_{n-1}=0, X_n=1} \]
+	And since the $X_i$s are independent this is equal to:
+	\[ = \probof{X_1=0}\cdots\probof{X_{n-1}=0}\cdot\probof{X_n=1} = (1-p)\cdots(1-p)\cdot p = (1-p)^{n-1}\cdot p \]
+	Which means $Y$ distributes geometrically over $p$, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{lemm*}
+
+	Suppose $X$ is a random variables whose support is $\bN_1$, then $\probof{X>n}=(1-p)^n$ for every $n\in\bN_1$ if and
+	only if $X\sim\geoof p$.
+
+\end{lemm*}
+
+\begin{proof}
+
+	\begin{multiparitemize}[0pt]
+		\paritem{$(\implies)$} Notice that $\probof{X=n}=\probof{X>n-1} - \probof{X>n}$ which is equal to in this case
+			$(1-p)^{n-1} - (1-p)^n = (1-p)^{n-1}\cdot(1-(1-p)) = (1-p)^{n-1}\cdot p$ as required.
+
+		\paritem{$(\impliedby)$} We will prove this through simple computation:
+			\[ \probof{X>n} = \sum_{x=n+1}^\infty\probof{X=x} = p\cdot\sum_{x=n+1}^\infty (1-p)^{x-1} =
+			p\cdot\frac{(1-p)^n}p = (1-p)^n \]
+			Since the sum is geometric.
+	\end{multiparitemize}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}[geoMrylsTheorem,Memorylessness\ of\ Geometric\ Distributions]
+
+	Suppose $X$ is a random variables whose support is $\bN_1$ and $\probof{X=1}<1$.
+	Then the following are equivalent:
+	\begin{msecenumerate}
+		\mitem $X$ distributes geometrically.
+		\mitem $X\deq\excondevent{X-1}[X>1]$
+		\mitem For every $m\in\bN_1$, $X\deq\excondevent{X-m}[X>m]$
+	\end{msecenumerate}
+
+\end{thrm*}
+
+The idea behind this theorem is that after $m$ trials fail ($X>m$), the current state of the world is still the same as the
+beginning of the trials (distributively equivalent to $X$).
+
+\begin{proof}
+
+	\begin{multiparitemize}[0pt]
+		\paritem{$\bs{(1)\implies(3)}$} Suppose $X\sim\geoof p$.
+			We will prove this through direct computation:
+			\[ \probof[X-m\mid X>m]{n} = \probof{X-n=m}[X>m] = \frac{\probof{X=n+m}}{\probof{X>m}} = \frac{p(1-p)^{n+m-1}}{(1-p)^m}
+			= p(1-p)^{n-1} \]
+			Which is a geometric distribution, as required.
+
+		\paritem{$\bs{(3)\implies(2)}$} This is trivial by letting $m=1$.
+
+		\paritem{$\bs{(2)\implies(1)}$} Notice that $\probof{X=n}=\probof{X=n+1}[X>1] = \frac{\probof{X=n+1}}{\probof{X>1}}$.
+			So we get that 
+			\[ \probof{X=n+1}=\probof{X=n}\cdot\probof{X>1} \]
+			If we let $p\coloneqq\probof{X=1}$, then $\probof{X>1}=1-p$ since the support of $X$ is $\bN_1$.
+			So:
+			\[ \probof{X=n+1} = (1-p)\probof{X=n} \]
+			This is the definition of a geometric series (if we let $a_n=\probof{X=n}$, we see that $a_{n+1}=(1-p)a_n$).
+			So we get:
+			\[ \probof{X=n} = (1-p)^{n-1}\cdot\probof{X=1} = (1-p)^{n-1}\cdot p \]
+			As required.
+	\end{multiparitemize}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	Let $n\in\bN_1$ and $p\in[0,1]$.
+	We say that a discrete random variable $X$ has a \ppemph{binomial distribution} over $n$ and $p$, denoted $X\sim\binof{n,p}$ if
+	for every natural $k$ between $0$ and $n$:
+	$\probof{X=k} = \binom{n}{k}\cdot p^k\cdot(1-p)^{n-k}$.
+
+\end{defn*}
+
+\begin{note}
+
+	We must check that this is a valid distribution.
+	\[ \sum_{k=0}^n\probof{X=k} = \sum_{k=0}^n\binom nk\cdot p^k\cdot (1-p)^{n-k} \]
+	Which is equal to, by the binomial theorem:
+	\[ = (p+1-p)^n = 1^n = 1 \]
+	As required.
+
+\end{note}
+
+\begin{thrm*}
+
+	If $\set{X_i}_{i=1}^n$ are indpendent random variables such that $X_i\sim\berof{p}$, then $\sum\limits_{i=1}^n X_i\sim\binof{n,p}$.
+
+\end{thrm*}
+
+The idea behind this is that if you have $n$ independent trials each with a probability of success of $p$, the probability that exactly
+$k$ of them succeed has a binomial distribution.
+
+\begin{proof}
+
+	Let $Y\coloneqq\sum\limits_{i=1}^n X_i$.
+	$Y=k$ if and only if $k$ of the $X_i$s are equal to $1$ and the rest are $0$.
+	So we must choose a subset of size $k$ of the $X_i$s to be equal to $1$, and there are $\binom{n}{k}$ choices for this.
+	This means that:
+	\[ \probof{Y=k} = \sum_{I\in\powsetof[k]{[n]}}\probof{\forall i\in I: X_i=1, \forall i\notin I: X_i=0} \]
+	Notice that for every $I$:
+	\[ \probof{\forall i\in I: X_i=1, \forall i\notin I: X_i=0} = \prod_{i\in I}\probof{X_i=1} \cdot \prod_{i\notin I}\probof{X_i=0} \]
+	Since the $X_i$s are independent.
+	This is equal to:
+	\[ = \prod_{i\in I}p \cdot \prod_{i\notin I}(1-p) = p^{\abs I}\cdot(1-p)^{n-\abs I} \]
+	Since $I\in\powsetof[k]{[n]}$, $\abs I=k$, so:
+	\[ \probof{Y=k} = \sum_{I\in\powsetof[k]{[n]}} p^k\cdot p^{n-k} \]
+	Since there are $\binom nk$ choices for $I$, this is equal to:
+	\[ = \binom nk\cdot p^k\cdot p^{n-k} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{coro*}
+
+	If $X\sim\binof{n,p}$ and $Y\sim\binof{m,p}$ and $X$ and $Y$ are independent, then $X+Y\sim\binof{n+m,p}$.
+
+\end{coro*}
+
+\begin{proof}
+
+	Suppose $\set{X_i}_{i=1}^{n+m}$ are independent random variables with a distribution of $\berof p$.
+	Then
+	\[ X\deq\sum_{i=1}^n X_i \quad Y\deq\sum\limits_{i=n+1}^m X_i \]
+	These are independent so $X+Y=\sum\limits_{i=1}^{n+m} X_i$, which by the theorem above distributes $\binof{n+m, p}$, as required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	Suppose $\set{X_n}_{n=1}^\infty$ is a set of random variables, and so is $Y$.
+	These random variables don't need to necessarily be over the same probability space.
+	We say that the \ppemph{distributive limit} of $X_n$ is $Y$, denoted $X_n\dilim Y$ if for every
+	$A\subseteq\bR: \lim_{n\to\infty}\probof{X_n\in A} = \probof{Y\in A}$.
+
+	If $X_n$ and $Y$ both have a countable support $S$ then this is equivalent to
+	$\forall k\in S: \lim_{n\to\infty}\probof{X_n=k} = \probof{Y=k}$.
+
+\end{defn*}
+
+\begin{defn*}
+
+	A discrete random variable $X$ has a \ppemph{Poisson Distribution} over $\lambda\in\bR_{>0}$, denote $X\sim\poiof\lambda$ if
+	for every $n\in\bN_0$, we have that $\probof{X=n}=e^{-\lambda}\cdot\frac{\lambda^n}{n!}$.
+
+\end{defn*}
+
+\begin{note}
+
+	This is a valid distribution since:
+	\[ \sum_{n=0}^\infty \probof{X=n} = e^{-\lambda}\cdot\sum_{n=0}^\infty\frac{\lambda^n}{n!} \]
+	The right side is the powerseries expansion of $e^\lambda$, so this is equal to $e^{-\lambda}\cdot e^\lambda=1$ as required.
+
+\end{note}
+
+\begin{thrm*}
+
+	Suppose $\set{X_n}_{n=1}^\infty$ is a series of random variables such that $X_n\sim\binof{n,\frac\lambda n}$ for some positive
+	real $\lambda$.
+	Then
+	\[ X_n\dilim\poiof\lambda \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let $k\in\bN_0$.
+	We sill show that $\lim_{n\to\infty}\probof{X_n=k} = e^{-\lambda}\cdot\frac{\lambda^k}{k!}$.
+	We know that:
+	\[ \probof{X_n=k} = \binom nk\cdot \parens{\frac\lambda n}^k\cdot\parens{1-\frac\lambda n}^{n-k} \]
+	Now note that:
+	\[ \binom nk \cdot\parens{\frac\lambda n}^k = \frac{n!}{n^k\cdot(n-k)!} \cdot \frac{\lambda^k}{k!} =
+	\frac{n\cdot(n-1)\cdots(n-k+1)}{n^k}\cdot\frac{\lambda^k}{k!} \]
+	Notice that the numerator and denominator of $\frac{n\cdot(n-1)\cdots(n-k+1)}{n^k}$ are both degree $k$ polynomials with a leading
+	coefficient of $1$, so the limit of this is $1$.
+	The limit of $\frac{\lambda^k}{k!}$ is obviously $\frac{\lambda^k}{k!}$ since it is independent of $n$.
+	Next we have:
+	\[ \parens{1-\frac\lambda n}^{n-k} = \parens{1-\frac\lambda n}^n \cdot \parens{1-\frac\lambda n}^{-k} \]
+	The left has a limit of $e^{-\lambda}$, and the left has a limit of $1$ (since the limit of $1-\frac\lambda n$'s limit is $1$).
+	So all in all the limit of $\probof{X_n=k}$ is:
+	\[ 1\cdot\frac{\lambda^k}{k!}\cdot e^{-\lambda} \cdot 1 = e^{-\lambda}\cdot\frac{\lambda^k}{k!} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	\begin{msecenumerate}[0pt]
+		\mitem If $X$ and $Y$ are independent random variables and $X\sim\poiof\lambda$ and $Y\sim\poiof\mu$ then
+			$X+Y\sim\poiof{\lambda+\mu}$.
+		\mitem If $X\sim\poiof\lambda$ and $Y\mid X=n\sim\binof{n,p}$ then $Y\sim\poiof{p\lambda}$.
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem We will prove this through direct computation:
+			\[ \probof{X+Y=k} = \sum_{n=0}^k \probof{X=n, Y=k-n} = \sum_{n=0}^k\probof{X=n}\cdot\probof{Y=k-n} = \]
+			\[ = \sum_{n=0}^k e^{-\lambda}\cdot e^{-\mu} \cdot \frac{\lambda^n}{n!}\cdot\frac{\mu^{n-k}}{(k-n)!} 
+			 = e^{-(\lambda+\mu)}\cdot\sum_{n=0}^k\frac{\lambda^n\cdot\mu^{n-k}}{n!\cdot(k-n)!} \]
+			Doing a bit of algebraic manipulation, this is equal to:
+			\[ \frac{e^{-(\lambda+\mu)}}{k!}\cdot\sum_{n=0}^k\binom kn \lambda^n\cdot\mu^{n-k} =
+			e^{-(\lambda+\mu)}\cdot\frac{(\lambda+\mu)^k}{k!} \]
+			As required.
+
+		\mitem We know that since $Y\mid X=n\sim\binof{n,p}$, if $Y=k$ then $n\geq k$.
+			\[ \probof{Y=k} = \sum_{n=k}^\infty \probof{Y=k}[X=n]\cdot\probof{X=n} =
+			\sum_{n=k}^\infty \binom nk\cdot p^k\cdot(1-p)^{n-k}\cdot e^{-\lambda}\cdot\frac{\lambda^n}{n!} = \]
+			\[ = e^{-\lambda}p^k\cdot\sum_{n=k}^\infty\binom nk\cdot \cdot(1-p)^{n-k}\cdot\frac{\lambda^n}{n!} \]
+			Notice that the term inside the sum is equal to:
+			\[ \frac{\lambda^n\cdot(1-p)^{n-k}}{(n-k)!} \]
+			So the sum is equal to:
+			\[ = \frac{e^{-\lambda}\cdot p^k\cdot \lambda^k}{k!}\cdot\sum_{n=0}^\infty\frac{\lambda^n\cdot(1-p)^n}{n!} \]
+			The sum is the powerseries of $e^{\lambda(1-p)}$, so this is equal to:
+			\[ = \frac{(p\lambda)^k}{k!}\cdot e^{-\lambda}\cdot e^{\lambda(1-p)} = e^{-p\lambda}\cdot\frac{(p\lambda)^k}{k!} \]
+			Which is the poisson distribution of $p\lambda$, as required.
+	\end{msecenumerate}
+
+\end{proof}
+
+\begin{defn*}
+
+	A discrete random variable $X$ has a \ppemph{hypergeomtric distribution} over $N,D,n\in\bN_0$ if:
+	\[ \probof{X=k} = \dfrac{\binom Dk\cdot\binom{N-D}{n-k}}{\binom Nn} \]
+	For relevant $k$.
+	This is denoted $X\sim\hgof{N,D,n}$.
+
+\end{defn*}
+
+\begin{note}
+
+	Notice that if $X\sim\hgof{N,D,n}$ then $k\leq D$, $n\leq N$, $k\leq n$, $D\leq N$, and $n-k\leq N-D$.
+	So $0,D+n-N\leq k\leq D, n$.
+
+\end{note}
+
+\begin{thrm*}
+
+	Suppose an urn has $N$ objects, $D$ of which are considered ``special''.
+	We remove (without repetition) $n$ objects from the urn.
+	Let $X$ be the number of ``special'' objects removed, then $X\sim\hgof{N,D,n}$.
+
+\end{thrm*}
+
+\begin{proof}
+
+	How many ways are there to remove $k$ special objects out of $n$ choices?
+	Well first there are $\binom Dk$ choices for which special objects to choose, and then there are another $\binom{N-D}{n-k}$
+	choices for the remaining objects (there are $N-D$ non-special objects, and $n-k$ objects which still need to be removed).
+	So all in all there are $\binom DK\cdot\binom{N-D}{n-k}$ ways to choose $k$ special objects out of $n$ choices.
+	There are $\binom Nn$ ways to choose $n$ objects, and since each choice is equally likely (since the probability of choosing any single
+	object is equal), the probability that we choose $k$ special objects is:
+	\[ \probof{X=k} = \dfrac{\binom Dk\cdot\binom{N-D}{n-k}}{\binom Nn} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{note}
+
+	This also proves that hypergeometric distributions are valid probability distributions since they represent a valid probability situation.
+	$X$ must be equal to some $k$ between $0,D+n-N$ and $n,D$, so the sum over all possible $k$s of $\probof{X=k}$ must be $1$.
+
+\end{note}
+

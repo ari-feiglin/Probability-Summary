@@ -1,0 +1,217 @@
+\begin{defn*}
+
+	Given a tuple $I$, $\matindex{I}_i$ is the element in the $i$-th position of the tuple.
+
+	If $I$ has a size of $n$, then for a $\sigma\in S_n$, I define $\sigma(I)$ as the tuple where:
+	\[ \matindex{\sigma(I)}_i = \matindex{I}_{\sigma(i)} \]
+
+\end{defn*}
+
+\begin{lemm*}
+
+	\[ \matindex{(\sigma\circ\tau)(I)}_i = \matindex{\sigma(I)}_{\tau(i)} \]
+
+\end{lemm*}
+
+\begin{proof}
+
+	Notice that:
+	\[ \matindex{\sigma(I)}_{\tau(i)} = \matindex{I}_{\sigma\circ\tau(i)} \]
+	And:
+	\[ \matindex{(\sigma\circ\tau)(I)} = \matindex{I}_{\sigma\circ\tau(i)} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{lemm*}[multinomialLemma]
+
+	Suppose $S=\set{s_1,\dots,s_\ell}$.
+
+	The number of tuples of length $n$ over $S$ which have $k_i$ occurrences of $s_i$ is:
+	\[ \frac{n!}{k_1!\cdots k_\ell!} \]
+
+	(Assuming $\sum\limits_{i=1}^\ell k_i = n$)
+
+\end{lemm*}
+
+\begin{proof}
+
+	Let:
+	\[ I = \tuple{\underbrace{s_1,\dots,s_1}_{k_1 \text{ times}},\dots,\underbrace{s_\ell,\dots,s_\ell}_{k_\ell \text{ times}}} \]
+	All other tuples which satisfy the criteria are permutations of this one.
+
+	We define equivalence the equivalence class of $\sigma\in S_n$ as the set of all permutations which produce the same
+	tuple:
+	\[ [\sigma] = \set{\tau\in S_n}[\sigma(I) = \tau(I)] \]
+	We need to find the number of distinct equivalence classes there are. To do so we will find the cardinality of each
+	equivalence class.
+
+	Let:
+	\[ \sigma_j = \set{i\in[n]}[\matindex{\sigma(I)}_i=s_j] \]
+	For $j\in[\ell]$. This is the set of all indexes in the permuted tuple of the elements $s_j$
+	(notice that $[\tau]=[\sigma]$ if and only if $\sigma_j=\tau_j$ for evey $j$).
+	It is important to note that $\set{\sigma_j}_{j=1}^\ell$ partitions $[n]$. If $i\in[n]$ then $\matindex{\sigma(I)}_i=s_j$
+	for some $j$ (which is distinct since the $s_j$s are distinct), and therefore $i\in\sigma_j$ for only that $j$.
+
+	Since there are $k_j$ indexes which equal $s_j$, $\abs{\sigma_j}=k_j$. 
+
+	We will construct a bijection:
+	\[ f\colon S_{\sigma_1}\times\cdots\times S_{\sigma_\ell} \longrightarrow [\sigma] \]
+	by:
+	\[ f(\pi_1,\dots,\pi_\ell) = \tau \]
+	Where $\tau$ is defined by:
+	\[ \tau=\sigma\circ\pi \]
+	If $i\in[n]$ then there exists a unique $j\in[\ell]$ such that $i\in\sigma_j$. Then we define:
+	\[ \pi(i) = \pi_j(i) \]
+	$\pi$ is a bijection since $\pi_j$ is, and therefore so is $\tau$.
+	Notice that if $i\in\sigma_j$, then $\matindex{(\sigma\circ\pi)(I)}_i=\matindex{\sigma(I)}_{\pi(i)}$, and since
+	$i\in\sigma_j$, then $\pi(i)=\pi_j(i)\in\sigma_j$, so
+	\[ \matindex{(\sigma\circ\pi)(I)}_i=\matindex{\tau(I)}_{i}=s_j=\matindex{\sigma(I)}_i \]
+	Which means that $\tau\in[\sigma]$, so $f$ is well-defined.
+
+	This function corresponds to taking $\sigma(I)$ and permuting its indexes as to not mess up their elements.
+
+	This is injective since if:
+	\[ f(\pi_1,\dots,\pi_\ell) = f(\pi'_1,\dots,\pi'_\ell) \]
+	Then:
+	\[ \sigma\circ\pi = \sigma\circ\pi' \implies \pi = \pi' \]
+	But that means that $\pi(i)=\pi'(i)$ for every $i$, and therefore for every $j$:
+	\[ \pi_j(i) = \pi'_j(i) \]
+	(For relevant $i$s), and therefore $\pi_j=\pi'_j$. So $f$ is injective.
+
+	This is surjective. If $\tau\in [\sigma]$, then we need to find $\pi_j$s such that their corresponding $\pi$ is equal to
+	$\sigma^{-1}\circ\tau$.
+
+	Suppose $i\in\sigma_j$, we define:
+	\[ \pi_j(i) = \sigma^{-1}\circ\tau(i) \]
+	We need to show that this is well-defined. So we must show that $\sigma^{-1}\circ\tau(i)\in\sigma_j$.
+	\[ \matindex{\sigma(I)}_{\sigma^{-1}\circ\tau(i)} = \matindex{I}_{\sigma\circ\sigma^{-1}\circ\tau(i)}
+	 = \matindex{I}_{\tau(i)} = \matindex{\tau(I)}_i \]
+	And since $[\tau]=[\sigma]$, this is equal to $\matindex{\sigma(I)}_i=s_j$.
+	So:
+	\[ \matindex{\sigma(I)}_{\sigma^{-1}\circ\tau(i)} = s_j \implies \sigma^{-1}\circ\tau(i)\in\sigma_j \]
+	As required.
+
+	And since for all relevant $i$: $\pi_j(i)=\sigma^{-1}\circ\tau(i)$, this means $\pi=\sigma^{-1}\circ\tau$, as required.
+
+	So $f$ is a bijection. This means:
+	\[ \abs{[\sigma]} = \abs{S_{\sigma_1}}\cdots\abs{S_{\sigma_\ell}} = k_1!\cdots k_\ell! \]
+
+	By \ppref[lemma]{partCardLemma}, this the number of distinct permutations is:
+	\[ \frac{n!}{k_1!\cdots! k_\ell!} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{defn*}
+
+	We define the result of the previous lemma to be something called a \ppemph{multinomial coefficient}:
+	\[ \binom{n}{k_1,\dots,k_\ell} = \frac{n!}{k_1!\cdots k_\ell!} \]
+	If $\sum\limits_{i=1}^\ell k_i=n$.
+
+\end{defn*}
+
+A natural question to ask at this point is why is this called a \ppemph{multinomial} coefficient:
+What is its relation with binomial coefficients?
+
+\begin{prop*}[nomialRelationProposition]
+
+	\[ \binom{n}{k} = \binom{n}{k,n-k} \]
+	(The left side is a \ppemph{binomial coefficient} while the right side is a \ppemph{multinomial coefficient}.)
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that $\binom{n}{k,n-k}$ represents the number of distinct tuples with $k$ of one element and $n-k$ of another.
+	This is analogous, equivalent actually, to the number of ways to order $k$ of one element and $n-k$ of another.
+	And as we discusses in the proof of \ppref[lemma]{binomialIntro}, this is equal to the cardinality of $\powsetof[k]{[n]}$.
+
+	Therefore
+	\[ \binom{n}{k} = \binom{n}{k,n-k} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+
+\newpage
+\begin{defn*}
+
+	Given a tuple $I$ of length $n$ over a set of elements $S$, I define for every $s\in S$:
+	\[ \#_s I\coloneqq\abs{\set{i\in[n]}[\matindex{I}_i=s]} \]
+	Which is the number of occurrences of $s$ in the tuple $I$.
+
+\end{defn*}
+
+\begin{thrm*}[multinomialTheorem,The\ Multinomial\ Theorem]
+
+	\[ \parens{\sum_{i=1}^\ell a_i}^n = \sum_{k_1+\cdots+k_\ell=n} \binom{n}{k_1,\dots,k_\ell}\cdot a_1^{k_1}\cdots a_\ell^{k_\ell} \]
+
+	This is a generalization of the more famous \ppemph{Binomial Theorem}, which we will discuss soon.
+
+\end{thrm*}
+
+\begin{proof}
+
+	We know:
+	\[ \parens{\sum_{i=1}^\ell a_i}^n = \sum_{i_1=1}^\ell a_{i_1} \cdots\sum_{i_n=1}^\ell a_{i_n} =
+	\sum_{i_1=1}^\ell\cdots\sum_{i_n=1}^\ell\parens{a_{i_1}\cdots a_{i_n}} \]
+	Let $I$ be defined as the tuple:
+	\[ I\coloneqq\tuple{i_1,\dots,i_n} \]
+	We can rewrite the sum as:
+	\[ \sum_{I\in[\ell]^n} \prod_{i\in I} a_i \]
+
+	We can partition $[\ell]^n$ like so: for every $\set{k_i}_{i=1}^\ell$ such that $\sum\limits_{i=1}^\ell k_i$, create a
+	subset of $[\ell]^n$ defined as follows:
+	\[ \set{I\in[\ell]^n}[\forall j\in[\ell]: \#_j I = k_j] \]
+	These sets are obviously disjoint, and their union is $[\ell]^n$ since for every $I\in[\ell]^n$ define $k_j=\#_j I$.
+
+	Suppose $S$ is one of these sets characterized by $\set{k_i}_{i=1}^\ell$. Then for every $I\in S$:
+	\[ \prod_{i\in I} a_i = a_1^{k_1}\cdots a_\ell^{k_\ell} \]
+	Since there are $k_i$ instances of $i$ in $I$.
+
+	And we know by the previous lemma that $\abs{S}=\binom{n}{k_1,\dots,k_\ell}$. So summing over $S$ gives:
+	\[ \binom{n}{k_1,\dots,k_\ell}a_1^{k_1}\cdots a_\ell^{k_\ell} \]
+	
+	And since $S$ is characterized by and only by $\set{k_i}_{i=1}^\ell$, there are as many sets ($S$) in the partition as
+	there are series $\set{k_i}_{i=1}^\ell$ such that $\sum\limits_{i=1}^\ell k_i = n$.
+
+	This means:
+	\[ \parens{\sum_{i=1}^\ell a_i}^n = \sum_{k_1+\cdots+k_\ell} \binom{n}{k_1,\dots,k_\ell}\cdot a_1^{k_1}\cdots a_{\ell}^{k_\ell} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}[binomialTheorem,The\ Binomial\ Theorem]
+
+	\[ (a+b)^n = \sum_{k=0}^n\binom{n}{k} a^k\cdot b^{n-k} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	By the \ppref{multinomialTheorem}, this is equal to:
+	\[ (a+b)^n = \sum_{k_1+k_2=n}\binom{n}{k_1,k_2} a^{k_1}\cdot b^{k_2} \]
+	But $k_1+k_2=n$ if and only if $k_2=n-k_1$. That is, we can construct a simple bijection from the set of $k_1,k_2$s to
+	the set $\set{0,\dots,n}$ (by mapping $(k_1,k_2)$ to $k_1$).
+	
+	So instead we can sum over $\set{0,\dots,n}$:
+	\[ (a+b)^n = \sum_{k=0}^n\binom{n}{k,n-k} a^k\cdot b^{n-k} \]
+	And by \ppref[proposition]{nomialRelationProposition}, this is equal to:
+	\[ (a+b)^n = \sum_{k=0}^n\binom{n}{k} a^k\cdot b^{n-k} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+

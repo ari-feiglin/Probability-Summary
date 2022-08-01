@@ -1,0 +1,176 @@
+So now that we've discussed expected values and variance, what exactly are they useful for?
+Recall what we're trying to study in probability theory: probability.
+It turns out that variance and expected values, along with being interesting on their own, also provide
+useful tools for studying probability.
+A big contribution of theirs is the many bounds and approximations they provide for probability.
+This is best demonstrated in the following theorems.
+
+\begin{thrm*}[markovsIneqTheorem,Markov's\ Inequality]
+
+	Suppose $X\asgeq0$ and $X$ has an expected value. Then for any positive real $a$:
+	\[ \probof{X\geq a} \leq \frac{\expecof X}a \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We know that $X\asgeq a\cdot\bone_{\set{X\geq a}}$ since if $X\geq a$ then
+	$a\cdot\bone_{\set{X\geq a}}=a$, and if $0\leq X<a$ then it is equal to $0$.
+	So this means:
+	\[ \expecof X\geq \expecof{a\cdot\bone_{\set{X\geq a}}} = a\cdot\expecof{\bone_{\set{X\geq a}}} \]
+	Now recall that an indicator function has an expected value of the probability of the event it indicates
+	(since it has a bernoulli distribution over this parameter).
+	So:
+	\[ \expecof X\geq a\cdot\probof{X\geq a} \]
+	Which means
+	\[ \probof{X\geq a} \leq \frac{\expecof X}a \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+Another way we can write Markov's inequality is by:
+\[ \probof{X\geq b\cdot\expecof X} \leq \frac1b \]
+For $b>0$.
+
+\begin{exercise}
+
+	Suppose $\set{X_i}_{i=1}^n$ is a series of independent random variables such that $X_i\sim\uniof{N}$.
+	Find an upper bound for the probability that there are at least $\ell$ collisions between the random
+	variables.
+
+\end{exercise}
+
+\begin{solution}
+
+	First, let us define indicator functions which indicate whether or not two random variables are equal:
+	\[ Y_{i,j} = \bone_{\set{X_i=X_j}} \]
+	And we'll let $Y$ be equal to the total number of collisions, which is the sum of all $Y_{i,j}$s for $i<j$:
+	\[ Y = \sum_{i<j} Y_{i,j} \]
+	Since $Y_{i,j}\asgeq 0$, $Y\asgeq 0$.
+	And since expected values are linear:
+	\[ \expecof Y = \sum_{i<j}\expecof{Y_{i,j}} = \sum_{i<j}\probof{X_i=X_j} \]
+	The probability that $X_i=X_j$ is equal to $\frac1N$ since if we set $X_i$'s value, the probability that $X_j$
+	is equal to that value is $\frac1N$.
+	Since there are $\binom n2$ values for $i,j$ such that $i<j$ (take any $2$-length subset of $[n]$ which
+	naturally gives $i,j$).
+	\[ \expecof Y = \sum_{i<j}\frac1N = \binom n2\cdot\frac1N \]
+	So all in all:
+	\[ \probof{Y\geq\ell} \leq \frac{\expecof Y}\ell = \binom n2\cdot\frac1{N\cdot\ell} \]
+
+\end{solution}
+
+\begin{exercise}[coupCollectExercise,The\ Coupon\ Collector's\ Problem]
+
+	Suppose there are $n$ types of coupons, and you keep collecting coupons until you have all $n$ types.
+	Further suppose that the probability of collecting any type of coupon is equal (and thus distributes
+	uniformly over $[n]$).
+	\begin{msecenumerate}
+		\mitem How many coupons must be collected in order to have a probability of having all types of coupons
+			with a probability $\geq\frac1c$?
+		\mitem Show that the probability of collecting more than $2n\logof n$ coupons (without getting all types)
+			is $\leq\frac1n$.
+	\end{msecenumerate}
+
+\end{exercise}
+
+\begin{solution}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Let $Y_k$ be the minimum number of coupons collected in order to get $k$ distinct coupons.
+			So we want to analyze $Y_n$.
+			Notice that $Y_0=0$ and:
+			\[ Y_n = Y_n - Y_0 = \sum_{k=1}^n Y_k - Y_{k-1} \]
+			And further notice that the probability that $\probof{Y_k-Y_{k-1}=t}$ is equal to
+			$\frac{n-(k-1)}n\cdot\parens{\frac{k-1}n}^{t-1}$ since $\frac{n-(k-1)}n$ is the probability we choose
+			a different type coupon on the $t$th attempt after $Y_{k-1}$, and $\parens{\frac{k-1}n}^{t-1}$ is the
+			probability that we choose one of the $k-1$ types of coupons for the $t-1$ attempts before that.
+			This means that $Y_k-Y_{k-1}\sim\geoof{\frac{n-k+1}n}$.
+
+			This means that:
+			\[ \expecof{Y_n} = \sum_{k=1}^n\expecof{Y_k-Y_{k-1}} = \sum_{k=1}^n\frac{n}{n-k+1} \]
+			This is just the sum from the opposite direction of:
+			\[ = n\cdot\sum_{k=1}^n\frac1k \]
+			And we know that
+			\[ \sum_{k=1}^n\frac1k \leq \logof n+1 \]
+			So all in all we have:
+			\[ \probof{Y_n\geq\ell} \leq \frac{\expecof{Y_n}}\ell \leq \frac n\ell(\logof n+1) \]
+			So if we set $\ell2n(\logof n+1)$, we get that
+			\[ \probof{Y_n\geq\ell} \leq \frac12 \]
+			Which means that $\probof{Y_n<\ell} > \frac12$.
+			So if we collect $2n(\logof n+1)$ coupons, we have a probability of success of greater than $\frac12$.
+
+		\mitem Let $A_j^k$ denote the event where we collect $k$ coupons but don't get the $j$th coupon.
+			Thus $\probof{A_j^k}=\parens{1-\frac1n}^k$ since the probability of not collecting the $j$th coupon each
+			time is $1-\frac1n$.
+			The event that we collect $k$ coupons and we don't get one of the types is the union (relative to $j$) of
+			$A_j^k$.
+			And by the union bound we get that:
+			\[ \probof{\bigcup_{j=1}^n A_j^k} \leq \sum_{j=1}^n \probof{A_j^k} \leq \sum_{j=1}^n\parens{1-\frac1n}^k
+			= n\cdot\parens{1-\frac1n}^k \]
+			Notice that $\parens{1-\frac1n}^k = \parens{1-\frac1n}^{n\cdot\frac kn}\leq e^{-\frac kn}$.
+			So if $k=2n\logof n$, we get that the probability is less than:
+			\[ \leq n\cdot e^{-2\logof n} = n\cdot n^{-2} = \frac1n \]
+			As required.
+	\end{msecenumerate}
+
+\end{solution}
+
+\begin{thrm*}[chebyIneqTheorem,Chebyshev's\ Inequality]
+
+	If $X$ is a random variable with variance, then for every positive real $a$:
+	\[ \probof{\abs{X-\expecof X}\geq a} \leq \frac{\varof X}{a^2} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let $Y\coloneqq(X-\expecof X)^2$, so $Y\geq0$ and $Y$ has expected value since $\expecof Y=\varof X$.
+	Notice that by \ppref{markovsIneqTheorem} we have that for every $b>0$:
+	\[ \probof{Y\geq b} \leq \frac{\expecof Y}b = \frac{\varof X}b \]
+	For $a>0$ notice that $Y\geq a^2$ is equal to $(X-\expecof X)^2\geq a^2=\abs{X-\expecof X}\geq a$, so:
+	\[ \probof{\abs{X-\expecof X}\geq a} = \probof{Y\geq a^2} \leq \frac{\varof X}{a^2} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+Notice that:
+\[ \probof{X-\expecof X\geq a}, \probof{X-\expecof X\leq -a} \leq \frac{\varof X}{a^2} \]
+
+\begin{thrm*}[wllnTheorem,The\ Weak\ Law\ of\ Large\ Numbers]
+
+	Suppose $\set{X_i}_{i=1}^\infty$ is a series of random variables which all have the same distribution and variance
+	(therefore their expected values and variances are all equal as well).
+	Let $X$ be a random variable which represents their distribution (ie. $X_i\deq X$ for every $i$).
+	Then for every $\epsilon>0$ we have that:
+    \[ \lim_{n\to\infty}\probof{\abs{\frac1n\sum_{k=1}^n X_k - \expecof X}>\epsilon} = 0 \]
+
+\end{thrm*}
+
+What this means is that the average result of the random variables does not diverge much from the expected value of
+the random variables.
+
+\begin{proof}
+
+	\def\avgX{\overline X_n}
+	Let $\avgX\coloneqq\frac1n\sum\limits_{k=1}^n X_k$.
+	Therefore:
+	\[ \expecof\avgX = \frac1n\cdot\sum_{k=1}^n\expecof{X_k} = \frac1n\cdot n\cdot\expecof X = \expecof X \]
+	And since the random variables are all independent we have that:
+	\[ \varof\avgX = \frac1{n^2}\cdot\sum_{k=1}^n\varof{X_k} = \frac1{n^2}\cdot n\cdot\varof X = \frac{\varof X}n \]
+	By \ppref{chebyIneqTheorem} we have that:
+	\[ \probof{\abs{\frac1n\cdot\sum_{k=1}^n-\expecof X}>\epsilon} = \probof{\abs{\avgX - \expecof{\avgX}}>\epsilon}
+	\leq \frac{\varof{\avgX}}{\epsilon^2} = \frac1n\cdot\frac{\varof X}{\epsilon^2} \]
+	Since $\frac{\varof X}{\epsilon^2}$ is constant
+	\[ \lim_{n\to\infty}\frac1n\cdot\frac{\varof X}{\epsilon^2} = 0 \]
+	And since the probability is non-negative, by the squeeze theorem we have that
+    \[ \lim_{n\to\infty}\probof{\abs{\frac1n\sum_{k=1}^n X_k - \expecof X}>\epsilon} = 0 \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+

@@ -1,0 +1,156 @@
+\begin{defn*}
+
+	Given a random variable $X$, we define the \ppemph{expected value} of $X$, denoted $\expecof X$ to be:
+	\[ \expecof X\coloneqq\sum_{x\in\bR} x\cdot\probof{X=x} \]
+	Since this is not a necessarily positive sum, and we are summing over a set $\bR$ (so order doesn't matter),
+	it is necessary for this sum to converge absolutely.
+	So $X$ has an expected value if and only if
+	\[ \sum_{x\in\bR} \abs x\cdot\probof{X=x} < \infty \]
+	Which is equivalent to $\expecof{\abs X}<\infty$.
+
+\end{defn*}
+
+The expected value of a random variables gives a weighted average of the values of the random variable.
+
+\begin{thrm*}[lotusTheorem,The\ Law\ of\ the\ Unconscious\ Statistician]
+
+	If $\jpv=\tuple{X_1,\dots,X_n}$ is a random vector of $n$ random variables and $f\colon\bR^n\longrightarrow\bR$ then
+	\[ \expecof{f(\jpv)} = \sum_{Y\in\bR^n} f(Y)\cdot\probof{\jpv=Y} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We know that:
+	\[ \expecof{f(\jpv)} = \sum_{x\in\bR} x\cdot\probof{f(\jpv)=x} \]
+	But $f(\jpv(\omega))=x$ if and only if $\jpv(\omega)\in f^{-1}\set x$.
+	This means that
+	\[ \probof{f(\jpv)=x} = \probof{\jpv\in f^{-1}\set x} = \sum_{Y\in f^{-1}\set x}\probof{\jpv=Y} \]
+	So we have that
+	\[ \expecof{f(\jpv)} = \sum_{x\in\bR} x\cdot\sum_{Y\in f^{-1}\set x}\probof{\jpv=Y} =
+	\sum_{x\in\bR}\sum_{Y\in f^{-1}\set x} f(Y)\cdot\probof{\jpv=Y} \]
+	Note that summing over every $x\in\bR$ and $Y\in f^{-1}\set x$ is equal to summing over every $Y\in\bR^n$, since
+	for every real vector $Y$, there is exactly one $x$ where $Y\in f^{-1}\set x$, and that is $f(Y)$.
+	So this is equal to
+	\[ \sum_{Y\in\bR^n}f(Y)\cdot\probof{\jpv=Y} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+In the special case where $n=1$, so $\jpv=\tuple X$, and $f\colon\bR\longrightarrow\bR$, we have that:
+\[ \expecof{f(X)} = \sum_{x\in\bR}f(x)\cdot\probof{X=x} \]
+
+\begin{thrm*}
+
+	The following are true:
+	\begin{msecenumerate}
+		\mitem If $X\overset{as}\geq0$ then $\expecof X\geq0$ (this means $\probof{X\geq0}=1$).
+		\mitem If $X\deq Y$ then $\expecof X=\expecof Y$.
+		\mitem $\expec$ is linear: $\expecof{\alpha X+\beta Y}=\alpha\expecof X+\beta\expecof Y$.
+		\mitem $\expec$ is monotonic: If $X\overset{as}\geq Y$ then $\expecof X\geq\expecof Y$.
+		\mitem If $X$ and $Y$ are indpendent, $\expecof{X\cdot Y}=\expecof X\cdot\expecof Y$.
+		\mitem If $X$ has a support in $\bN$, then $\expecof X=\sum_{n=1}^\infty\probof{X\geq n}$.
+	\end{msecenumerate}
+
+\end{thrm*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Since $\probof{X\geq0}=1$, $\probof{X<0}=0$, so for every $x<0$, $\probof{X=x}=0$.
+		Therefore:
+		\[ \expecof X = \sum_{x>0}x\cdot\probof{X=x} \]
+		Which is a positive sum.
+
+		\mitem Since both random variables have the same distribution, the sum of $x\probof{X=x}$ is equal
+		to $x\probof{Y=x}$, so the expected values are equal.
+
+		\mitem First let us show that $\alpha X+\beta Y$ has an expected value.
+		So we need to show that $\expecof{\abs{\alpha X+\beta Y}}<\infty$.
+		But notice by \ppref{lotusTheorem}:
+		\[ \expecof{\abs{\alpha X+\beta Y}} = \sum_{x,y\in\bR}\abs{\alpha x+\beta y}\cdot\probof{X=x,Y=y} \leq \]
+		\[ \leq \abs\alpha\sum_{x\in\bR}\abs x\cdot\sum_{y\in\bR}\probof{X=x,Y=y} +
+		\abs\beta\sum_{y\in\bR}\abs y\cdot\sum_{x\in\bR}\probof{X=x,Y=y} \]
+		Notice that:
+		\[ \abs\alpha\sum_{x\in\bR}\abs x\cdot\sum_{y\in\bR}\probof{X=x,Y=y} =
+		\abs\alpha\sum_{x\in\bR}\abs x\cdot\probof{X=x} \]
+		Which converges since $\expecof X$ exists.
+		Similar for the other term.
+		So $\expecof{\abs{\alpha X+\beta Y}}<\infty$, as required.
+
+		And by \ppref{lotusTheorem} again:
+		\[ \expecof{\alpha X+\beta Y} = \sum_{x,y\in\bR}(\alpha x+\beta y)\cdot\probof{X=x,Y=y} \]
+		Doing a very similar process to the one above, we see that this is equal to:
+		\[ \alpha\sum_{x\in\bR}x\cdot\sum_{y\in\bR}\probof{X=x,Y=y} +
+		\beta\sum_{y\in\bR}y\cdot\sum_{x\in\bR}\probof{X=x,Y=y} \]
+		Which is equal to
+		\[ \alpha\sum_{x\in\bR}x\cdot\probof{X=x} + \beta\sum_{y\in\bR}y\cdot\probof{Y=y} = \alpha\expecof X+\beta\expecof Y \]
+		As required.
+
+		\mitem This means $X-Y\overset{as}\geq0$, so $\expecof{X-Y}\geq0$, so $\expecof X-\expecof Y\geq0$, and therefore
+		$\expecof X\geq\expecof Y$, as required.
+
+		\mitem Assuming the expected value exists, we see that:
+		\[ \expecof{X\cdot Y} = \sum_{x,y\in\bR}xy\probof{X=x,Y=y} = \sum{x\in\bR}x\probof{X=x}\cdot\sum_{y\in\bR}y\probof{Y=y}
+		= \expecof X\cdot\expecof Y \]
+		Since $\abs X$ and $\abs Y$ are also independent, $\expecof{\abs{X\cdot Y}}=\expecof{\abs X}\cdot\expecof{\abs Y}$ by
+		above, and these both converge since $X$ and $Y$ have expected value, so $\expecof{\abs{X\cdot Y}}<\infty$ as required.
+
+		\mitem Notice that $n\cdot\probof{X=n} = \sum\limits_{k=1}^n\probof{X=n}$, so:
+		\[ \expecof X = \sum_{n=1}^\infty n\probof{X=n} = \sum_{n=1}^\infty\sum_{k=1}^n\probof{X=n} \]
+		This is summing over $n\in\bN$, $n\geq k$, so we can reverse the order of summation to get:
+		\[ \sum_{k=1}^\infty\sum_{n=k}^\infty\probof{X=n} = \sum_{k=1}^\infty\probof{X\geq k} \]
+		As required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	\begin{msecenumerate}[0pt]
+		\mitem $\expecof{\berof p}=p$
+		\mitem $\expecof{\binof{n,p}}=np$
+		\mitem $\expecof{\geoof p}=\frac1p$
+		\mitem $\expecof{\uniof{a,b}}=\frac{a+b}2$
+		\mitem $\expecof{\poiof\lambda}=\lambda$
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem With some direct computation, we see that $\expecof{\berof p}=1\cdot p + 0\cdot(1-p)=p$, as required.
+		\mitem Since $\binof{n,p}=\berof p +\cdots+ \berof p$, $\expecof{\binof{n,p}}=\expecof{\berof p}+\cdots+\expecof{\berof p}
+		= p+\cdots+p = np$, as required.
+		\mitem Notice that if $p<1$:
+		\[ \expecof{\geoof p} = p\cdot\sum_{n=1}^\infty n\cdot(1-p)^{n-1} \]
+		Notice that
+		\[ -\frac{d}{dp}\sum_{n=1}^\infty (1-p)^n = \sum_{n=1}^\infty n(1-p)^{n-1} \]
+		This is true for $p<1$ since the radius of convergence of this powerseries is $1$.
+		And we know that:
+		\[ \sum_{n=1}^\infty (1-p)^n = \frac{1-p}{p} = \frac1p - 1 \]
+		Whose derivative is $-\frac1{p^2}$.
+		So:
+		\[ \sum_{n=1}^\infty n(1-p)^{n-1} = \frac1{p^2} \]
+		And therefore $\expecof{\geoof p}=\frac1p$.
+
+		If $p=1$ then the sum is just equal to $1$, since for $n>1$ $(1-p)^{n-1}=0$.
+
+		\mitem 
+		\[ \expecof{\uniof{a,b}} = \sum_{n=a}^b n\cdot\frac1{b-a+1} = \frac1{b-a+1}\cdot\frac{b-a+1}2(a+b) = \frac{a+b}2 \]
+
+		\mitem \[ \expecof{\poiof\lambda} = e^{-\lambda}\cdot\sum_{n=0}^\infty n\cdot\frac{\lambda^n}{n!} 
+		= e^{-\lambda}\cdot\sum_{n=1}^\infty\frac{\lambda^n}{(n-1)!} = \lambda e^{-\lambda}\cdot\sum_{n=0}^\infty\frac{\lambda^n}{n!}
+		= \lambda \]
+		As required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+

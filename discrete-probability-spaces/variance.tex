@@ -1,0 +1,207 @@
+We can think of expected values as an approximation of a random variable, and then a good idea is to come up with
+a measure for how good of an approximation this is.
+We call this approximation the random variable's \emph{variance}.
+
+\begin{defn*}
+
+	Given a random variable $X$, we define its \ppemph{variance} to be:
+	\[ \varof X\coloneqq\expecof{(X-\expecof X)^2} \]
+	This is of course assuming that it exists.
+
+\end{defn*}
+
+Note that we can't just define it to be $\expecof{X-\expecof{X}}$ which would be more natural, since this equals
+$\expecof X-\expecof{\expecof X} = \expecof X-\expecof X = 0$.
+Notice that the variance is equal to:
+\[ = \expecof{X^2 - 2X\expecof X + \expecof X^2} = \expecof{X^2} - 2\expecof{X}\expecof{X} + \expecof X^2
+= \expecof{X^2} - \expecof X^2 \]
+
+\begin{thrm*}[varTraitsTheorem]
+
+	The following are true:
+	\begin{msecenumerate}
+		\mitem $\varof X\geq0$.
+		\mitem $\varof X=0$ if and only if there exists some $c\in\bR$ such that $X=\aseq c$.
+		\mitem $\varof{X+a}=\varof X$.
+		\mitem $\varof{aX}=a^2\varof{X}$.
+		\mitem If $X$ and $Y$ are independent, then $\varof{X+Y}=\varof X+\varof Y$.
+	\end{msecenumerate}
+
+\end{thrm*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Since $(X-\expecof X)^2\geq0$, so is its expected value, which is the variance of $X$.
+		\mitem Note that if $X\aseq c$, then $\expecof c=c=\expecof X$.
+		So if $\varof X=0$, notice that this means:
+		\[ 0 = \expecof{(X-\expecof X)^2} = \sum_{k\in\bR}k^2\probof{X-\expecof X=k} \]
+		And $k^2\geq0$, for $k\neq0$ the term must be $0$, so $\probof{X-\expecof X=k}=0$ for $k\neq0$.
+		And since this is a probability function, this means that $\probof{X-\expecof X=0}=1$, so by definition
+		$X\aseq\expecof X$.
+		For the converse, notice $X\deq\expecof X$, so $\varof X=\expecof{(\expecof X-\expecof X)^2}=\expecof0=0$.
+
+		\mitem Notice that 
+		\[ \varof{X+a}=\expecof{(X+a-\expecof{X+a})^2}=\expecof{(X-\expecof X)^2}=\varof X \]
+
+		\mitem Notice that
+		\[ \varof{aX} = \expecof{(aX-\expecof{aX})^2} = \expecof{a^2(X-\expecof X)^2} = a^2\varof X \]
+
+		\mitem Plugging in $X+Y$ to the formula for variance we found above gives:
+		\[ \varof{X+Y} = \expecof{(X+Y)^2} - \expecof{X+Y}^2 = \expecof{X^2} + 2\expecof{XY} + \expecof{Y^2} -
+		\expecof{X}^2 - 2\expecof X\expecof Y - \expecof Y^2 \]
+		Since $X$ and $Y$ are independent, $\expecof{XY}=\expecof{X}\expecof Y$, so this is equal to:
+		\[ \expecof{X^2} - \expecof X^2 + \expecof{Y^2} - \expecof Y^2 = \varof X+\varof Y \]
+		As required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+Now let's compute the variance of some distributions:
+
+\begin{prop*}
+
+	\begin{msecenumerate}[0pt]
+		\mitem $\varof{\berof p}=p-p^2$
+		\mitem $\varof{\binof{n,p}}=n(p-p^2)$
+		\mitem $\varof{\uni[n]}=\frac{n^2-1}{12}$
+		\mitem $\varof{\poiof\lambda}=\lambda$
+		\mitem $\varof{\geoof p}=\frac{1-p}{p^2}$
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Notice that $X^2\berof p$ since it is actually equal to $X$.
+		So $\varof{X}=\expecof{X}-\expecof{X}^2=p-p^2$.
+
+		\mitem Since $\binof{n,p}$ is distributively equal to the sum of $n$ independent bernoulli distributions,
+		and the variance of the sum of independent random variables is equal to the sum of the variances, this is
+		equal to $n(p-p^2)$ as required.
+
+		\mitem Notice that:
+		\[ \expecof{X^2} = \sum_{k=1}^n k^2\cdot\probof{X=k} = \frac1n\cdot\sum_{k=1}^n k^2 =
+		\frac1n\cdot\frac{n(n+1)(2n+1)}6 = \frac{(n+1)(2n+1)}6 \]
+		And so:
+		\[ \varof X = \frac{(n+1)(2n+1)}6 - \frac{(n+1)^2}4 = \frac{n^2-1}{12} \]
+		And notice that $\uniof{a,b}=\uniof{b-a+1}+a-1$, so:
+		\[ \varof{\uniof{a,b}} = \frac{b^2+a^2-2ab+2b-2a}{12} \]
+
+		\mitem Notice that:
+		\[ \expecof{X^2} = e^{-\lambda}\cdot\sum_{k=0}^\infty k^2\cdot\frac{\lambda^k}{k!} = 
+		\lambda e^{-\lambda}\cdot\sum_{k=0}^\infty (k+1)\frac{\lambda^k}{k!} =
+		\lambda e^{-\lambda}(e^\lambda+\lambda e^\lambda) = \lambda + \lambda^2 \]
+		And so the variance is equal to $\lambda+\lambda^2-\lambda^2=\lambda$.
+
+		\mitem This is left as an exercise (or look it up).
+		The computation doesn't really add anything of value to the discussion.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	Suppose $X$ is a random variable which has variance.
+	Then
+	\[ \varof X=\min\limits_{a\in\bR}\expecof{(X-a)^2} \]
+	So the minimum is when $a=\expecof X$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Let $Y=X-\expecof X$ and let $\epsilon\neq0$.
+	We will show that $\expecof{(Y+\epsilon)^2}>\varof X = \varof Y$.
+	Furthermore, since $\expecof Y=0$, $\expecof{Y+\epsilon}=\epsilon$, so:
+	\[ \expecof{(Y+\epsilon)^2}=\varof{Y+\epsilon}+\expecof{Y+\epsilon}^2=\varof{Y+\epsilon}+\epsilon^2 = \varof X + \epsilon^2 \]
+	So $\expecof{(Y+\epsilon)^2} > \varof X$ as required (since $\epsilon^2>0$).
+
+	\hfill$\qed$
+
+\end{proof}
+
+\newpage
+Notice that if $X$ and $Y$ are two random variables, we showed above that (this is a trivial result from the definition of variance):
+\[ \varof{X+Y} = \varof X+\varof Y + 2(\expecof{XY} - \expecof X\expecof Y) \]
+This rightmost term turns out to be somewhat important, and it offers a sort of measure as to how dependent two random variables are.
+So like what we do with every significant mathematical object, we'll give it a name.
+
+\begin{defn*}
+
+	Given two random variables $X$ and $Y$, their \ppemph{covariance} is:
+	\[ \covof{X,Y} \coloneqq \expecof{XY} - \expecof X\expecof Y \]
+
+\end{defn*}
+
+Note that this is equal to $\expecof{(X-\expecof X)(Y-\expecof Y)}$.
+As we remarked above, $\varof{X+Y}=\var X+\var Y+2\covof{X,Y}$.
+So it follows then that if $X$ and $Y$ are independent, $\covof{X,Y}=0$.
+And $\covof{X,X}=\expecof{X^2}-\expecof X^2=\varof X$.
+
+\begin{thrm*}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Covariance is symmetric: $\covof{X,Y}=\covof{Y,X}$.
+		\mitem $\covof{\alpha X+\beta Y, Z} = \alpha\covof{X,Z} + \beta\covof{Y,Z}$.
+		\mitem $\covof{X+\alpha,Y}=\covof{X,Y}$
+	\end{msecenumerate}
+
+\end{thrm*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem This is trivial by the definition of covariance.
+		\mitem By definition:
+		\[ \covof{\alpha X+\beta Y,Z} = \expecof{(\alpha X+\beta Y)Z} - \expecof{\alpha X+\beta Y}\expecof Z = \]
+		\[ = \alpha\expecof{XZ} + \beta\expecof{YZ} - \alpha\expecof X\expecof Z - \beta\expecof Y\expecof Z =
+		\alpha\covof{X,Z} + \beta\covof{Y,Z} \]
+		As required.
+		\mitem Notice that $\covof{\alpha,Y}=\expecof{\alpha Y}-\expecof{\alpha}\expecof Y=\alpha\expecof Y-\alpha\expecof Y=0$,
+		and $\covof{X+\alpha,Y}=\covof{X,Y}+\covof{\alpha,Y}=\covof{X,Y}$ as required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}[varCovRelationTheorem]
+
+	If $\set{X_i}_{i=1}^n$ are random variables then:
+	\[ \varof{\sum_{i=1}^n X_i} = \sum_{i=1}^n\varof{X_i} + 2\sum_{1\leq i<j\leq n}\covof{X_i,X_j} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We can show this through induction.
+	The trivial case of $n=1$ is trivial, and the other base case $n=2$ was shown above.
+	For the inductive step, notice that in the sum $\sum\limits_{i=1}^{n+1}X_i$, we can treat $X_n+X_{n+1}$ as one term and get a
+	sum of $n$ random variables.
+	So:
+	\[ \varof{\sum_{i=1}^{n+1} X_i} = \sum_{i=1}^{n-1}\varof{X_i} + \varof{X_n+X_{n+1}} + 2\sum_{1\leq i<j\leq n-1}\covof{X_i,X_j} +
+	2\sum_{i=1}^{n-1}\covof{X_i,X_n+X_{n+1}} \]
+	Since $\varof{X_n+X_{n+1}}=\varof{X_n}+\varof{X_{n+1}}+2\covof{X_n,X_{n+1}}$ and
+	$\covof{X_i,X_n+X_{n+1}}=\covof{X_i,X_n}+\covof{X_i,X_{n+1}}$, this is equal to:
+	\[ = \sum_{i=1}^{n+1}\varof{X_i} + 2\covof{X_n,X_{n+1}} + 2\sum_{1\leq i<j\leq n}\covof{X_i,X_j} + 2\sum_{i=1}^{n-1}\covof{X_i,X_{n+1}} \]
+	Since for $i=n$, $\covof{X_i,X_{n+1}}=\covof{X_n,X_{n+1}}$, this is equal to:
+	\[ = \sum_{i=1}^{n+1}\varof{X_i} + 2\sum_{1\leq i<j\leq n+1}\covof{X_i,X_j} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+An alternative way of writing this is:
+\[ \varof{\sum_{i=1}^n X_i} = \sum_{i=1}^n\varof{X_i} + \sum_{1\leq i\neq j\leq n}\covof{X_i,X_j} \]
+Since for every two indexes $a$ and $b$, the term $\covof{X_a,X_b}$ will be added twice, since $\covof{X_b,X_a}=\covof{X_a,X_b}$ will also be
+added.
+And since $\varof{X_i}=\covof{X_i,X_i}$ we can rewrite this again as:
+\[ \varof{\sum_{i=1}^n X_i} = \sum_{1\leq i,j\leq n}\covof{X_i,X_j} \]
+

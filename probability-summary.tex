@@ -1,0 +1,105 @@
+\documentclass[10pt]{article}
+
+\usepackage{kpfonts}
+\usepackage{fullproof}
+\usepackage{mathtools, amsfonts, amsmath, amssymb}
+\usepackage{tikz}
+\usepackage{bbm}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{biunotation}
+\usepackage{nameref}
+\usepackage{fancyhdr}
+
+\input ../prettyprint
+
+\input pracros
+
+\mathcode`/="213D
+
+\fancyhf{}
+\makeatletter
+\fancyhead[L]{\textsc{\thesubsection. \@currentlabelname}}
+\fancyhead[R]{\textsc{\thepage}}
+
+\begin{document}
+
+\barcolorbox{255,200,200}{100,0,0}{255,150,150}{%
+	\hfil{\Huge\scshape\scalebox{1.5}{$\bP$}\kern-0.5ex robability Proof Summary}\hfil%
+	
+	\large\scshape\bigskip
+	\hfil Ari Feiglin \hfil
+
+	\medskip
+	\hfil July, 2022 \hfil
+}
+
+\tableofcontents
+
+\clearpage
+
+\pagestyle{fancy}
+
+\subsection{Prerequisites}
+
+\input prereqs
+
+\newpage
+\section{Combinatorics}
+\subsection{Orderings}
+
+\input combinatorics/orderings
+
+\newpage
+\subsection{Multinomials}
+
+\input combinatorics/multinomials
+
+\newpage
+\section{Discrete Probability Spaces}
+
+\subsection{Introduction to Probability Spaces}
+\input discrete-probability-spaces/intro.tex
+
+\newpage
+\subsection{The Basics of Probability Spaces}
+\input discrete-probability-spaces/basics.tex
+
+\newpage
+\subsection{The Inclusion-Exclusion Principle}
+\input discrete-probability-spaces/inclusion-exclusion
+
+\newpage
+\subsection{Conditional Probability and Independence}
+\input discrete-probability-spaces/conditional-probability-independence
+
+\newpage
+\subsection{Discrete Random Variables}
+\input discrete-probability-spaces/random-variables
+
+\newpage
+\subsection{Expected Values}
+\input discrete-probability-spaces/expected-values
+
+\newpage
+\subsection{Variance}
+\input discrete-probability-spaces/variance
+
+\newpage
+\subsection{Approximations and Bounds}
+\input discrete-probability-spaces/approximations-and-bounds
+
+\newpage
+\subsection{Conditional Expectation}
+\input discrete-probability-spaces/conditional-expectation
+
+\newpage
+\section{Continuous Probability Spaces}
+\subsection{General Probability Spaces}
+\input continuous-probability-spaces/general-probability-spaces
+
+\newpage
+\subsection{Joint Probability, Expectation, and Variance}
+\input continuous-probability-spaces/joint-probability-expectation-variance
+
+\end{document}
+

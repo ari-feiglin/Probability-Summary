@@ -1,0 +1,306 @@
+\begin{note}
+
+Given the sum:
+\[ \sum_{x\in X}f(x) \]
+Where $X$ is potentially uncountable, we define it to be:
+\[ \sum_{x\in X} f(x) \coloneqq \sum_{x\in\sprtof[f]{X}} f(x) \]
+Where $\sprtof[f]{X}$ is the \ppemph{support} of $f$ on $X$, defined to be:
+\[ \sprtof[f]{X}\coloneqq\set{x\in X}[f(x)\neq0] \]
+
+Note that the sum must still be absolutely convergant, as we're summing in any order.
+
+\end{note}
+
+\begin{defn*}
+
+A probability space $\tuple{\Omega, \cF, \prob}$ is \ppemph{discrete} if there exists a function:
+\[ P\colon\Omega\longrightarrow[0,1] \]
+Such that for every event $A$:
+\[ \probof{A} = \sum_{\omega\in A}\mprobof\omega \]
+
+\end{defn*}
+
+\begin{defn*}
+
+A (finite) discrete probability space is \ppemph{uniform} if for every $\omega\in\Omega$:
+\[ \mprobof\omega=\frac1{\abs{\Omega}} \]
+
+\end{defn*}
+
+\begin{prop*}
+
+If $\tuple{\Omega,\cF,\prob}$ is a uniform probability space, then:
+\[ \probof{A} = \frac{\abs{A}}{\abs\Omega} \]
+
+\end{prop*}
+
+\begin{proof}
+
+This is quite simple to prove.
+Notice:
+\[ \probof{A} = \sum_{\omega\in A}\mprobof\omega = \sum_{\omega\in A}\frac1{\abs\Omega} = \frac{\abs{A}}{\abs\Omega} \]
+As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{exam}
+
+Suppose you live on the planet Ekato-Karpouzia, which has $k$ days in its year.
+
+You're in a class with $n$ people, what is the probability that at least two of the people in the class have the same
+birthday? (Assuming $n\leq k$.)
+
+This is called the \ppemph{birthday problem} or the \ppemph{birthday paradox}, since the probability of this is higher
+than one would expect.
+
+\end{exam}
+
+\begin{blankpp}
+
+Here, we can define $\Omega$ to be the set of all functions from $[n]$ to $[k]$, where $f(i)$ gives the birthday of
+the $i$th person.
+
+We also know that the probability space must be uniform, since the probability of having one distribution of birthdays is
+the same as having another (this isn't the case in real life, but this is a good enough assumption for us).
+
+Notice that the event that there are at least two people in the class with the same birthday is the complement of the
+event that no one in the class shares a birthday with anyone else.
+This event is the set of all injective functions from $[n]$ to $[k]$.
+We know there are $\frac{k!}{(k-n)!}$ of those, which means the probability that everyone has a different birthday is:
+\[ \frac{k!}{(k-n)!\cdot k^n} \]
+
+This is the probability of the complement of our goal event, which means the probability we're looking for is:
+\[ 1 - \frac{k!}{(k-n)!\cdot k^n} \]
+
+Now suppose that E.~Karpouzia has the same number of days in a year as us, $365$.
+That is, $k=365$.
+If this were the case, even with $50$ people, there'd be a probability greater than $0.97$.
+
+\end{blankpp}
+
+\begin{thrm*}[totProbOneTheorem,Law\ of\ Total\ Probability\ Version\ One]
+
+If $\set{A_i}_{i\in I}\in\cF$ is a countable partition of $\Omega$, that is:
+\[ \bigsqcup_{i\in I} A_i = \Omega \]
+Then for every event $B$:
+\[ \probof{B} = \sum_{i\in I}\probof{B\cap A_i} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+Notice that:
+\[ \bigsqcup_{i\in I}B\cap A_i = B\cap\parens{\bigsqcup_{i\in I} A_i} = B\cap\Omega = B \]
+Which means that:
+\[ \probof{B} = \probof{\bigsqcup_{i\in I} B\cap A_i} \]
+And since $I$ is countable, this is equal to:
+\[ \implies \probof{B} = \sum_{i\in I}\probof{B\cap A_i} \]
+As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{exam}
+
+An $n$-sided die and a $k$-sided die are rolled.
+What is the probability the result of the $n$-sided die is less than that of the $k$-sided die?
+
+\end{exam}
+
+\begin{blankpp}
+
+In this case, $\Omega=[n]\times[k]$, where $(x,y)\in\Omega$ corresponds to a result of $x$ on the $n$-sided die and $y$
+on the $k$-sided die.
+
+The event we're trying to compute a probability for is:
+\[ B = \set{(x,y)\in\Omega}[x<y] \]
+
+Let's define for $a\in[k]$:
+\[ A_a = [n]\times\set{a} = \set{(x,a)\in\Omega} \]
+
+Thus:
+\[ \probof{B} = \sum_{a=1}^k \probof{B\cap A_a} \]
+
+$B\cap A_a=\set{(x,a)}[x<a]$, which means that $\abs{B\cap A_a}=a-1$ (as there are $a-1$ choices for $x$).
+Since the probability is uniform (the probability of rolling any two numbers is equal), this means:
+\[ \probof{B\cap A_a} = \frac{\abs{B\cap A_a}}{\abs\Omega} = \frac{a-1}{n\cdot k} \]
+
+Therefore:
+\[ \probof{B} = \sum_{a=1}^k \frac{a-1}{n\cdot k} = \frac1{nk}\cdot\sum_{a=0}^{k-1}a =
+   \frac{1}{nk}\cdot\frac k2\cdot(k-1) = \frac{k-1}{2n} \]
+
+\end{blankpp}
+
+\begin{lemm*}[finiteUnionBoundLemma]
+
+	If $\set{A_i}_{i=1}^n$ are events, then:
+	\[ \probof{\bigcup_{i=1}^n A_i}\leq\sum_{i=1}^n\probof{A_i} \]
+
+\end{lemm*}
+
+\begin{proof}
+
+	We can prove this through induction on $n=1$. The base case for $n=1$ is trivial.
+	We will also prove it for $n=2$.
+
+	\ppemph{Base case} $n=2$:
+
+	Notice that:
+	\[ \probof{A_1\cup A_2} = \probof{A_1\sqcup(A_2\setminus A_1)} = \probof{A_1} + \probof{A_2\setminus A_1} \]
+	And since $A_2\setminus A_1$ is a subset of $A_2$, its probability is less than the probability of $A_2$.
+	So we get:
+	\[ \probof{A_1\cup A_2} = \probof{A_1} + \probof{A_2\setminus A_1} \leq \probof{A_1} + \probof{A_2} \]
+	As required.
+
+	\ppemph{Inductive step}:
+
+	Suppose the hypothesis is true for $n$.
+	Let $\set{A_i}_{i=1}^{n+1}$ be events.
+	Then:
+	\[ \probof{\bigcup_{i=1}^{n+1} A_i} = \probof{\parens{\bigcup_{i=1}^n A_i}\cup A_{n+1}} \]
+	And as we proved for $n=2$, this is less than:
+	\[ \leq \probof{\bigcup_{i=1}^n A_i} + \probof{A_{n+1}} \]
+	And by our inductive hypothesis, $\probof{\bigcup\limits_{i=1}^n A_i}\leq\sum\limits_{i=1}^n\probof{A_i}$, so this is 
+	less than:
+	\[ \leq \sum_{i=1}^n\probof{A_i} + \probof{A_{n+1}} = \sum_{i=1}^{n+1}\probof{A_i} \]
+
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	A series of sets $\set{A_i}_{i=1}^\infty$ is \ppemph{increasing} if for every $n\in\bN_1$, $A_n$ is a subset of $A_{n+1}$.
+	And it is \ppemph{decreasing} if for every $n\in\bN_1$, $A_n$ is a superset of $A_{n+1}$.
+
+\end{defn*}
+
+\begin{thrm*}[contProbTheorem]
+
+	If $\set{A_i}_{i=1}^\infty$ is increasing, then:
+	\[ \probof{\bigcup_{n=1}^\infty A_n} = \lim_{n\to\infty}\probof{A_n} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let's define $B_n\coloneqq A_n\setminus A_{n-1}$.
+
+	\begin{claim}
+		$\set{B_n}_{n=1}^\infty$ is pairwise disjoint.
+
+		Suppose $\omega\in B_n$, then $\omega\notin A_{n-1}$.
+		Since $\set{A_i}_{i=1}^\infty$ is increasing, this means that for every $k<n$, we know $\omega\notin A_k$.
+		And since $B_k\subseteq A_k$, this means that for every $k<n$, $\omega\notin B_k$.
+
+		Suppose that for some $k>n$, $\omega\in B_k$. But this would mean $\omega\notin B_n$ (by above), which is a contradiction.
+
+		So for every $k\neq n: \omega\notin B_k$.
+		So $\set{B_n}_{n=1}^\infty$ is disjoint.
+	\end{claim}
+
+	\begin{claim}
+		\[ \bigsqcup_{k=1}^n B_k = A_n \]
+
+		Suppose $\omega\in\bigsqcup B_k$, then there exists some $k\leq n$ such that $\omega\in B_k$.
+		And since $B_k\subseteq A_k$, this means $\omega\in A_k$.
+
+		Now suppose $\omega A_n$.
+		There must be some $k$ such that $\omega\in A_k$ and $\omega\notin A_{k-1}$
+		(take $k=\min\set{m\leq n}[\omega\in A_m]$).
+		This means $\omega\in A_k\setminus A_{k-1}=B_k$, and $k\leq n$, so $\omega\in\bigsqcup B_k$.
+
+		So an element is in one union if and only if it is in $A_n$, and therefore they are equal.
+	\end{claim}
+
+	It follows that:
+	\[ \bigsqcup_{n=1}^\infty B_n = \bigcup_{n=1}^\infty A_n \]
+	Since:
+	\[ \bigcup_{n=1}^\infty A_n = \bigcup_{n=1}^\infty \bigsqcup_{k=1}^n B_k = \bigsqcup_{n=1}^\infty B_k \]
+
+	So:
+	\[ \probof{\bigcup_{n=1}^\infty A_n} = \probof{\bigsqcup_{n=1}^\infty B_n} = \sum_{n=1}^\infty \probof{B_n} \]
+	Now recall that by definition:
+	\[ \sum_{k=1}^\infty\probof{B_k} = \lim_{n\to\infty}\sum_{k=1}^n\probof{B_k} = \lim_{n\to\infty}\probof{\bigsqcup_{k=1}^n B_k} \]
+	And by our previous claim, this is equal to:
+	\[ = \lim_{n\to\infty}\probof{A_n} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{coro*}[contProbCoro]
+
+	If $\set{A_i}_{i=1}^\infty$ are events which are decreasing, then:
+	\[ \probof{\bigcap_{n=1}^\infty A_n} = \lim_{n\to\infty}\probof{A_n} \]
+
+\end{coro*}
+
+\begin{proof}
+
+	Notice that since $A_n\supseteq A_{n+1}$, we know that $A_n^c\subseteq A_{n+1}^c$, so $\set{A_i^c}_{i=1}^\infty$ is an
+	increasing series.
+	Furthermore:
+	\[ \bigcap_{n=1}^\infty A_n = \parens{\bigcup_{n=1}^\infty A_n^c}^c \]
+	So:
+	\[ \probof{\bigcap_{n=1}^\infty A_n} = 1 - \probof{\bigcup_{n=1}^\infty A_n^c} \]
+
+	And since $\set{A_i^c}_{i=1}^\infty$ is increasing, by the above theorem:
+	\[ = 1 - \lim_{n\to\infty}\probof{A_n^c} = \lim_{n\to\infty} 1-\probof{A_n^c} = \lim_{n\to\infty}\probof{A_n} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{note}
+
+	These two theorems will become very important in the future when we discuss general probability spaces.
+	So keep them in mind.
+
+\end{note}
+
+\newpage
+\begin{thrm*}
+
+	If $I$ is countable then:
+	\[ \probof{\bigcup_{i\in I} A_i}\leq\sum_{i\in I}\probof{A_i} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We already proved the finite case in \ppref[lemma]{finiteUnionBoundLemma},
+	so all that remains is to prove the countably finite case.
+	That is, we need to prove:
+	\[ \probof{\bigcup_{n=1}^\infty A_n} \leq \sum_{n=1}^\infty\probof{A_n} \]
+
+	Let:
+	\[ B_n\coloneqq\bigcup_{k=1}^n A_k \]
+	Then $\set{B_n}_{n=1}^\infty$ is increasing, and:
+	\[ \bigcup_{n=1}^\infty B_n = \bigcup_{n=1}^\infty A_n \]
+
+	So by the previous theorem:
+	\[ \probof{\bigcup_{n=1}^\infty A_n} = \probof{\bigcup_{n=1}^\infty B_n} = \lim_{n\to\infty}\probof{B_n} =
+	\lim_{n\to\infty}\probof{\bigcup_{k=1}^n A_k} \]
+
+	And by \ppref[lemma]{finiteUnionBoundLemma}:
+	\[ \probof{\bigcup_{k=1}^n A_k}\leq\sum_{k=1}^n\probof{A_k} \]
+	So:
+	\[ \lim_{n\to\infty}\probof{\bigcup_{k=1}^n A_k}\leq\lim_{n\to\infty}\sum_{k=1}^n\probof{A_k} = \sum_{n=1}^\infty\probof{A_n} \]
+
+	Which means that all in all:
+	\[ \probof{\bigcup_{n=1}^\infty A_n} \leq \sum_{n=1}^\infty\probof{A_n} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+

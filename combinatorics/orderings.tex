@@ -1,0 +1,536 @@
+\begin{prop*}
+
+	There are $\frac{n!}{(n-k)!}$ injective functions from $[k]$ to $[n]$.
+
+\end{prop*}
+
+\begin{proof}
+
+	Let $A$ be this set of injective functions.
+
+	Let's create a bijection:
+	\[ f\colon[n]\times[n-1]\times\cdots\times[n-k+1]\longrightarrow A \]
+	We know that forall $a_1,\dots,a_k\in[n]$ there exists a bijection:
+	\[ f_{\set{a_1,\dots,a_k}}\colon [n-k]\longrightarrow[n]\setminus\set{a_1,\dots,a_k} \]
+	So we can define $f$ like so:
+	\[ f(a_1,a_2,\dots,a_{n-k}) = g \]
+
+	Where:
+	\[ g(1) = a_1 \]
+	And:
+	\[ g(i) = f_{\set{g(1),\dots,g(i-1)}}(a_i) \]
+	For $i\geq2$.
+
+	This is well-defined and $g$ is an injection since $g(i)\in[n]\setminus\set{g(1),\dots,g(i-1)}$ (this can be shown
+	inductively. It is not trivial since we must prove that $g(1)\neq\cdots g(i-1)$ in order to show that
+	$f_{\set{g(1),\dots,g(i-1)}}$ is the intended bijection.)
+
+	$f$ is injective since if:
+	\[ f(a_1,\dots,a_{n-k}) g_1 = g_2 = f(b_1,\dots,b_{n-k}) \]
+	Then:
+	\[ g_1(1) = g_2(1) \implies a_1 = b_1 \]
+	And:
+	\[ g_1(2) = g_2(2) \implies f_{\set{a_1}}(a_2) = f_{\set{a_1}}(b_2) \implies a_2=b_2 \]
+	Since $f_{\set{a_1}}$ is a bijection. 
+
+	And so on.
+
+	Now we must prove that $f$ is surjective. Suppose $g$ is an injection. Notice then that:
+	\[ f(g(1), f^{-1}_{\set{g(1)}}(g(2)), f^{-1}_{\set{g(1),g(2)}}(g(3)), \dots, f^{-1}_{\set{g(1),\dots,g(k-1)}}(g(k))) = g \]
+	Let $h$ be the left side ($f(\dots)$), then:
+	\[ h(i) = f_{\set{g(1),\dots,g(i-1)}}\parens{f^{-1}_{\set{g(1),\dots,g(i-1)}}(g(i))} = g(i) \]
+	So $h=g$ as required.
+	
+	Therefore $f$ is a bijection and:
+	\[ \abs{A} = n\cdot(n-1)\cdots(n-k+1) = \frac{n!}{(n-k)!} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{note}
+
+	This proof is just a more rigorous wording of the classic construction of the injective functions.
+
+	To construct an injective function, first choose the image of $1$. There are $n$ choices for this. Then there are $n-1$
+	choices for $2$, and so on. In the end we get that in total there are:
+	\[ n\cdot(n-1)\cdots(n-k+1) = \frac{n!}{(n-k)!} \]
+	choices and thus injective functions.
+
+\end{note}
+
+\def\image{{\rm Im}}
+\begin{lemm*}
+
+	If $A$ and $B$ are finite sets with the same cardinality, then every injection from $A$ to $B$ is a bijection.
+
+\end{lemm*}
+
+\begin{proof}
+
+	Suppose $f\colon A\longrightarrow B$ is an injection.
+	This means that $\abs{\image f}=\abs{A}=\abs{B}$. 
+
+	Suppose, for the sake of a contradiction, that $f$ is not a surjection.
+	Then there exists a $b\in B$ which has not origin in $A$, that is $b\notin\image f$.
+
+	But we know that $\image f\sqcup\set{b}\subseteq B$, so:
+	\begin{align*}
+		\abs{\image f\sqcup\set{b}} &\leq \abs{B} \\
+		\implies \abs{\image f}+1 &\leq \abs{B} \\
+		\implies \abs{B}+1 &\leq \abs{B} \\
+		\implies 1\leq 0
+	\end{align*}
+
+	In contradiction.
+	So $f$ is a surjection, and therefore a bijection, as required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}
+
+	There are $n!$ permutations of a set of cardinality $n$. That is, $\abs{S_n}=n!$.
+
+\end{thrm*}
+
+\begin{proof}
+
+	We know that every injection from $[n]$ to $[n]$ is a bijection, and vice versa.
+	So $S_n$ is the set of injections from $[n]$ to $[n]$, of which we proved there are:
+	\[ \frac{n!}{(n-n)!} = n! \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{lemm*}[partCardLemma]
+
+	If $P$ is a partition of $A$ such that every equivalence class has equal cardinality:
+	\[ \abs{A} = \abs{P}\cdot p \]
+	Where $p$ is the cardinality of an equivalence class.
+
+\end{lemm*}
+
+\begin{proof}
+
+	Suppose $[a]$ is an equivalence class of $A$. Then we know that for every equivalence class $[b]$, there exists a
+	bijection:
+	\[ f_{[b]}\colon [a]\longrightarrow[b] \]
+	Since they have equal cardinalities.
+
+	We'll define a function:
+	\[ f\colon P\times[a]\longrightarrow A \]
+	Where:
+	\[ f([b], \alpha) = f_{[b]}(\alpha) \]
+
+	This is injective since:
+	\[ f([b], \alpha) = f([c], \beta) \implies f_{[b]}(\alpha) = f_{[c]}(\beta) \]
+	Since the codomain of $f_{[x]}$ is $[x]$, and if $[x]\neq[y]$ then $[x]\cap[y]=\varnothing$ as $P$ is a partition, this
+	means that $[b]=[c]$. And since $f_{[b]}$ is a bijection, this means that $\alpha=\beta$.
+
+	So $([b],\alpha)=([c],\beta)$, which means $f$ is injective.
+	
+	Now, suppose $b\in A$, then:
+	\[ f([b], f_{[b]}^{-1}(b)) = f_{[b]}\parens{f_{[b]}^{-1}(b)} = b \]
+	So $f$ is surjective.
+
+	This means that $f$ is a bijection.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{prop}
+
+	There are $(n-1)!$ distinct ways to place $n$ people around a circular table.
+
+\end{prop}
+
+\begin{proof}
+
+	This is the same as asking how many distinct permutations there are if we define the equivalence class of a permutation
+	$\sigma\in S_n$ by:
+	\[ [\sigma]=\set{\tau\in S_n}[\exists i\in\bZ: \tau(x)=\sigma(x+i\bmod n)] \]
+	As $x+i\bmod n$ corresponds to a shift of $i$ spots about the table.
+
+	We know for all $i\in\bZ$, $x+i\bmod n=x+(i\bmod n)\bmod n$, and $0\leq i\bmod n<n$. So:
+	\[ [\sigma]=\set{\tau\in S_n}[\exists 0\leq i<n: \tau(x)=\sigma(x+i\bmod n)] \]
+	And for every $0\leq i\neq j<n$:
+	\[ x+i\bmod n\neq x+j\bmod n\implies \sigma(x+i\bmod n)\neq\sigma(x+j\bmod n) \]
+	Therefore:
+	\[ \abs{[\sigma]} = n \]
+
+	By \ppref[lemma]{partCardLemma}, this means that the number of distinct permutation is:
+	\[ \frac{n!}{n} = (n-1)! \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}[twoObjOrderingsTheorem]
+
+	The number of distinct ways to order $k$ black balls and $n-k$ white ones is:
+	\[ \frac{n!}{k!\cdot(n-k)!} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let the balls form the series $\set{a_i}_{i=1}^n$ where $a_i$ is $1$ (black) for $i\leq k$ and $0$ (white) for all other
+	$a_i$s. We define the equivalence class between permutations of the $n$ balls:
+	\[ [\sigma] = \set{\tau\in S_n}[a_{\tau(i)} = a_{\sigma(i)}] \]
+	This represents all the permutations of the balls which give the same ordering as $\sigma$. We want to count the number
+	of distinct permutations there are, which is the number of distinct equivalence classes.
+
+	Let:
+	\[ A_\sigma\coloneqq\set{n\geq i\in\bN_1}[a_{\sigma(i)}=1] \]
+	And:
+	\[ B_\sigma\coloneqq[n]\setminus A_\sigma \]
+	We will define a bijection:
+	\[ f\colon S_{A_\sigma}\times S_{B_\sigma}\longrightarrow[\sigma] \]
+
+	Where:
+	\[ f(\sigma_A, \sigma_B) = \tau \]
+	Where $\tau$ is defined by:
+	\[ \tau(x) = \begin{cases} \sigma_A(x) & x\in A_\sigma \\ \sigma_B(x) & x\in B_\sigma \end{cases} \]
+
+	We need to show that this is well-defined. Firstly, this is a bijection because $A_\sigma$ and $B_\sigma$ are disjoint and
+	$\sigma_A$ and $\sigma_B$ are bijections.
+	Suppose $i\in[n]$, if $i\in A_\sigma$ then by definition $a_{\sigma(i)}=1$, and $a_{\tau(i)} = a_{\sigma_A(i)}$,
+	but $\sigma_A(i)\in A_\sigma$, so $a_{\sigma_A(i)}=1$, as required.
+	The proof is similar if $i\in B_\sigma$.
+
+	Now, let's show that $f$ is injective. Suppose:
+	\[ f(\sigma_A, \sigma_B) = \tau_1 = \tau_2 = f(\pi_A, \pi_B) \]
+	This means that for every $i\in A_\sigma$: $\tau_1(i)=\tau_2(i)$, but we know that this just means $\sigma_A(i)=\pi_A(i)$,
+	therefore $\sigma_A=\pi_A$. Similar for $B$. Since the two sets are finite, this means that $f$ is a bijection.
+	
+	And we know that the cardinality of $A_\sigma$ is $k$ (since $\sigma$ is a bijection and there are $k$ $a_i$s which equal
+	$1$), and therefore $B_\sigma$ has a cardinality of $n-k$. So:
+
+	\[ \abs{\sigma} = k!\cdot(n-k)! \]
+	
+	So by \ppref[lemma]{partCardLemma}, this means the number of equivalence classes is:
+	\[ \frac{n!}{k!\cdot(n-k)!} \]
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{coro*}[binomialIntro]
+
+	\[ \binom{n}{k} = \frac{n!}{k!\cdot(n-k)!} \]
+
+\end{coro*}
+
+\begin{proof}
+
+	Let $\set{a_i}_{i=1}^n$ be defined similarly to as it was above. Let $P$ the set of distinct orderings of this set.
+	As per the theorem above, $\abs{P}=\frac{n!}{k!\cdot(n-k)!}$. We will construct a bijection:
+	\[ f\colon P\longrightarrow\powsetof[k]{[n]} \]
+
+	We define it like so:
+	\[ f([\sigma]) = \set{m\in[n]}[a_{\sigma(m)}=1] \]
+
+	We know this must have a cardinality of $k$ since there are $k$ $a_i$s which are equal to $1$, and permutations in the
+	same equivalence class map the same $a_i$s to $1$, so the function is well-defined.
+
+	Let us prove that $f$ is injective. If $f(\sigma)=f(\tau)$ then
+	\[ a_{\sigma(m)} = 1 \iff a_{\tau(m)} = 1 \]
+	Which means that $a_{\sigma(m)}=a_{\tau(m)}$, and therefore $[\tau]=[\sigma]$, as required.
+
+	Now suppose $S=\set{x_1,\dots,x_k}\in\powsetof[k]{[n]}$. We can define a permutation like so:
+	\[ \sigma(x_i) = i \]
+	And since $\abs{[n]\setminus S}=n-k$, there is a bijection between $[n]\setminus S$ and $\set{k+1,\dots,n}$. So we can
+	map the values in $[n]\setminus S$ (non-$x_i$ values) bijectively to $\set{k+1,\dots,n}$.
+
+	This defines a bijection $\sigma$ in $S_n$. Now notice that since $a_i=1$ only for $i\leq k$:
+	\[ \set{m\in[n]}[a_{\sigma(m)}=1] = \set{m\in[n]}[\sigma(m)\leq k] = \set{x_1,\dots,x_k} = S \]
+	So:
+	\[ f([\sigma]) = S \]
+	And $f$ is therefore a surjection.
+
+	Therefore $f$ is bijective and:
+	\[ \binom{n}{k} = \abs{\powsetof[k]{[n]}} = \abs{P} = \frac{n!}{k!\cdot(n-k)!} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{prop}[pascalsIdentity,Pascal's\ Identity]
+
+	\[ \binom{n}{k} = \binom{n}{n-k} \]
+
+	This identity is named after \ppemph{Blaise Pascal}, one of the pioneers of early probability theory.
+
+\end{prop}
+
+\begin{proof}
+
+	\begin{note}
+
+		This can be proved algebraically, by applying the formula for binomial coefficient which we proved earlier.
+
+		But this proof is dry and does not reveal much about the inner nature of the identity.
+
+	\end{note}
+
+	This is a simple proof. All it requires is a construction of a bijection:
+	\[ f\colon\powsetof[k]{[n]}\longrightarrow\powsetof[n-k]{[n]} \]
+	The construction is quite simple and natural:
+	\[ f(S) = [n]\setminus S \]
+	This is obviously well-defined, and is a bijection since it is its own inverse.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}[pascalsRule,Pascal's\ Rule]
+
+	\[ \binom{n-1}{k} + \binom{n-1}{k-1} = \binom{n}{k} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	A good look at the proposition reveals what the theorem really means: there is a partition of $\powsetof[k]{[n]}$ into
+	two sets isomorphic to $\powsetof[k]{[n-1]}$ and $\powsetof[k-1]{[n-1]}$ respectively. So let's attempt to find (one) of
+	these partitions.
+
+	We can define the partition into two sets:
+	\[ A=\set{S\in\powsetof[k]{[n]}}[n\in S] \]
+	And:
+	\[ B=\powsetof[k]{[n]}\setminus A = \set{S\in\powsetof[k]{[n]}}[n\notin S] \]
+
+	First, let's show that $A$ is isomorphic to $\powsetof[k-1]{[n-1]}$. Let $S\in A$. We can map it to $S\setminus\set{n}$.
+	This is well-defined since it has a cardinality of $\abs{S}-1=k-1$ and is a subset of $[n]\setminus\set{n}=[n-1]$.
+	Since for every $S\in A$, $n\in S$, this is injective (since $S=S\setminus\set{n}\cup\set{n}$). 
+	It is surjective since given $S'\in\powsetof[k-1]{[n-1]}$, $S'\cup\set{n}$ will be mapped to it.
+
+	And $B$ is actually just equal to $\powsetof[k]{[n-1]}$. This is because if $S\in B$ then
+	$S\subseteq[n]\setminus\set{n}=[n-1]$, and $S$ has a cardinality of $k$.
+
+	And $A\sqcup B=\powsetof[k]{[n]}$ trivially.
+
+	Therefore:
+	\[ \abs{A} + \abs{B} = \abs{\powsetof[k]{[n]}} \implies \binom{n-1}{k-1}+\binom{n-1}{k} = \binom{n}{k} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\newfunc{mset}{{\cal M}}({})
+\newfunc{sprt}{{\rm supp}}({})
+\def\bU{\mathbb{U}}
+\def\msetcoeff#1#2{\left(\!\binom{#1}{#2}\!\right)}
+
+\begin{defn*}
+
+	A \ppemph{multiset} in a universe $\bU$ is a pair:
+	\[ A=(\bU, m) \]
+	Where $\bU$ is a set and $m$ is a function:
+	\[ m\colon \bU\longrightarrow\bN_0 \]
+	This is called $A$'s \ppemph{multiplicity function} and is also denoted $m_A$.
+	
+	Multisets are a way of representing sets where elements can be repeated a finite number of times.
+	Basically, for every $a$ in $A$, $m(a)$ represents how many times $a$ is in the multiset.
+
+	Let $\msetof{\bU}$ be the set of all multisets in the bU $\bU$, that is:
+	\[ \msetof{\bU}\coloneqq\set{(\bU, m)}[m\colon \bU\longrightarrow\bN_0] = \bU\times\parens{\bN_0}^\bU \]
+
+	Given a multiset $A$ in a universe $\bU$, we define its \ppemph{support} to be the set of all elements in $A$:
+	\[ \sprtof{A}\coloneqq\set{a\in\bU}[m(a)>0] \]
+
+	And we say that $a\in A$ if $a\in\sprtof{A}$.
+
+	We define the \ppemph{cardinality} of a finite multiset $A$ (a multiset is finite if its support is):
+	\[ \abs{A}\coloneqq\sum_{a\in\sprt{A}}m(a) \]
+
+	Finally, we define the set of all $k$-length multisets over $\bU$ as:
+	\[ \msetof[k]{\bU} = \set{A\in\msetof{\bU}}[\abs{A}=k] \]
+	And we define its cardinality to be:
+	\[ \msetcoeff{\abs{\bU}}{k}\coloneqq\abs{\msetof[k]{\bU}} \]
+	This is called the \ppemph{multiset coefficient}.
+
+\end{defn*}
+
+\begin{prop*}
+
+	\[ \msetcoeff{n}{k} = \binom{n+k-1}{k} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	So we need to find the cardinality of $\msetof[k]{[n]}$.
+
+	Firstly, recall that by \ppref[corollary]{binomialIntro}
+	the number of distinct orderings of $k$ of one object and $n-1$ of another is $\binom{n+k-1}{k}$.
+	So let's create a bijection from the set of distinct orderings of $k$ one object and $n-1$ of another.
+
+	These orderings can be uniquely characterized by the indexes of the $n-1$ objects, which are the series
+	$\set{p_i}_{i=1}^{n-1}$ where $1\leq p_1<\cdots<p_{n-1}\leq n+k-1$.
+	For simplicity, let's define $p_0\coloneqq0$ and $p_n\coloneqq n+k$.
+
+	\newfunc{func}{f}({})
+	So now let's define the bijection:
+	\[ \funcof{\set{p_i}_{i=0}^n} = ([n], m) \]
+	Where for every $k\in[n]$:
+	\[ m(k) = p_k - p_{k-1} - 1 \]
+
+	Let's prove that this is well-defined.
+	Firstly, $p_k>p_{k-1}\implies p_k-p_{k-1}-1\geq0$, so $m(k)\in\bN_0$ as required.
+
+	Secondly:
+	\[ \sum_{k=1}^n m(k) = \sum_{k=1}^n p_k - p_{k-1} - 1 = \sum_{k=1}^n\parens{p_k-p_{k-1}} - n \]
+	This is a telescopic sum, which is equal to:
+	\[ = p_n - p_0 - n = n+k - n = k \]
+	Which means this multiset has a cardinality of $k$, as required.
+
+	Now, let's show that $f$ is an injection.
+
+	Suppose:
+	\[ \funcof{\set{p_i}_{i=0}^n} = \funcof{\set{q_i}_{i=0}^n} \]
+	That means for every $k\in[n]$:
+	\[ p_k - p_{k-1} - 1 = q_k - q_{k-1} - 1 \implies p_k - p_{k-1} = q_k - q_{k-1} \]
+	And through simple induction it can be shown that $p_k=q_k$ (recall that $p_0=q_0=0$ for the base).
+
+	So $f$ is injective.
+
+	Now, suppose $([n], m)\in\msetof[k]{[n]}$ is a multiset, we can define:
+	\[ p_k\coloneqq\sum_{i=1}^k (m(i)) + k \]
+	Which is a valid indexing since $p_k<p_{k+1}$, $p_0=0$, and $p_n=\sum\limits_{i=1}^k m(i) + n = k+n$.
+
+	And notice that:
+	\[ p_k - p_{k-1} = m(k) + 1 \implies m(k) = p_k - p_{k-1} - 1 \]
+	Which means that:
+	\[ \funcof{\set{p_i}_{i=0}^n} = ([n], m) \]
+	So every multiset has an origin, therefore $f$ is surjective.
+
+	So $f$ is a bijection, which means that:
+	\[ \msetcoeff{n}{k} = \abs{\msetof[k]{[n]}} = \binom{n+k-1}{k} \]
+
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	\[ \msetcoeff{n}{k} = \msetcoeff{k+1}{n-1} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	As shown earlier, $\msetof[k]{[n]}$ is isomorphic to the set of orderings of $n-1$ of one object and $k$ of another.
+	So for instance, it is isomorphic to the set of orderings of $n-1$ black balls and $k$ white balls.
+
+	But we can flip which object is which, so this is isomorphic to the orderings of $k$ black balls and $n-1$ white balls.
+	And this is isomorphic by the (proof of the) previous proposition to $\msetof[n-1]{[k+1]}$.
+
+	So all in all $\msetof[k]{[n]}$ is isomorphic to $\msetof[n-1]{[k+1]}$, so:
+	\[ \msetcoeff{n}{k} = \msetcoeff{k+1}{n-1} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	\[ \msetcoeff{n}{k} = \msetcoeff{n}{k-1} + \msetcoeff{n-1}{k} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	We will create a partition of $\msetof[k]{[n]}$ into subsets which have the required cardinality.
+	The partition which accomplishes this is defined as follows:
+	\[ \msetof[k]{[n]} = A\sqcup B \]
+	Where:
+	\[ A\coloneqq\set{M\in\msetof[k]{[n]}}[n\notin M] \quad B\coloneqq\set{M\in\msetof[k]{[n]}}[n\in M] \]
+
+	Notice that $A=\msetof[k]{[n-1]}$.
+
+	We can define a bijection $f$ from $B$ to $\msetof[k-1]{[n]}$ as follows:
+	\[ f(M) = \tilde M \]
+	Where:
+	\[ m_{\tilde M}(i) = \begin{cases}
+		m_M(i) & i\neq n \\
+		m_M(i) - 1 & i=n 
+	\end{cases} \]
+
+	This is well-defined because the sum of $m_{\tilde M}$ is one less than the sum of $m_M$, which is $k$.
+	So the sum is $k-1$, as required.
+
+	It is obviously injective, since we have all the necessary knowledge about $m$ in its image.
+
+	It is also obviously surjective, since given $m_{\tilde M}$, we can define $m$ like so:
+	\[ m(i) = \begin{cases} m_{\tilde M}(i) & i\neq n \\ m_{\tilde M}(i) + q & i=n \end{cases} \]
+
+	So $f$ is a bijection, therefore:
+	\[ \abs{B} = \msetcoeff{n}{k-1} \]
+
+	So all in all we know:
+	\[ \abs{\msetof[k]{[n]}} = \abs{A} + \abs{B} \implies \msetcoeff{n}{k} = \msetcoeff{n-1}{k} + \msetcoeff{n}{k-1} \]
+	As required.
+
+\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{thrm*}
+
+	Given a set $A$ with $n$ elements, the number of ways to choosen $k$ elements from $A$ is:
+	\begin{msecitemize}
+		\mitem If order matters (so choosing $a$ then $b$ is different from choosing $b$ then $a$)
+		and repition is allowed (we can choose $a$ twice for example):
+			\[ n^k \]
+		\mitem If order matters, but repetition is not allowed:
+			\[ \frac{n!}{(n-k)!} \]
+		\mitem If order doesn't matter, but repetition is allowed:
+			\[ \msetcoeff{n}{k} = \binom{n+k-1}{k} \]
+		\mitem If order doesn't matter, and repetition is not allowed:
+			\[ \binom nk \]
+	\end{msecitemize}
+
+	This should give insight as to why what we've been discussing is significant.
+
+\end{thrm*}
+
+\begin{proof}
+
+	\begin{msecitemize}
+		\mitem If order matters and repetition is allowed, then this is just analogous to the number of tuples over $A$ with
+		length $k$, this is the set $A^k$, which has a cardinality of $n^k$.
+
+		\mitem If order matters, but repetition is not allowed, then this is just analogous to the number of tuples over $A$
+		with length $k$, but all elements in the tuples are distinct.
+		And tuples are analogous to functions, so this is analogous to the injective functions from $[k]$ to $A$,
+		of which there are $\frac{n!}{(n-k)!}$.
+
+		\mitem If order doesn't matter, and repetition is allowed, then we're just choosing a multiset of length $k$ from $A$.
+		And we know there are $\msetcoeff{n}{k}=\binom{n+k-1}{k}$ of those.
+
+		\mitem If order doesn't matter and repetition is not allowed, then we're just choosing a set of cardinality $k$ from
+		$A$, in other words a $k$-length subset of $A$.
+		And we know there are $\binom{n}{k}$ of those.
+	\end{msecitemize}
+
+\hfill$\qed$
+
+\end{proof}
+
+

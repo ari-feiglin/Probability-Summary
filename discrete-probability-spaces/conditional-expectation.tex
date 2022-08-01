@@ -1,0 +1,213 @@
+\begin{defn*}
+
+	If $X$ is a discrete random variable with an expected value and $A$ is an event such that $\probof A>0$,
+	we define the \ppemph{conditional expectation} of $X$ relative to $A$ by:
+	\[ \expecof{X}[A]\coloneqq\sum_{x\in\bR}x\cdot\probof{X=x}[A] \]
+
+\end{defn*}
+
+This definition begs the question, does conditional expectation always exist if $\expecof X$ does?
+The answer is yes.
+
+\begin{prop*}
+
+	Conditional expectation is well-defined in the regard stated above.
+
+\end{prop*}
+
+\begin{proof}
+
+	Notice that by definition:
+	\[ \expecof{X}[A] = \sum_{x\in\bR} x\cdot\frac{\probof{X=x,A}}{\probof A} =
+	\frac1{\probof A}\cdot\sum_{x\in\bR}x\cdot\probof{X=x,A} \]
+	Now note that that sum must converge since $\probof{X=x,A}\leq\probof{X=x}$ so absolutely the
+	sum is less than the expected value of $X$, and converges.
+	But we can squeeze out a bit more from this.
+	Notice that if we instead change our point of view from events to random variables, the event $A$
+	occurring is the same as $\bone_A$ being $1$.
+	So $\probof{X=x,A}=\probof{X=x,\bone_A=1}$.
+	Furthermore, notice that $\bone_A\cdot X=x$ if and only if $\bone_A=1$ and $X=x$ or $x=0$.
+	But since $x=0$ doesn't contribute to the sum, we get that:
+	\[ \expecof{X}[A] = \frac1{\probof A}\cdot\sum_{x\in\bR}x\cdot\probof{\bone_A\cdot X=x} =
+	\frac1{\probof A}\cdot\expecof{\bone_A\cdot X} \]
+
+	And since $\bone_A\cdot X\asleq X$, this converges.
+
+	\hfill$\qed$
+
+\end{proof}
+
+Similar to the \ppref{totProbTwoTheorem}, we have a similar situation with expectation and conditional expectation:
+
+\begin{prop*}
+
+	If $X$ is a discrete random variable and $\set{A_i}_{i\in I}$ is a partition of $\Omega$
+	\[ \expecof X = \sum_{i\in I}\expecof{X}[A_i]\cdot\probof{A_i} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	This is simple and can be proven with some simple algebraic manipulation:
+	\[ \expecof X = \sum_{x\in\bR}x\cdot\probof{X=x} \]
+	Which is equal to by \ppref{totProbTwoTheorem}:
+	\[ = \sum_{x\in\bR}x\cdot\sum_{i\in I}\probof{X=x}[A_i]\cdot\probof{A_i}
+	= \sum_{i\in I}\probof{A_i}\cdot\sum_{x\in\bR}x\cdot\probof{X=x}[A_i] = \sum_{i\in I}\expecof{X}[A_i]\cdot\probof{A_i} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	If $N$ is a discrete random variable with a natural support and expected value, and $\set{X_i}_{i=1}^\infty$ is a sequence
+	of random variables which have the same distribution (suppose $X_i\deq X$), then:
+	\[ \expecof{\sum_{i=1}^N X_i} = \expecof X\cdot\expecof N \]
+
+\end{prop*}
+
+\begin{proof}
+
+	We can use the previous proposition to see that:
+	\[ \expecof{\sum_{i=1}^N X_i} = \sum_{n=1}^\infty\expecof{\sum_{i=1}^N X_i}[N=n]\cdot\probof{N=n} \]
+	Notice that
+	\[ \expecof{\sum_{i=1}^N X_i}[N=n] = \expecof{\sum_{i=1}^n X_i} = \sum_{i=1}^n\expecof X_i = n\cdot\expecof X \]
+	So:
+	\[ \expecof{\sum_{i=1}^N X_i} = \expecof X\cdot\sum_{n=1}^\infty n\cdot\expecof N = \expecof X\cdot\expecof N \]
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	Suppose $X$ is a random variable with expected value, and $Y$ is a random variable over the probability space
+	$(\Omega,\cF,\prob)$, then we define a random variable:
+	\[ \expecof{X}[Y]\colon\Omega\longrightarrow\bR \]
+	Such that for every $\omega\in\Omega$:
+	\[ \expecof{X}[Y](\omega) = \expecof{X}[Y=Y(\omega)] \]
+	If $\probof{Y=Y(\omega)}$ is non-zero, and we can define it to be $0$ otherwise.
+
+\end{defn*}
+
+Conditional expectation is very useful when tring to compute expected values and variance for random variables which are
+very dependent on another.
+This is best demonstrated by the following theorems:
+
+\begin{thrm*}[lawOfTotExpecTheorem,Law\ of\ Total\ Expectation]
+
+	\[ \expecof{X} = \expecof{\expecof{X}[Y]} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Let's start by introducing a new random variable, $\probof{X=x}[Y]$ for every $x$  such that
+	\[ \probof{X=x}[Y](\omega)=\probof{X=x}[Y=Y(\omega)] \]
+	Now it's quite simple to see that
+	\[ \expecof{X}[Y] = \sum_{x\in\bR}x\cdot\probof{X=x}[Y] \]
+	As passing $\omega$ to the right hand side gives us precisely the definition of $\expecof{X}[Y=Y(\omega)]$.
+
+	Now using this we see:
+	\[ \expecof{\expecof{X}[Y]} = \expecof{\sum_{x\in\bR}x\cdot\probof{X=x}[Y]} \]
+	And applying the result from an above proposition, this is equal to:
+	\[ \sum_{y\in\bR}\expecof{\sum_{x\in\bR}x\cdot\probof{X=x}[Y=y]}\cdot\probof{Y=y} \]
+	The expected value is just a constant so this is equal to:
+	\[ \sum_{y\in\bR}\sum_{x\in\bR}x\cdot\probof{X=x}[Y=y]\cdot\probof{Y=y} = \sum_{x\in\bR}x\cdot\sum_{y\in\bR}\probof{X=x,Y=y}
+	= \sum_{x\in\bR}x\cdot\probof{X=x} = \expecof X\]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}[condExpecProp]
+
+	\begin{msecenumerate}[0pt]
+		\mitem If $X$ and $Y$ are independent then $\expecof{X}[Y]=\expecof X$.
+		\mitem If $f$ is a real function then $\expecof{f(Y)\cdot X}[Y]=f(Y)\cdot\expecof{X}[Y]$.
+	\end{msecenumerate}
+
+\end{prop*}
+
+\begin{proof}
+
+	\begin{msecenumerate}[0pt]
+		\mitem Let $\omega\in\Omega$, then
+			\[ \expecof{X}[Y](\omega) = \expecof{X}[Y=Y(\omega)] = \sum_{x\in\bR}x\cdot\probof{X=x}[Y=Y(\omega)] =
+			\sum_{x\in\bR}x\cdot\probof{X=x} = \expecof X \]
+
+		\mitem Let $\omega\in\Omega$ then:
+			\[ \expecof{f(Y)\cdot X}[Y] = \expecof{f(Y)\cdot X}[Y=Y(\omega)] = \expecof{f(Y(\omega))\cdot X}[Y=Y(\omega)] \]
+			And since $f(Y(\omega))$ is a constant, this is equal to:
+			\[ = f(Y(\omega)) \cdot \expecof{X}[Y=Y(\omega)] = \big(f(Y)\cdot\expecof{X}[Y]\big)(\omega) \]
+			As required.
+	\end{msecenumerate}
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{defn*}
+
+	Given an event $A$ and a random variable $X$ with variance, we define \ppemph{conditional variance} of $X$ relative to $A$
+	to be:
+	\[ \varof{X}[A] = \expecof{X^2}[A] - \expecof{X}[A]^2 \]
+
+	And if $Y$ is another random variable, we define $\varof{X}[Y]$ to be another random variable defined by:
+	\[ \varof{X}[Y](\omega) \coloneqq \varof{X}[Y=Y(\omega)] \]
+
+\end{defn*}
+
+Notice then that as a direct result of the definition
+\[ \varof{X}[Y] = \expecof{X^2}[Y] - \expecof{X}[Y]^2 \]
+
+\begin{lemm*}
+
+	\[ \expecof{\varof{X}[Y]} = \varof{X-\expecof{X}[Y]} \]
+
+\end{lemm*}
+
+\begin{proof}
+
+	Notice that 
+	\[ \expecof{\varof{X}[Y]} = \expecof{\expecof{X^2}[Y]} - \expecof{\expecof{X}[Y]^2} = \expecof{X^2} - \expecof{\expecof{X}[Y]^2} \]
+	And
+	\[ \varof{X-\expecof{X}[Y]} = \expecof{X^2} - 2\expecof{X\cdot\expecof{X}[Y]} + \expecof{\expecof{X}[Y]^2} -
+	\big(\expecof{X}-\expecof{\expecof{X}[Y]}\big)^2 \]
+	Notice that $\expecof{X}-\expecof{\expecof{X}[Y]}=\expecof X-\expecof X=0$, and that
+	\[ \expecof{X\cdot\expecof{X}[Y]} = \expecof{\expecof{X\cdot\expecof{X}[Y]}[Y]} \]
+	Now recall that \ppref[proposition]{condExpecProp} $\expecof{X\cdot\expecof{X}[Y]}[Y]=\expecof{X}[Y]\cdot\expecof{X}[Y]$ since
+	$\expecof{X}[Y]$ is a function of $Y$.
+	So
+	\[ \expecof{X\cdot\expecof{X}[Y]} = \expecof{\expecof{X}[Y]^2} \]
+	So all in all:
+	\[ \varof{X-\expecof{X}[Y]} = \expecof{X^2} - \expecof{\expecof{X}[Y]^2} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{thrm*}
+
+	\[ \varof{X} = \expecof{\varof{X}[Y]} + \varof{\expecof{X}[Y]} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	Notice that
+	\[ \expecof{\varof{X}[Y]} = \expecof{\expecof{X^2}[Y] - \expecof{X}[Y]^2} = \expecof{\expecof{X^2}[Y]} - \expecof{\expecof{X}[Y]^2}
+	= \expecof{X^2} - \expecof{\expecof{X}[Y]^2} \]
+	And
+	\[ \varof{\expecof{X}[Y]} = \expecof{\expecof{X}[Y]^2} - \expecof{\expecof{X}[Y]}^2 = \expecof{\expecof{X}[Y]^2} - \expecof{X}^2 \]
+	So all in all we get that
+	\[ \expecof{\varof{X}[Y]} + \varof{\expecof{X}[Y]} = \expecof{X^2} - \expecof{X}^2 = \varof X \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
