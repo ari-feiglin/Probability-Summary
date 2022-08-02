@@ -182,7 +182,7 @@
 
 \begin{proof}
 
-	Let the balls form the series $\set{a_i}_{i=1}^n$ where $a_i$ is $1$ (black) for $i\leq k$ and $0$ (white) for all other
+	Let the balls form the sequence $\set{a_i}_{i=1}^n$ where $a_i$ is $1$ (black) for $i\leq k$ and $0$ (white) for all other
 	$a_i$s. We define the equivalence class between permutations of the $n$ balls:
 	\[ [\sigma] = \set{\tau\in S_n}[a_{\tau(i)} = a_{\sigma(i)}] \]
 	This represents all the permutations of the balls which give the same ordering as $\sigma$. We want to count the number
@@ -344,8 +344,8 @@
 	Multisets are a way of representing sets where elements can be repeated a finite number of times.
 	Basically, for every $a$ in $A$, $m(a)$ represents how many times $a$ is in the multiset.
 
-	Let $\msetof{\bU}$ be the set of all multisets in the bU $\bU$, that is:
-	\[ \msetof{\bU}\coloneqq\set{(\bU, m)}[m\colon \bU\longrightarrow\bN_0] = \bU\times\parens{\bN_0}^\bU \]
+	Let $\msetof{\bU}$ be the set of all multisets in the universe $\bU$, that is:
+	\[ \msetof{\bU}\coloneqq\set{(\bU, m)}[m\colon \bU\longrightarrow\bN_0] \]
 
 	Given a multiset $A$ in a universe $\bU$, we define its \ppemph{support} to be the set of all elements in $A$:
 	\[ \sprtof{A}\coloneqq\set{a\in\bU}[m(a)>0] \]

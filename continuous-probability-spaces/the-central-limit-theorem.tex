@@ -39,9 +39,9 @@ We will demonstrate the necessity of this with the following example.
 \begin{proof}
 
 	Since $\probof{X=a}=0$, $F_X$ is continuous at $a$ and therefore $\cumof[X_n]a\longrightarrow\cumof[X]a$.
-	Now, suppose that $\probof{X_n=a}$ doesn't converge to $0$, that means that there is some subseries of $X_n$, $X_{m_n}$
+	Now, suppose that $\probof{X_n=a}$ doesn't converge to $0$, that means that there is some subsequence of $X_n$, $X_{m_n}$
 	such that $\probof{X_{m_n}=a}>\epsilon$ for some $\epsilon>0$.
-	We can assume that $m_n=n$ since $X_{m_n}\dilim X$ (since every subseries of $\cumof[X_n]a$ must converge to $\cumof[X]a$).
+	We can assume that $m_n=n$ since $X_{m_n}\dilim X$ (since every subsequence of $\cumof[X_n]a$ must converge to $\cumof[X]a$).
 	But we know that for every $\delta>0$:
 	\[ \cumof[X_n]a = \probof{X_n\leq a} \geq \probof{X_n\leq a-\delta} + \probof{X_n=a} > \probof{X_n\leq a-\delta} + \epsilon \]
 	So if we take the limit of both sides we get that:

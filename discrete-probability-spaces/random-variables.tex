@@ -393,7 +393,7 @@ Notice that this means
 
 \end{thrm*}
 
-The idea behind this theorem is that if you have a series of independent trials which can either succeed or fail with a
+The idea behind this theorem is that if you have a sequence of independent trials which can either succeed or fail with a
 probability of $p$, then the probability that you succeed for the first time on your $n$th try distributes geometrically.
 
 \begin{proof}
@@ -466,7 +466,7 @@ beginning of the trials (distributively equivalent to $X$).
 			If we let $p\coloneqq\probof{X=1}$, then $\probof{X>1}=1-p$ since the support of $X$ is $\bN_1$.
 			So:
 			\[ \probof{X=n+1} = (1-p)\probof{X=n} \]
-			This is the definition of a geometric series (if we let $a_n=\probof{X=n}$, we see that $a_{n+1}=(1-p)a_n$).
+			This is the definition of a geometric sequence (if we let $a_n=\probof{X=n}$, we see that $a_{n+1}=(1-p)a_n$).
 			So we get:
 			\[ \probof{X=n} = (1-p)^{n-1}\cdot\probof{X=1} = (1-p)^{n-1}\cdot p \]
 			As required.
@@ -573,7 +573,7 @@ $k$ of them succeed has a binomial distribution.
 
 \begin{thrm*}
 
-	Suppose $\set{X_n}_{n=1}^\infty$ is a series of random variables such that $X_n\sim\binof{n,\frac\lambda n}$ for some positive
+	Suppose $\set{X_n}_{n=1}^\infty$ is a sequence of random variables such that $X_n\sim\binof{n,\frac\lambda n}$ for some positive
 	real $\lambda$.
 	Then
 	\[ X_n\dilim\poiof\lambda \]

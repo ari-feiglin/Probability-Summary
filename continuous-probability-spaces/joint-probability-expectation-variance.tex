@@ -174,14 +174,14 @@ I will provide a proof for this specific case.
 	Where $n=\floor{2^k\cdot x}$, so for every $t$ interval, $g^k(x)$ is constant.
 	And this is a countable partition of $\bR$ so by above:
 	\[ \expecof{g^k(X)} = \int_\bR g^k(x)\cdot f_X(x)\,dx \]
-	Also notice that since these partitions get finer, $g^k$ is an increasing series, and it converges to $g$.
+	Also notice that since these partitions get finer, $g^k$ is an increasing sequence, and it converges to $g$.
 
 	And since $g^k(X)$ is essentially a discrete random variable, $\expecof{g^k(X)}\leq\expecof{g^{k+1}(X)}$.
 	By the monotone convergence theorem (which is a result of measure theory we will not be showing here), it turns out that:
 	\[ \expecof{g^k(X)} \nearrow \expecof{g(X)} \]
 	And
 	\[ \int_\bR g_k(x)\cdot f_X(x)\,dx \nearrow \int_\bR g(x)\cdot f_X(x)\,dx \]
-	And since we showed that the two series on the left are equal, since limits are unique, we get that:
+	And since we showed that the two sequences on the left are equal, since limits are unique, we get that:
 	\[ \expecof{g(X)} = \int_\bR g(x)\cdot f_X(x)\,dx \]
 	As required.
 
