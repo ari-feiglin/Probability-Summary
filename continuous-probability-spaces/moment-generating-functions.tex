@@ -107,6 +107,17 @@ Let's compute the moment generating functions of a few distributions.
 		This converges if and only if $e^t(1-p)<1$, that is $t<-\logof{1-p}$.
 		If this is the case then:
 		\[ M_X(t) = \frac{pe^t}{1-e^t(1-p)} = \frac{p}{e^{-t}+p-1} \]
+	\mitem If $Z\sim\normof{0,1}$ then:
+		\[ M_Z(t) = \expecof{e^{tX}} = \frac1{\sqrt{2\pi}}\int_\bR e^{tx}\cdot e^{-\frac{x^2}2}\,dx =
+		e^{\frac{t^2}2}\cdot\frac1{\sqrt{2\pi}}\int_\bR e^{-\frac{t^2}2-tx+\frac{x^2}2}\,dx \]
+		Notice that $-\frac{t^2}2-tx+\frac{x^2}2=-\frac{(x-t)^2}2$, so this is equal to:
+		\[ = e^{-\frac{t^2}2}\cdot\frac1{\sqrt{2\pi}}\int_\bR e^{-\frac{(x-t)^2}2}\,dx \]
+		This integral is the integral of the probability density function of $\normof{t,1}$, which we know is $1$.
+		So this means:
+		\[ M_Z(t) = e^{-\frac{t^2}2} \]
+
+		And if $X\sum\normof{\mu,\sigma^2}$, then $X\deq\sigma Z+\mu$, so:
+		\[ M_X(t) = \expecof{e^{\sigma Z+\mu}} = e^\mu\cdot M_Z(\sigma t) = e^\mu\cdot e^{-\frac{\sigma^2 t^2}2} \]
 \end{msecitemize}
 
 \begin{thrm*}[chernoffBoundTheorem,Chernoff\ Bound]
@@ -149,6 +160,7 @@ Let's compute the moment generating functions of a few distributions.
 
 \end{proof}
 
+\newpage
 \begin{thrm*}[hoeffIneqTheorem,Hoeffding's\ Inequality]
 
 	If $\set{X_k}_{k=1}^n$ is a sequence of independent random variables such that for every $k$ $\expecof{X_k}=0$ and
@@ -199,4 +211,11 @@ We can generalize this fact with the below corollary:
 	\hfill$\qed$
 
 \end{proof}
+
+\begin{note}
+
+	An important note is that if $M_X(t)=M_Y(t)$ for every $t$ in some interval $(-\epsilon, \epsilon)$ then $X\deq Y$.
+	We will not prove this.
+
+\end{note}
 

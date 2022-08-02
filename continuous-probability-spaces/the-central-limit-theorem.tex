@@ -1,0 +1,180 @@
+In this section we will return to studying normal distributions.
+We will see how normal distributions are actually one of, if not the, most general distribution there is.
+
+\begin{defn*}
+
+	If $\set{X_n}_{n=1}^\infty$ is a sequence of random variables, then we say that:
+	\[ X_n\dilim X \]
+	If the limit of $\cumof[X_n]a$ is $\cumof[X]a$ for every real $a$ where $F_X$ is continuous.
+
+\end{defn*}
+
+Why do we require that $F_X$ be continuous at $a$?
+We will demonstrate the necessity of this with the following example.
+
+\begin{exam}
+
+	If $X_n\aseq C_n$ for some sequence $C_n$ whose limit is $C$, then it would make sense that $X_n\dilim C$.
+	Now, we know that:
+	\[ \cumof[X_n]a = \probof{X_n\leq a} = \begin{cases} 1 & a\geq C_n \\ 0 & a<C_n \end{cases} \quad
+	\cumof[X]a = \begin{cases} 1 & a\geq C \\ 0 & a<C \end{cases} \]
+	This means that $F_X$ is continuous for every $a$ other than $C$.
+	So if $a\geq C$, then at some point $a\geq C_n$, and therefore the limit of $\cumof[X_n]a$ is $1$.
+	If $a<C$ then at some point $a<C_n$ and therefore the limit of $\cumof[X_n]a$ is $0$.
+	So we have that at every $a\neq C$, $\cumof[X_n]a\dilim\cumof[X]a$.
+
+	But what about when $a=C$?
+	Now, suppose $C_n\searrow C$, which means that for every $C_n$, $a<C_n$.
+	This means that $\cumof[X_n]a=0$ while $\cumof[X]a=1$.
+
+\end{exam}
+
+\begin{prop*}
+
+	If $X_n\dilim X$ and $\probof{X=a}=0$, then
+	\[ \lim_{n\to\infty}\probof{X_n=a} = 0 \]
+
+\end{prop*}
+
+\begin{proof}
+
+	Since $\probof{X=a}=0$, $F_X$ is continuous at $a$ and therefore $\cumof[X_n]a\longrightarrow\cumof[X]a$.
+	Now, suppose that $\probof{X_n=a}$ doesn't converge to $0$, that means that there is some subseries of $X_n$, $X_{m_n}$
+	such that $\probof{X_{m_n}=a}>\epsilon$ for some $\epsilon>0$.
+	We can assume that $m_n=n$ since $X_{m_n}\dilim X$ (since every subseries of $\cumof[X_n]a$ must converge to $\cumof[X]a$).
+	But we know that for every $\delta>0$:
+	\[ \cumof[X_n]a = \probof{X_n\leq a} \geq \probof{X_n\leq a-\delta} + \probof{X_n=a} > \probof{X_n\leq a-\delta} + \epsilon \]
+	So if we take the limit of both sides we get that:
+	\[ \cumof[X]a \geq \cumof[X]{a-\delta} + \epsilon \]
+	And since $F_X$ is continuous at $a$, if we take the limit of both sides as $\delta$ approaches $0^+$, we get that:
+	\[ \cumof[X]a \geq \lim_{\delta\to0^+}\cumof[X]{a-\delta} + \epsilon = \cumof[X]a + \epsilon \]
+	Which is a contradiction since $\epsilon>0$.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\newpage
+\begin{prop*}
+
+	If $X_n\dilim X$ and $a<b$ are two real numbers such that $\probof{X=a}=\probof{X=b}=0$, then
+	\[ \lim_{n\to\infty}\probof{X_n\in[a,b]} = \probof{X\in[a,b]} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	We know that since $\probof{X=a}$, $\probof{X\in[a,b]}=\cumof[X]b-\cumof[X]a$, and
+	\[ \probof{X_n\in[a,b]} = \cumof[X_n]b - \cumof[X_n]a + \probof{X_n=a} \]
+	And if we take the limit of both sides we get (since $F_X$ is continuous at $a$ and $b$):
+	\[ \lim_{n\to\infty}\probof{X_n\in[a,b]} = \cumof[X]b - \cumof[X]a = \probof{X\in[a,b]} \]
+	As required
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{prop*}
+
+	If $\set{X_n}_{n=1}^\infty$ and $X$ are random variables with a support in $\bN_0$, then $X_n\dilim X$ if and only if for ever integer $k$:
+	\[ \probof{X_n=k}\longrightarrow\probof{X=k} \]
+
+\end{prop*}
+
+\begin{proof}
+
+	In one direction, we know that for every integer $k$:
+	\[ \probof{X_n=k} = \cumof[X_n]k - \cumof[X_n]{k-\frac12} \longrightarrow \cumof[X]k - \cumof[X]{k-\frac12} =
+	\probof{X\in\big(k-\frac12,k\big]} \]
+	And since $X$ has an integer support, this is equal to $\probof{X=k}$ as required.
+
+	In the other direction, we know that:
+	\[ \cumof[X_n]k = \sum_{i=0}^k\probof{X_n=i} \]
+	And we know that the limit of this is:
+	\[ \sum_{i=0}^k\probof{X=i} = \cumof[X]k \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+This proves that our previous definition of distributive limits is consistent with this one in the discrete case, so it is still the case that
+\[ \binof{n,\frac\lambda n}\dilim\poiof\lambda \]
+
+\begin{exam}
+
+	Notice that if $X_n\sim\frac1n\geoof{\frac1n}$:
+	\[ \probof{X_n\leq x} = \probof{nX_n\leq xn} = 1-\parens{1-\frac pn}^{\floor{x\cdot n}} \]
+	So therefore:
+	\[ 1-\parens{1-\frac pn}^{x\cdot n} \leq \probof{X_n\leq x} \leq 1-\parens{1-\frac pn}^{x\cdot(n-1)} \]
+	The the limit of the left term is $1-e^{-p\cdot x}$, and so is the right term since it is the left term divided by $\parens{1-\frac pn}^x$
+	whose limit is $1$.
+	So:
+	\[ \lim_{n\to\infty} \cumof[X_n]x = 1-e^{-p\cdot x} \]
+	And therefore:
+	\[ \frac1n\geoof{\frac pn}\dilim\expof{p} \]
+
+\end{exam}
+
+\begin{thrm*}[centralLimitTheorem,The\ Central\ Limit\ Theorem]
+
+	If $\set{X_n}_{n=1}^\infty$ is a sequence of independent random variables which have the same distribution ($X_n\deq X$ for some $X$),
+	$\expecof{X_n}=0$, and $\varof{X_n}=1$ then:
+	\[ \frac1{\sqrt n}\cdot\sum_{i=1}^n X_i\dilim\normof{0,1} \]
+
+\end{thrm*}
+
+\begin{proof}
+
+	We will let $Y_n\coloneqq\frac1n\sum\limits_{i=1}^n X_i$.
+	Then since the $X_i$s are independent we get:
+	\[ M_{Y_n}(t) = \expecof{e^{\frac t{\sqrt n}\cdot\sum_{i=1}^n X_i}} = \expecof{\prod_{i=1}^n e^{\frac t{\sqrt n}X_i}} =
+	\prod_{i=1}^n\expecof{e^{\frac t{\sqrt n}X_i}} = M_X\parens{\frac t{\sqrt n}}^n \]
+	So we want to show that the limit of this is $M_Z(t)=e^{\frac{t^2}2}$.
+	We do this by expanding $M_X(t)$ using taylor's theorem:
+	\[ M_X(t) = \expecof{1} + t\cdot\expecof{X} + \frac{t^2}2\expecof{X^2} + o\parens{t^2} \]
+	We know $\expecof X=0$ and $1=\varof X=\expecof{X^2}-\expecof{X}^2=\expecof{X^2}$, so:
+	\[ M_X(t) = 1+\frac{t^2}2 + o\parens{t^2} \]
+	And therefore:
+	\[ M_X\parens{\frac t{\sqrt n}}^n = \parens{1 + \frac{t^2}{2n} + o\parens{\frac{t^2}n}}^n \]
+	Now, we know that for every $c>0$, at some point $o\parens{\frac{t^2}n}\leq c\cdot\frac{t^2}{2n}$, so we get that:
+	\[ \parens{1+\frac{t^2}{2n}}^n \leq M_X\parens{\frac t{\sqrt n}}^n \leq \parens{1 + \frac{(1+c)t^2}{2n}}^n \]
+	And so we get that:
+	\[ \liminf_{n\to\infty} M_X\parens{\frac t{\sqrt n}}^n \geq e^{\frac{t^2}2} \]
+	And for every $c>0$:
+	\[ \limsup_{n\to\infty} M_X\parens{\frac t{\sqrt n}}^n \leq e^{\frac{(1+c)t^2}{2n}} \]
+	And this means that (by taking the infimum):
+	\[ \limsup_{n\to\infty} M_X\parens{\frac t{\sqrt n}}^n \leq e^{\frac{t^2}2} \]
+	And therefore:
+	\[ \lim_{n\to\infty} M_X\parens{\frac t{\sqrt n}}^n = e^{\frac{t^2}2} \]
+	As required.
+
+	\hfill$\qed$
+
+\end{proof}
+
+\begin{coro*}
+
+	If $\set{X_n}_{n=1}^\infty$ is a set of independent random variables with the same distribution as $X$,
+	and $\expecof{X_n}=\mu$ and $\varof{X_n}=\sigma^2$ then:
+	\[ \frac{\sum_{i=1}^n X_i - n\mu}{\sigma\cdot\sqrt n}\dilim\normof{0,1} \]
+
+\end{coro*}
+
+\begin{proof}
+
+	We know that:
+	\[ \expecof{\frac{\sum_{i=1}^n X_i - n\mu}{\sigma\cdot\sqrt n}} = \frac1{\sigma\cdot\sqrt n}\cdot\parens{n\cdot\mu - n\cdot\mu} = 0 \]
+	And:
+	\[ \varof{\frac{\sum_{i=1}^n X_i - n\mu}{\sigma\cdot\sqrt n}} = \frac1{n\sigma^2}\cdot\varof{\sum_{i=1}^n X_i} =
+	\frac{n}{n\sigma^2}\cdot\sigma^2 = 1 \]
+	So by the theorem above, we get that
+	\[ \frac{\sum_{i=1}^n X_i - n\mu}{\sigma\cdot\sqrt n}\dilim\normof{0,1} \]
+
+\end{proof}
+
+\def\approxsim{\mathrel{\overset{\scalebox{0.7}{$\scriptscriptstyle approx$}}\sim}}
+
+What this means is that for large enough $n$s, the sum of $X_i$s has the approximate distribution:
+\[ \sum_{i=1}^n X_i \approxsim \sigma\cdot\sqrt n\cdot\normof{0,1} + n\mu = \normof{n\mu, n\sigma^2} \]
+
