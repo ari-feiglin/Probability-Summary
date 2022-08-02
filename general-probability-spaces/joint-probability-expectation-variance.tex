@@ -112,12 +112,12 @@ Once again we will define expected values, but for absolutely continuous random 
 
 \end{defn*}
 
-\begin{prop*}
+\begin{lemm*}
 
 	If $X$ has expectation then
-	\[ \expecof X = \int_0^\infty \ccumof[X]x\,dx + \int_{-\infty}^0 \cumof[X]x \]
+	\[ \expecof X = \int_0^\infty \ccumof[X]x\,dx - \int_{-\infty}^0 \cumof[X]x \]
 
-\end{prop*}
+\end{lemm*}
 
 \begin{proof}
 
@@ -126,9 +126,9 @@ Once again we will define expected values, but for absolutely continuous random 
 	This is integrating over $(t,x)\in\bR^2$ where $0\leq x\leq t$ so this is equal to the integral:
 	\[ = \int_0^\infty \int_0^t f_X(x)\,dx\,dt = \int_0^\infty \parens{\int_0^t\,dx}\cdot f_X(t)\,dt = \int_0^\infty t\cdot f_X(t)\,dt \]
 	Similarly we see that:
-	\[ \int_{-\infty}^0\cumof[X]x\,dx = \int_{-\infty}^0 t\cdot f_X(t)\,dt \]
+	\[ \int_{-\infty}^0\cumof[X]x\,dx = -\int_{-\infty}^0 t\cdot f_X(t)\,dt \]
 	And so we get that:
-	\[ \int_0^\infty \ccumof[X]x\,dx + \int_{-\infty}^0 \cumof[X]x = \int_{-\infty}^\infty t\cdot f_X(t)\,dt = \expecof X \]
+	\[ \int_0^\infty \ccumof[X]x\,dx - \int_{-\infty}^0 \cumof[X]x = \int_{-\infty}^\infty t\cdot f_X(t)\,dt = \expecof X \]
 
 	\hfill$\qed$
 
@@ -149,40 +149,19 @@ I will provide a proof for this specific case.
 
 \begin{proof}
 
-	Let us prove this for the simple case that $g$ is a constant function over an interval $[a,b)$, that is $g(x)=\bone_{[a,b)}(x)$.
-	Then $g(X)=\bone_{[a,b]}(X)$, so $g(X)$ is $1$ when $X\in[a,b)$ and $0$ otherwise, this means that $g(X)\sim\berof{\probof{X\in[a,b)}}$.
-	So:
-	\[ \expecof{g(X)} = \probof{X\in[a,b)} = \int_a^b f_X(x)\,dx = \int_\bR g(x)\cdot f_X(x)\,dx \]
-	Since $g(x)$ is $0$ for all reals that aren't in $[a,b)$.
-
-	Now suppose we have a countable partition $\set{[x_{j-1},x_j)}_{j\in J}$ (that is $x_{j-1}<x_j$).
-	We define $g_j=\bone_{[x_{j-1},x_j)}$ for every $j\in J$.
-	If then we have real numbers $c_j$ and we define
-	\[ g = \sum_{j\in J} c_j\cdot g_j \]
-	Then 
-	\[ g(X) = \sum_{j\in J} c_j\cdot g_j(X) = \sum_{j\in J} c_j\cdot\bone_{[x_{j-1},x_j)}(X) \]
-	So $g(X)$ takes values $c_j$ and 
-	\[ \probof{g(X)=c_j} = \probof{X\in[x_{j-1},x_j)} = \int_{x_{j-1}}^{x_j}f_X(x)\,dx \]
-	So all in all we have that:
-	\[ \expecof{g(X)} = \sum_{j\in J} c_j\cdot\int_{x_{j-1}}^{x_j}f_X(x)\,dx = \sum_{j\in J}\int_{x_{j-1}}^{x_j} c_jg_j(x)\cdot f_X(x)\,dx =
-	\sum_{j\in J} \int_{x_{j-1}}^{x_j}g(x)\cdot f_X(x)\,dx = \int_\bR g(x)\cdot f_X(x)\,dx \]
-
-	Now suppose that $g$ is the sum of a countably infinite 
-	Now suppose we have a sequence of functions $g^k$ which approach $g$ from below which are constant over certain intervals, like above.
-	So we can define:
-	\[ g^k(x) = \inf_{t\in\bracks{n\cdot 2^{-k}, (n+1)\cdot 2^{-k}}} g(t) \]
-	Where $n=\floor{2^k\cdot x}$, so for every $t$ interval, $g^k(x)$ is constant.
-	And this is a countable partition of $\bR$ so by above:
-	\[ \expecof{g^k(X)} = \int_\bR g^k(x)\cdot f_X(x)\,dx \]
-	Also notice that since these partitions get finer, $g^k$ is an increasing sequence, and it converges to $g$.
-
-	And since $g^k(X)$ is essentially a discrete random variable, $\expecof{g^k(X)}\leq\expecof{g^{k+1}(X)}$.
-	By the monotone convergence theorem (which is a result of measure theory we will not be showing here), it turns out that:
-	\[ \expecof{g^k(X)} \nearrow \expecof{g(X)} \]
-	And
-	\[ \int_\bR g_k(x)\cdot f_X(x)\,dx \nearrow \int_\bR g(x)\cdot f_X(x)\,dx \]
-	And since we showed that the two sequences on the left are equal, since limits are unique, we get that:
-	\[ \expecof{g(X)} = \int_\bR g(x)\cdot f_X(x)\,dx \]
+	We know from the lemma above that:
+	\[ \expecof{g(X)} = \int_0^\infty \probof{g(X)\geq x}\,dx - \int_{-\infty}^0 \probof{g(X)\leq x}\,dx \]
+	Let's focus on the left integral, we know that
+	\[ \int_0^\infty\probof{g(X)\geq x}\,dx = \int_0^\infty\probof{X\in g^{-1}[x,\infty)}\,dx = \int_0^\infty\int_{g^{-1}[x,\infty)}f_X(y)\,dydx \]
+	This is just the integral of $f_X(y)$ over the set
+	\[ A = \set{(x,y)\in\bR^2}[x\geq0, y\in g^{-1}[x,\infty)] = \set{(x,y)\in\bR^2}[0\leq x\leq g(y)] \]
+	So we can swap the order of integration to get:
+	\[ \int_{g^{-1}[0,\infty)}\int_0^{g(y)} f_X(y)\,dxdy = \int_{g^{-1}[0,\infty)}g(y)\cdot f_X(y)\,dy \]
+	And similarly we get that:
+	\[ -\int_{-\infty}\probof{g(X)\leq x}\,dx = \int_{g^{-1}[-\infty,\infty]}g(y)\cdot f_X(y)\,dy \]
+	So all in all we get that:
+	\[ \expecof{g(X)} = \int_{g^{-1}[0,\infty)}g(y)\cdot f_X(y)\,dy + \int_{g^{-1}[-\infty,0]}g(y)\cdot f_X(y)\,dy =
+	\int_\bR g(x)\cdot f_X(x)\,dx \]
 	As required.
 
 	\hfill$\qed$
